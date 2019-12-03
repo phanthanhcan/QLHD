@@ -1,0 +1,161 @@
+﻿@model IEnumerable<HopDongMgr.Models.SuKhongPhuHop>
+
+@{
+    ViewBag.Title = "DANH SÁCH SỰ KHÔNG PHÙ HỢP";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa sự không phù hợp này không?";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@functions
+{
+    public static string TruncateAtWord(string textToTruncate, int length)
+    {
+        if (textToTruncate == null || textToTruncate.Length < length)
+            return textToTruncate;
+        int iNextSpace = textToTruncate.LastIndexOf(" ", length);
+        return string.Format("{0}...", textToTruncate.Substring(0, (iNextSpace > 0) ? iNextSpace : length).Trim());
+    }
+}
+<div id='myModal' class='modal fade in' tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id='myModalContent'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-danger fade in" id="id-modal-danger" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog modal-MD">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>@ViewBag.ThongBaoXoa</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-outline" data-dismiss="modal" id="btnDel">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade in" id="id-modal-warning" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog modal-MD">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn lặp lại sự không phù hợp này không?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-outline" data-dismiss="modal" id="btnLapLai">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="box">
+    <div class="box-header">
+        @Html.ActionLink("Thêm mới", "Create", "SuKhongPhuHops", null, new { @class = "btn btn-primary" })
+        <button type="button" value="@Url.Action("Edit", new { id = "_TOREPLACE_" })" class="btn btn-warning" id="btnUpdate">Chi tiết</button>
+        <button type="button" value="@Url.Action("Delete")" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#id-modal-danger">Xóa</button>
+        <input type="button" value="Lặp lại" class="btn btn-success" data-toggle="modal" data-target="#id-modal-warning" />
+        <select class="dropdownSearch" id="cboTinhTrang" name="cboTinhTrang">
+            <option value="">Tất cả</option>
+            <option value="Chưa xử lý">Chưa xử lý</option>
+            <option value="Đã xử lý">Đã xử lý</option>
+            <option value="Chưa đánh giá">Chưa đánh giá</option>
+            <option value="Đã đánh giá">Đã đánh giá</option>
+        </select>
+    </div>
+    <div class="box-body">
+        <table id="tblDsSuKPH" data-parameter="ColDef" class="display dataTable" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+            <thead>
+                <tr role="row">
+                    <th style="width:120px">Tình trạng</th>
+                    <th></th>
+                    <th>Sự KPH</th>
+                    <th>Đơn vị</th>
+                    <th width="200px">Nội dung</th>
+                    <th>Ngày phát hiện</th>
+                    <th>Người nhập</th>
+                    <th>Số lần lặp lại</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if ((List<HopDongMgr.Models.KPH_GetSuKPH_Result>)ViewBag.LstKPH != null)
+            {
+                foreach (var item in (List<HopDongMgr.Models.KPH_GetSuKPH_Result>)ViewBag.LstKPH)
+                {
+                        <tr role="row" id="@item.Id">
+                            <td>
+                                @if (item.TinhTrang.Equals("Chưa đánh giá"))
+                                {
+                                    @Html.ActionLink("Chưa đánh giá", "Create", "KiemSoatSuKhongPhuHops", new { id = item.Id }, new { @class = "btn btn-block btn-danger" })
+                                }
+                                else if (item.TinhTrang.Equals("Đã đánh giá"))
+                                {
+                                    <a class="btn btn-block btn-primary disabled">Chưa xử lý</a>
+                                    @*@:Chưa xử lý*@
+                                }
+                                else
+                                {
+                                    <a class="btn btn-block bg-green-gradient disabled">Đã xử lý</a>
+                                    @*@:Đã xử lý*@
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    @Html.ActionLink(" ", "Print", "Report", new { id = item.Id, Madv = item.ThuocDonVi }, new { @class = "fa fa-print fa-lg", data_modal = "" })
+                                </div>
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SuKph)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TEN_DVIQLY)
+                            </td>
+                            <td>
+                                @*@{
+                                    var x = TruncateAtWord(item.NoiDung, 200);
+                                }
+                                @Html.DisplayFor(modelItem => x)*@
+                                <p data-toggle="tooltip" data-placement="top" title="@Html.DisplayFor(modelItem => item.NoiDung)">@TruncateAtWord(item.NoiDung, 50)  @*@Html.DisplayFor(modelItem => item.NoiDungCT)*@</p>
+                                <span style="display: none">@Html.DisplayFor(modelItem => item.NoiDung)</span>
+                            </td>
+                            <td>
+                                @string.Format("{0:dd/MM/yyyy}", item.NgayPhatHien)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IdNguoiPhatHien)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SoLanLapLai)
+                            </td>
+                        </tr>
+                                        }
+                                    }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="~/Scripts/App/SuKhongPhuHop/DsSuKPH.js"></script>

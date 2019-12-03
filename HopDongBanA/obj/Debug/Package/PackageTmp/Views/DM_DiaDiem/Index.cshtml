@@ -1,0 +1,113 @@
+﻿@model IEnumerable<HopDongMgr.Models.DM_DiaDiem>
+
+@{
+    ViewBag.Title = "DANH SÁCH ĐỊA ĐIỂM";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa địa điểm này không?";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*toggel Đồng ý*@
+<div class="modal modal-danger fade in" id="modal-danger-DongBo" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog modal-MD">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Đồng bộ danh mục Địa điểm từ chương trình ĐTXD</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-outline" data-dismiss="modal" id="btnDongYDB">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*---------*@
+<div class="box-header">
+    <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+    <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
+    <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
+    <input type="button" value="Đồng Bộ" class="btn" id="btnDongBo" data-toggle="modal" data-target="#modal-danger-DongBo" style="display:none" />
+</div>
+
+<table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+    <thead>
+        <tr role="row">
+            <th>Mã địa điểm</th>
+            <th>Tên địa điểm</th>
+            @*<th>Khóa</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr role="row" id="@item.MaDD">
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaDD)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenDD)
+                </td>
+                <@*td>
+                    @{
+                        bool Khoa = item.Khoa.GetValueOrDefault(false);
+                    }
+                    @Html.CheckBox("Khoa",Khoa ,new Dictionary<string, object>() { { "data-off-color", "danger" }, { "class", "cbootstrapSwitch" }, { "readonly", "readonly" } })
+                </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#btnDongYDB').click(function () {
+            Loading();
+            $.ajax({
+                url: "/DM_DiaDiem/DongBo_DanhMucDiaDiem",
+                dataType: "json",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    if (data == "1") {
+                        LoadingHide();
+                        $.notify({
+                            title: '<strong>Thông báo</strong>:',
+                            message: 'Đồng bộ thành công'
+                        }, {
+                            type: 'info'
+                        });
+
+                        var url = '@Url.Action("Index", "DM_DiaDiem")';
+                        window.location.href = url;
+                    }
+                    else {
+                        $.notify({
+                            title: '<strong>Thông báo</strong>:',
+                            message: data + 'Có lỗi xảy ra khi đồng bộ'
+                        }, {
+                            type: 'danger'
+                        });
+
+                        console.log(data);
+                        LoadingHide();
+                    }
+                },
+                error: function (xhr) {
+                    console.log("error: " + data + " status: " + status + " er:" + er);
+                }
+        });
+
+        });
+    });
+</script>
+}

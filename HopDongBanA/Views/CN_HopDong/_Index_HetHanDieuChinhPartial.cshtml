@@ -1,0 +1,70 @@
+﻿
+@{
+//ViewBag.Title = "Danh sách hợp đồng hết hạn - Index";
+//Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class=" container-fluid">
+    @{
+        WebGrid grid = null;
+        string errMsg = null;
+        TempData["RowPerPage"] = 3;
+        try
+        {
+            grid = new WebGrid(source: Model, rowsPerPage: 3 , ajaxUpdateContainerId: "TableUpdate");
+            // ajax
+            //grid.Pager(nu)
+
+        }
+        catch (Exception ex)
+        {
+            errMsg = ($"lỗi {ex.ToString()}");
+        }
+    }
+    <div class="card mb-3">
+        @*<div class="card-header">
+            <i class="fas fa-table"></i>
+            Data Table Example
+        </div>*@
+
+        <div class="card-body" id="TableUpdate">
+            <div class="table-responsive">
+                @if (grid != null)
+                {
+                    @grid.GetHtml(
+                   tableStyle: "table table-bordered table-hover",
+                   headerStyle: "thead-light",
+                   footerStyle: "table-pager",
+                   selectedRowStyle: "table-active",
+                   htmlAttributes: new {id= "44"},  // id của tble
+                   mode: WebGridPagerModes.All,
+                   firstText: "Trang đầu",
+                   lastText: "Trang cuối",
+                   columns: grid.Columns(
+                       grid.Column("IDHD", header: "ID"),
+                       grid.Column("TenLoai", header:"Loại hợp đồng"),
+                       grid.Column("SoHopDong", header: "Số hợp đồng"),
+                       grid.Column("IDCT", header: "ID công trình"),
+                       grid.Column("TenCT", header: "Tên công trình"),
+                       grid.Column("NgayKy", header: "Ngày ký", format: item => item.NgayKy?.ToString("dd/MM/yyyy")),
+                       grid.Column("GiaTriThucTe", header: "Giá trị thực tế", style: "text-right", format: item => item.GiaTriThucTe?.ToString("#,##0VND")),
+                       grid.Column("NgayHetHanThucTe", header: "Ngày hết hạn thực tế"),
+                       grid.Column("HoTen", header: "Người theo dõi")
+                   ))
+                }
+            </div>
+        </div>
+
+        @if (errMsg != null)
+        {
+            <h4 class="text-danger">@errMsg</h4>
+        }
+    </div>
+</div>
+@section Scripts{
+    <script>
+
+    </script>
+
+}
+

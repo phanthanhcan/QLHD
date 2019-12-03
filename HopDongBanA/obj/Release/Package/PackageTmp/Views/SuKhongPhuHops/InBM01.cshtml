@@ -1,0 +1,111 @@
+﻿@model IEnumerable<HopDongMgr.Models.KPH_GetSuKPH_Result>
+
+@{
+    ViewBag.Title = "DANH SÁCH SỰ KHÔNG PHÙ HỢP";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa sự không phù hợp này không?";
+}
+
+<div id='myModal' class='modal fade in' role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="box-title">Biểu mẫu 01</h4>
+            </div>
+            <div class="modal-body" id="tableChiTiet">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="box-header">
+    <input type="button" value="In biểu mẫu" class="btn btn-info" id="btnIn"  data-toggle="modal"/>    @*data-target="#myModal"*@ 
+</div>
+<div>
+    @Html.Raw(TempData["err"])
+</div>
+<table id="BM01" class="display dataTable" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+    <thead>
+        <tr>
+            <th>Sự không phù hợp</th>
+            <th>Đơn vị</th>
+            <th>Nội dung</th>
+            <th>Số lần lặp lại</th>
+            <th>Người nhập</th>
+            <th>Tình trạng</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {
+            <tr role="row" id="@item.Id" data-parameter="@item.ThuocDonVi">
+                <td class="sorting_1">
+                    @Html.DisplayFor(modelItem => item.SuKph)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TEN_DVIQLY)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NoiDung)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SoLanLapLai)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdNguoiPhatHien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TinhTrang)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    var table = $('#BM01').DataTable({
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Vietnamese.json"
+        },
+        select: true,
+        columnDefs: [
+            { targets: 2, width: '30%' }
+        ]
+    });
+    
+    $("#btnIn").click(function () {
+        var idSelected = $("#BM01 .selected").attr("id");
+        var thuocDonVi = $("#BM01 .selected").attr("data-parameter");
+        if (idSelected != undefined) {
+            Loading();
+            $.ajax({
+                url: '@Url.Action("Print", "Report")',
+                type: "GET",
+                data: { id: idSelected, Madv: thuocDonVi },
+                success: function (data) {
+                    LoadingHide();
+                    $("#myModal").modal('show');
+                    $('#tableChiTiet').html(data);
+                },
+                error: function (xhr) {
+                    console.log("error: " + " status: " + status + " er:");
+                    LoadingHide();
+                }
+            });
+        } else {
+            $.notify({
+                // options
+                message: 'Bạn chưa chọn dòng nào'
+            }, {
+                // settings
+                type: 'danger'
+            });
+        }
+        
+
+        $('#modal-chitiet').modal({
+            show: true
+        });
+    });
+</script>

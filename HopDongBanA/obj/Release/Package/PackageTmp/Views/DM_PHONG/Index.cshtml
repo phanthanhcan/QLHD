@@ -1,0 +1,37 @@
+﻿@model IEnumerable<HopDongMgr.Models.DM_PHONG>
+
+@{
+    ViewBag.Title = "DANH SÁCH PHÒNG BAN";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa phòng ban này không?";
+}
+
+<div class="box-header">
+    <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+    <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
+    <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
+</div>
+<table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+    <thead>
+        <tr role="row">
+            <th>Tên phòng ban</th>
+            <th>Tên tắt</th>
+            <th>Đơn vị quản lý</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr role="row" id="@item.Id">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ten)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenTat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DM_DONVI.TEN_DVIQLY)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,137 @@
+﻿@model IEnumerable<HopDongMgr.Models.KPH_GetHanhDongKhacPhuc_Result>
+
+@{
+    ViewBag.Title = "DANH SÁCH HÀNH ĐỘNG KHẮC PHỤC";
+}
+
+<div id='myModal' class='modal fade in' tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="box-title">Biểu mẫu 03</h4>
+            </div>
+            <div class="modal-body" id="tableChiTiet">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="box-header">
+    <input type="button" value="In biểu mẫu" class="btn btn-info" id="btnIn" data-toggle="modal" />   @*data-target="#myModal"*@
+</div>
+<div>
+    @Html.Raw(TempData["err"])
+</div>
+<table id="BM03" class="display dataTable" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+    <thead>
+      
+        <tr role="row">
+            <th>Sự không phù hợp</th>
+            <th>Phân tích nguyên nhân</th>
+            <th>Hành động đề xuất</th>
+            <th>Ngày phê duyệt</th>
+            <th>Thời gian hoàn tất</th>
+            <th>Thời gian hoàn tất thực tế</th>
+            <th>Kết quả giám sát</th>
+            <th>Ngày gia hạn</th>
+            <th>Ghi chú</th>
+            <th>Kết quả thẩm tra</th>
+        </tr>
+       
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {
+            <tr role="row" id="@item.Id" data-parameter="@item.ThuocDonVi">
+                <td class="sorting_1">
+                    @Html.DisplayFor(modelItem => item.SuKph)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhanTichNguyenNhan)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeXuatHanhDong)
+                </td>
+                <td>
+                    @string.Format("{0:dd/MM/yyyy}", item.NgayPheDuyet)
+                </td>
+                <td>
+                    @string.Format("{0:dd/MM/yyyy}", item.ThoiHanHoanTat)
+                </td>
+                <td>
+                    @string.Format("{0:dd/MM/yyyy}", item.ThoiHanHoanTatThucTe)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KetQuaGiamSat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayGiaHan)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GhiChu)
+                </td>
+                <td>
+                    @if (item.KetQuaThamTra.Equals("Thẩm tra"))
+                    {
+                        <label>Chưa thẩm tra</label>
+                        @*@Html.LabelFor(null, string.Format("{0}", "Chưa thẩm tra"));*@
+                    }
+                    else
+                    {<label> @Html.DisplayFor(modelItem => item.KetQuaThamTra)</label>}
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+<script>
+    var table = $('#BM03').DataTable({
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Vietnamese.json"
+        },
+        select: true,
+        columnDefs: [
+            { targets: 2, width: '30%' }
+        ]
+    });
+
+    $("#btnIn").click(function () {
+        //debugger;
+        var idSelected = $("#BM03 .selected").attr("id");
+        var thuocDonVi = $("#BM03 .selected").attr("data-parameter");
+        if (idSelected != undefined) {
+            Loading();
+            $.ajax({
+                url: '@Url.Action("PrintBM03", "Report")',
+                type: "GET",
+                data: { id: idSelected, Madv: thuocDonVi },
+                success: function (data) {
+                    LoadingHide();
+                    $('#myModal').modal({
+                        show: true
+                    });
+                    $('#tableChiTiet').html(data);
+                },
+                error: function (xhr) {
+                    console.log("error: " + " status: " + status + " er:");
+                    LoadingHide();
+                }
+            })
+        }
+        else {
+            $.notify({
+                // options
+                message: 'Bạn chưa chọn dòng nào'
+            }, {
+                // settings
+                type: 'danger'
+            });
+        }
+
+        $('#modal-chitiet').modal({
+            show: true
+        });
+    });
+</script>

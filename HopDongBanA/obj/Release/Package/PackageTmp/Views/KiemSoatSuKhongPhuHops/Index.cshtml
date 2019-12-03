@@ -1,0 +1,132 @@
+﻿@model IEnumerable<HopDongMgr.Models.KiemSoatSuKhongPhuHop>
+
+@{
+    ViewBag.Title = "DANH SÁCH KIỂM SOÁT SỰ KHÔNG PHÙ HỢP";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa kiểm soát này không?";
+}
+
+<script src="~/Scripts/App/KiemSoatKhongPhuHop/DsKiemSoatKPH.js"></script>
+
+<div id='myModal' class='modal fade in' role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="box-title">Thẩm tra kiểm soát sự không phù hợp</h4>
+            </div>
+            <div class="modal-body">
+                <div id='myModalContent'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-danger fade in" id="id-modal-danger" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog modal-MD">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>@ViewBag.ThongBaoXoa</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-outline" data-dismiss="modal" id="btnDel">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="box">
+    <div class="box-header">
+        <button type="button" value="@Url.Action("Edit", new { id = "_TOREPLACE_" })" class="btn btn-warning" id="btnUpdate">Chi tiết</button>
+        <button type="button" value="@Url.Action("Delete")" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#id-modal-danger">Xóa</button>
+        <select class="dropdownSearch" id="cboTinhTrang" name="cboTinhTrang">
+            <option value="">Tất cả</option>
+            <option value="Chưa xử lý">Chưa xử lý</option>
+            <option value="Thẩm tra">Thẩm tra</option>
+            <option value="Chờ thẩm tra">Chờ thẩm tra</option>
+            <option value="Đã thẩm tra">Đã thẩm tra</option>
+            @*<option value="Tạo phiếu mới">Tạo phiếu mới</option>*@
+            <option value="Bình thường">Bình thường</option>
+        </select>
+    </div>
+    <div class="box-body">
+        <table id="tblDsKiemSoat" class="display dataTable" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+            <thead>
+                <tr role="row">
+                    <th style="width:120px">Tình trạng</th>
+                    <th>Sự KPH</th>
+                    <th>Ngày phát hiện</th>
+                    <th>Mức độ</th>
+                    <th>Nguyên nhân</th>
+                    <th>Cách thức kiểm soát</th>
+                    <th>Ngày kiểm soát</th>
+                    <th>Ngày xử lý</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if ((List<HopDongMgr.Models.KPH_GetKiemSoatKPH_Result>)ViewBag.LstKSKPH != null)
+                {
+                    foreach (var item in (List<HopDongMgr.Models.KPH_GetKiemSoatKPH_Result>)ViewBag.LstKSKPH)
+                    {
+                        <tr role="row" id="@item.Id">
+                            <td style="min-width: 120px;">
+                                @if (item.TinhTrang.Equals("Chưa xử lý"))
+                                {
+                                    @Html.ActionLink("Chưa xử lý", "Edit", "HanhDongKhacPhucs", new { id = item.Id, value = "create" }, new { @class = "btn btn-block btn-danger" })
+                                }
+                                else if (item.TinhTrang.Equals("Chưa thẩm tra"))
+                                {
+                                    @Html.ActionLink("Thẩm tra", "ThamTraKiemSoat", "KiemSoatSuKhongPhuHops", new { id = item.Id }, new { @class = "btn btn-block btn-warning", data_modal = "" })
+                                }
+                                else if (item.TinhTrang.Equals("Chờ thẩm tra"))
+                                {
+                                    <a class="btn btn-block bg-light-blue-gradient disabled">@item.TinhTrang</a>
+                                }
+                                else if (item.TinhTrang.Equals("Đã thẩm tra KS"))
+                                {
+                                    @Html.ActionLink("Đã thẩm tra", "ThamTraKiemSoat", "KiemSoatSuKhongPhuhops", new { id = item.Id }, new { @class = "btn btn-block bg-olive", data_modal = "" })
+                                }
+                                else
+                                {
+                                    <a class="btn btn-block bg-green-gradient disabled">@item.TinhTrang</a>
+                                }
+                            </td>
+                            <td style="min-width: 145px;">
+                                @Html.DisplayFor(modelItem => item.SuKph)
+                            </td>
+                            <td style="min-width: 145px;">
+                                @string.Format("{0:dd/MM/yyyy}", item.NgayPhatHien)
+                                @*@Html.DisplayFor(modelItem => item.NgayPhatHien, "{0:dd/MM/yyyy}")*@
+                            </td>
+                            <td style="min-width: 145px;">
+                                @Html.DisplayFor(modelItem => item.MucDo)
+                            </td>
+                            <td style="min-width: 145px;">
+                                @Html.DisplayFor(modelItem => item.NguyenNhan)
+                            </td>
+                            <td style="min-width: 145px;">
+                                @Html.DisplayFor(modelItem => item.CachThucKiemSoat)
+                            </td>
+                            <td style="min-width: 145px;">
+                                @string.Format("{0:dd/MM/yyyy}", item.NgayKiemSoat)
+                                @*@Html.DisplayFor(modelItem => item.NgayKiemSoat)*@
+                            </td>
+                            <td style="min-width: 145px;">
+                                @string.Format("{0:dd/MM/yyyy}", item.NgayXuLy)
+                                @*@Html.DisplayFor(modelItem => item.NgayXuLy)*@
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

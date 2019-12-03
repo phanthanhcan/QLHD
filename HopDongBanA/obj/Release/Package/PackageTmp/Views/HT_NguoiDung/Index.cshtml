@@ -1,0 +1,57 @@
+﻿@model IEnumerable<HopDongMgr.Models.HT_NguoiDung>
+
+@{
+    ViewBag.Title = "DANH SÁCH NGƯỜI DÙNG";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa người dùng này không?";
+}
+
+<div class="box-header">
+    <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+    <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
+    <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
+</div>
+<table id="example" data-parameter="ColDef" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+    <thead>
+        <tr role="row">
+            <th>Mã người dùng</th>
+            <th>Họ tên</th>
+            <th>Giới tính</th>
+            <th>Có hiệu lực</th>
+            <th>Chức vụ</th>
+            <th>Tên nhóm</th>
+            <th>Tên phòng ban</th>
+            <th>Tên đơn vị</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr role="row" id="@item.oid">
+                <td class="sorting_1">
+                    @Html.DisplayFor(modelItem => item.MaNguoiDung)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HoTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GioiTinh)
+                </td>
+                <td>
+                    @Html.CheckBoxFor(modelItem => item.Active, new Dictionary<string, object>() { { "checked", "true" }, { "data-off-color", "danger" }, { "class", "cbootstrapSwitch" }, { "readonly", "readonly" } })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HT_CHUCVU.Ten)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HT_Nhom.Ten)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DM_PHONG.Ten)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DM_DONVI.TEN_DVIQLY)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

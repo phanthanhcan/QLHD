@@ -1,0 +1,282 @@
+﻿@using HopDongMgr.Models;
+@model List<List<GetList_HopDongHetHan_ALL_Model>>
+@{
+    ViewBag.Title = "Danh sách hợp dồng hết hạn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    <ul class="nav nav-tabs nav-justified " style="padding-bottom:1em">
+        <li class="active"><a data-toggle="tab" href="#HHDC">HĐ hết hạn điều chỉnh</a></li>
+        <li><a data-toggle="tab" href="#HHTC">HĐ hết hạn thi công</a></li>
+        <li><a data-toggle="tab" href="#HHTH">HĐ hết hạn thực hiện</a></li>
+    </ul>
+    <div class="tab-content">
+        <!--hết hạn điều chỉnh-->
+        <div id="HHDC" class="tab-pane fade in active">
+            <table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;" data-parameter="NoResponsive">
+                <thead>
+                    <tr role="row">
+                        <th>Số hợp đồng</th>
+                        <th>Công trình</th>
+                        <th>Loại hợp đồng</th>
+                        <th>Ngày ký</th>
+                        <th>Giá trị hợp đồng</th>
+                        <th>Ngày hết hạn thi công</th>
+                        <th>Ngày hết hạn thực tế</th>
+                        <th>Người theo dõi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model[0])
+                        {
+                            <tr role="row" id="@item.IDHD">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SoHopDong)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TenCT)
+                                </td>
+                                <td class="text-left" title="@item.TenLoai">
+                                    @item.TenLoai.Substring(0, item.TenLoai.IndexOf(',') > -1 ? item.TenLoai.IndexOf(',') : item.TenLoai.Length)
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        if (item.NgayKy.HasValue == true)
+                                        {
+
+                                            @item.NgayKy.Value.ToString("dd/MM/yyyy");
+                                        }
+                                    }
+                                </td>
+                                <td class="text-right">
+                                    @{
+                                        if (item.GiaTriThucTe.HasValue == true)
+                                        {
+
+                                            string.Format("{0:0,0}", item.GiaTriThucTe.Value);
+                                        }
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        if (item.NgayHetHanThiCong.HasValue == true)
+                                        {
+
+                                            @item.NgayHetHanThiCong.Value.ToString("dd/MM/yyyy");
+                                        }
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        if (item.NgayHetHanThucTe.HasValue == true)
+                                        {
+
+                                            @item.NgayHetHanThucTe.Value.ToString("dd/MM/yyyy");
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HoTen)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- 2. hết hạn thi công-->
+        <div id="HHTC" class="tab-pane fade">
+            <table id="example1" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;" data-parameter="NoResponsive">
+                <thead>
+                    <tr role="row">
+                        <th>Số hợp đồng</th>
+                        <th>Công trình</th>
+                        <th>Loại hợp đồng</th>
+                        <th>Ngày ký</th>
+                        <th>Giá trị hợp đồng</th>
+                        <th>Ngày hết hạn thi công</th>
+                        <th>Ngày hết hạn thực tế</th>
+                        <th>Người theo dõi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null )
+                    {
+                        foreach (var item in Model[1])
+                        {
+                            <tr role="row" id="@item.IDHD">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SoHopDong)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TenCT)
+                                </td>
+                                <td class="text-left" title="@item.TenLoai">
+                                    @item.TenLoai.Substring(0, item.TenLoai.IndexOf(',') > -1 ? item.TenLoai.IndexOf(',') : item.TenLoai.Length)
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        if (item.NgayKy.HasValue == true)
+                                        {
+
+                                            @item.NgayKy.Value.ToString("dd/MM/yyyy");
+                                        }
+                                    }
+                                </td>
+                                <td class="text-right">
+                                    @{
+                                        if (item.GiaTriThucTe.HasValue == true)
+                                        {
+
+                                            string.Format("{0:0,0}", item.GiaTriThucTe.Value);
+                                        }
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        if (item.NgayHetHanThiCong.HasValue == true)
+                                        {
+
+                                            @item.NgayHetHanThiCong.Value.ToString("dd/MM/yyyy");
+                                        }
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        if (item.NgayHetHanThucTe.HasValue == true)
+                                        {
+
+                                            @item.NgayHetHanThucTe.Value.ToString("dd/MM/yyyy");
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HoTen)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- 3. hết hạn thực hiện-->
+        <div id="HHTH" class="tab-pane fade">
+            <table id="example2" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;" data-parameter="NoResponsive">
+                <thead>
+                    <tr role="row">
+                        <th>Số hợp đồng</th>
+                        <th>Công trình</th>
+                        <th>Loại hợp đồng</th>
+                        <th>Ngày ký</th>
+                        <th>Giá trị hợp đồng</th>
+                        <th>Ngày hết hạn thi công</th>
+                        <th>Ngày hết hạn thực tế</th>
+                        <th>Người theo dõi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model[2])
+                        {
+                            <tr role="row" id="@item.IDHD">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SoHopDong)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TenCT)
+                                </td>
+                                <td class="text-left" title="@item.TenLoai">
+                                    @item.TenLoai.Substring(0, item.TenLoai.IndexOf(',') > -1 ? item.TenLoai.IndexOf(',') : item.TenLoai.Length);
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        if (item.NgayKy.HasValue == true)
+                                        {
+
+                                            @item.NgayKy.Value.ToString("dd/MM/yyyy");
+                                        }
+                                    }
+                                </td>
+                                <td class="text-right">
+                                    @{
+                                        if (item.GiaTriThucTe.HasValue == true)
+                                        {
+
+                                            string.Format("{0:0,0}", item.GiaTriThucTe.Value);
+                                        }
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        if (item.NgayHetHanThiCong.HasValue == true)
+                                        {
+
+                                            @item.NgayHetHanThiCong.Value.ToString("dd/MM/yyyy");
+                                        }
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        if (item.NgayHetHanThucTe.HasValue == true)
+                                        {
+
+                                            @item.NgayHetHanThucTe.Value.ToString("dd/MM/yyyy");
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HoTen)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+@section scripts{
+    <script>
+        $('li a[href="#HHTC"]').click(function (e) {
+            if (!$.fn.DataTable.isDataTable('#example1')) {
+                $('#example1').DataTable({
+                    responsive: false,
+                    language: {
+                        url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Vietnamese.json"
+                    },
+                    select: true,
+                    columnDefs: [
+                    { targets: [2, 3], width: '' }
+                    ],
+                    scrollY: "400px",
+                    scrollX: true,
+                    aaSorting: []
+                });
+            }
+        });
+
+        $('li a[href="#HHTH"]').click(function (e) {
+            if (!$.fn.DataTable.isDataTable('#example2')) {
+                $('#example2').DataTable({
+                    responsive: false,
+                    language: {
+                        url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Vietnamese.json"
+                    },
+                    select: true,
+                    columnDefs: [
+                    { targets: [2, 3], width: '' }
+                    ],
+                    scrollY: "400px",
+                    scrollX: true,
+                    aaSorting: []
+                });
+            }
+        });
+
+
+    </script>
+}

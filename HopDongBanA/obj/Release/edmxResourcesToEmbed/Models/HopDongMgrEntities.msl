@@ -1,0 +1,608 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="HopDongMgrModelsStoreContainer" CdmEntityContainer="HopDongMgrEntities">
+    <EntitySetMapping Name="CN_DieuChinh">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.CN_DieuChinh">
+        <MappingFragment StoreEntitySet="CN_DieuChinh">
+          <ScalarProperty Name="DotDieuChinh" ColumnName="DotDieuChinh" />
+          <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+          <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+          <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+          <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+          <ScalarProperty Name="LyDoDieuChinh" ColumnName="LyDoDieuChinh" />
+          <ScalarProperty Name="SoNgayGiaHanTienDo" ColumnName="SoNgayGiaHanTienDo" />
+          <ScalarProperty Name="GiaTriSauDieuChinh" ColumnName="GiaTriSauDieuChinh" />
+          <ScalarProperty Name="NgayDieuChinh" ColumnName="NgayDieuChinh" />
+          <ScalarProperty Name="IDHD" ColumnName="IDHD" />
+          <ScalarProperty Name="IDDC" ColumnName="IDDC" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CN_HopDong">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.CN_HopDong">
+        <MappingFragment StoreEntitySet="CN_HopDong">
+          <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+          <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+          <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+          <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+          <ScalarProperty Name="IsHoanThanh" ColumnName="IsHoanThanh" />
+          <ScalarProperty Name="XuLyTranhChap" ColumnName="XuLyTranhChap" />
+          <ScalarProperty Name="GiaTriPhat" ColumnName="GiaTriPhat" />
+          <ScalarProperty Name="XuLyViPham" ColumnName="XuLyViPham" />
+          <ScalarProperty Name="NgayTongNghiemThu" ColumnName="NgayTongNghiemThu" />
+          <ScalarProperty Name="SoNgayThiCong" ColumnName="SoNgayThiCong" />
+          <ScalarProperty Name="SoNgayThucHien" ColumnName="SoNgayThucHien" />
+          <ScalarProperty Name="GiaTriHopDong" ColumnName="GiaTriHopDong" />
+          <ScalarProperty Name="NgayKy" ColumnName="NgayKy" />
+          <ScalarProperty Name="SoHopDong" ColumnName="SoHopDong" />
+          <ScalarProperty Name="IDHT" ColumnName="IDHT" />
+          <ScalarProperty Name="GiaTriGoiThau" ColumnName="GiaTriGoiThau" />
+          <ScalarProperty Name="IDDV" ColumnName="IDDV" />
+          <ScalarProperty Name="NamGiaoA" ColumnName="NamGiaoA" />
+          <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+          <ScalarProperty Name="MaCT" ColumnName="MaCT" />
+          <ScalarProperty Name="IDLoai" ColumnName="IDLoai" />
+          <ScalarProperty Name="IDHD" ColumnName="IDHD" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CN_ThanhLy">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.CN_ThanhLy">
+        <MappingFragment StoreEntitySet="CN_ThanhLy">
+          <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+          <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+          <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+          <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+          <ScalarProperty Name="GiaTriQuyetToan" ColumnName="GiaTriQuyetToan" />
+          <ScalarProperty Name="GiaTriThanhLy" ColumnName="GiaTriThanhLy" />
+          <ScalarProperty Name="NgayThanhLy" ColumnName="NgayThanhLy" />
+          <ScalarProperty Name="IDHD" ColumnName="IDHD" />
+          <ScalarProperty Name="IDTL" ColumnName="IDTL" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DM_CongTrinh">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.DM_CongTrinh">
+        <MappingFragment StoreEntitySet="DM_CongTrinh">
+          <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+          <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+          <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+          <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+          <ScalarProperty Name="Khoa" ColumnName="Khoa" />
+          <ScalarProperty Name="MaDD" ColumnName="MaDD" />
+          <ScalarProperty Name="MaNV" ColumnName="MaNV" />
+          <ScalarProperty Name="TenCT" ColumnName="TenCT" />
+          <ScalarProperty Name="MaCT" ColumnName="MaCT" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DM_DiaDiem">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.DM_DiaDiem">
+        <MappingFragment StoreEntitySet="DM_DiaDiem">
+          <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+          <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+          <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+          <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+          <ScalarProperty Name="Khoa" ColumnName="Khoa" />
+          <ScalarProperty Name="TenDD" ColumnName="TenDD" />
+          <ScalarProperty Name="MaDD" ColumnName="MaDD" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DM_DONVI">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.DM_DONVI">
+        <MappingFragment StoreEntitySet="DM_DONVI">
+          <ScalarProperty Name="TenTat" ColumnName="TenTat" />
+          <ScalarProperty Name="MaDiaChinh" ColumnName="MaDiaChinh" />
+          <ScalarProperty Name="WEBSITE" ColumnName="WEBSITE" />
+          <ScalarProperty Name="TEN_TINH" ColumnName="TEN_TINH" />
+          <ScalarProperty Name="TNGUOI_UQUYEN" ColumnName="TNGUOI_UQUYEN" />
+          <ScalarProperty Name="CVU_UQUYEN" ColumnName="CVU_UQUYEN" />
+          <ScalarProperty Name="DCHI_DVIUQ" ColumnName="DCHI_DVIUQ" />
+          <ScalarProperty Name="TEN_DVIUQ" ColumnName="TEN_DVIUQ" />
+          <ScalarProperty Name="NGAY_UQUYEN" ColumnName="NGAY_UQUYEN" />
+          <ScalarProperty Name="SO_UQUYEN" ColumnName="SO_UQUYEN" />
+          <ScalarProperty Name="CHUC_VU" ColumnName="CHUC_VU" />
+          <ScalarProperty Name="DAI_DIEN" ColumnName="DAI_DIEN" />
+          <ScalarProperty Name="MA_STHUE" ColumnName="MA_STHUE" />
+          <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+          <ScalarProperty Name="FAX" ColumnName="FAX" />
+          <ScalarProperty Name="DTHOAI_TRUC" ColumnName="DTHOAI_TRUC" />
+          <ScalarProperty Name="DTHOAI_NONG" ColumnName="DTHOAI_NONG" />
+          <ScalarProperty Name="DTHOAI_KDOANH" ColumnName="DTHOAI_KDOANH" />
+          <ScalarProperty Name="DIEN_THOAI" ColumnName="DIEN_THOAI" />
+          <ScalarProperty Name="ID_DIA_CHINH" ColumnName="ID_DIA_CHINH" />
+          <ScalarProperty Name="DIA_CHI" ColumnName="DIA_CHI" />
+          <ScalarProperty Name="CAP_DVI" ColumnName="CAP_DVI" />
+          <ScalarProperty Name="MA_DVICTREN" ColumnName="MA_DVICTREN" />
+          <ScalarProperty Name="TEN_DVIQLY" ColumnName="TEN_DVIQLY" />
+          <ScalarProperty Name="MA_DVIQLY" ColumnName="MA_DVIQLY" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DM_DonViThucHien">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.DM_DonViThucHien">
+        <MappingFragment StoreEntitySet="DM_DonViThucHien">
+          <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+          <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+          <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+          <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+          <ScalarProperty Name="Khoa" ColumnName="Khoa" />
+          <ScalarProperty Name="DiaChi" ColumnName="DiaChi" />
+          <ScalarProperty Name="TenDV" ColumnName="TenDV" />
+          <ScalarProperty Name="IDDV" ColumnName="IDDV" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DM_HinhThucHopDong">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.DM_HinhThucHopDong">
+        <MappingFragment StoreEntitySet="DM_HinhThucHopDong">
+          <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+          <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+          <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+          <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+          <ScalarProperty Name="Khoa" ColumnName="Khoa" />
+          <ScalarProperty Name="TenHinhThuc" ColumnName="TenHinhThuc" />
+          <ScalarProperty Name="IDHT" ColumnName="IDHT" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DM_LoaiHopDong">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.DM_LoaiHopDong">
+        <MappingFragment StoreEntitySet="DM_LoaiHopDong">
+          <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+          <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+          <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+          <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+          <ScalarProperty Name="Khoa" ColumnName="Khoa" />
+          <ScalarProperty Name="TenLoai" ColumnName="TenLoai" />
+          <ScalarProperty Name="IDLoai" ColumnName="IDLoai" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DM_NguonVon">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.DM_NguonVon">
+        <MappingFragment StoreEntitySet="DM_NguonVon">
+          <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+          <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+          <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+          <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+          <ScalarProperty Name="Khoa" ColumnName="Khoa" />
+          <ScalarProperty Name="TenNV" ColumnName="TenNV" />
+          <ScalarProperty Name="MaNV" ColumnName="MaNV" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DM_PHONG">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.DM_PHONG">
+        <MappingFragment StoreEntitySet="DM_PHONG">
+          <ScalarProperty Name="TenTat" ColumnName="TenTat" />
+          <ScalarProperty Name="MaDV" ColumnName="MaDV" />
+          <ScalarProperty Name="Ten" ColumnName="Ten" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HanhDongKhacPhucs">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.HanhDongKhacPhuc">
+        <MappingFragment StoreEntitySet="HanhDongKhacPhuc">
+          <ScalarProperty Name="IdNguoiPhuTrach" ColumnName="IdNguoiPhuTrach" />
+          <ScalarProperty Name="QuyetDinhApDung" ColumnName="QuyetDinhApDung" />
+          <ScalarProperty Name="TranhNhiemGSThucHien" ColumnName="TranhNhiemGSThucHien" />
+          <ScalarProperty Name="DVPBYeuCauThucHien" ColumnName="DVPBYeuCauThucHien" />
+          <ScalarProperty Name="PhongBanThucHien" ColumnName="PhongBanThucHien" />
+          <ScalarProperty Name="NgayGiaHan" ColumnName="NgayGiaHan" />
+          <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+          <ScalarProperty Name="KetQuaThamTra" ColumnName="KetQuaThamTra" />
+          <ScalarProperty Name="KetQuaGiamSat" ColumnName="KetQuaGiamSat" />
+          <ScalarProperty Name="IdNguoiGiamSat" ColumnName="IdNguoiGiamSat" />
+          <ScalarProperty Name="ThoiHanHoanTatThucTe" ColumnName="ThoiHanHoanTatThucTe" />
+          <ScalarProperty Name="ThoiHanHoanTat" ColumnName="ThoiHanHoanTat" />
+          <ScalarProperty Name="NgayPheDuyet" ColumnName="NgayPheDuyet" />
+          <ScalarProperty Name="IdNguoiPheDuyetDeXuat" ColumnName="IdNguoiPheDuyetDeXuat" />
+          <ScalarProperty Name="IdNguoiPhanTich" ColumnName="IdNguoiPhanTich" />
+          <ScalarProperty Name="HanhDong" ColumnName="HanhDong" />
+          <ScalarProperty Name="DeXuatHanhDong" ColumnName="DeXuatHanhDong" />
+          <ScalarProperty Name="NgayPhanTich" ColumnName="NgayPhanTich" />
+          <ScalarProperty Name="PhanTichNguyenNhan" ColumnName="PhanTichNguyenNhan" />
+          <ScalarProperty Name="IdKiemSoatSuKph" ColumnName="IdKiemSoatSuKph" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HT_CHUCVU">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.HT_CHUCVU">
+        <MappingFragment StoreEntitySet="HT_CHUCVU">
+          <ScalarProperty Name="Ma" ColumnName="Ma" />
+          <ScalarProperty Name="Ten" ColumnName="Ten" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HT_DSChucNang">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.HT_DSChucNang">
+        <MappingFragment StoreEntitySet="HT_DSChucNang">
+          <ScalarProperty Name="IsMenu" ColumnName="IsMenu" />
+          <ScalarProperty Name="oidParent" ColumnName="oidParent" />
+          <ScalarProperty Name="STT" ColumnName="STT" />
+          <ScalarProperty Name="TenMenu" ColumnName="TenMenu" />
+          <ScalarProperty Name="TenHienThi" ColumnName="TenHienThi" />
+          <ScalarProperty Name="TenAction" ColumnName="TenAction" />
+          <ScalarProperty Name="TenController" ColumnName="TenController" />
+          <ScalarProperty Name="oid" ColumnName="oid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HT_NguoiDung">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.HT_NguoiDung">
+        <MappingFragment StoreEntitySet="HT_NguoiDung">
+          <ScalarProperty Name="BiDanh" ColumnName="BiDanh" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="NamSinh" ColumnName="NamSinh" />
+          <ScalarProperty Name="ChucVu" ColumnName="ChucVu" />
+          <ScalarProperty Name="GioiTinh" ColumnName="GioiTinh" />
+          <ScalarProperty Name="IdPhong" ColumnName="IdPhong" />
+          <ScalarProperty Name="IdNhom" ColumnName="IdNhom" />
+          <ScalarProperty Name="MaDV" ColumnName="MaDV" />
+          <ScalarProperty Name="AnhDaiDien" ColumnName="AnhDaiDien" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="HoTen" ColumnName="HoTen" />
+          <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
+          <ScalarProperty Name="MaNguoiDung" ColumnName="MaNguoiDung" />
+          <ScalarProperty Name="oid" ColumnName="oid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HT_Nhom">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.HT_Nhom">
+        <MappingFragment StoreEntitySet="HT_Nhom">
+          <ScalarProperty Name="Quyen" ColumnName="Quyen" />
+          <ScalarProperty Name="MaDV" ColumnName="MaDV" />
+          <ScalarProperty Name="Ten" ColumnName="Ten" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HT_Nhom_ChucNang">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.HT_Nhom_ChucNang">
+        <MappingFragment StoreEntitySet="HT_Nhom_ChucNang">
+          <ScalarProperty Name="IdNhom" ColumnName="IdNhom" />
+          <ScalarProperty Name="IdChucNang" ColumnName="IdChucNang" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HT_Nhom_LoaiHopDong">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.HT_Nhom_LoaiHopDong">
+        <MappingFragment StoreEntitySet="HT_Nhom_LoaiHopDong">
+          <ScalarProperty Name="IDNhom" ColumnName="IDNhom" />
+          <ScalarProperty Name="IDLoaiHD" ColumnName="IDLoaiHD" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HT_PhongBan_LoaiHopDong">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.HT_PhongBan_LoaiHopDong">
+        <MappingFragment StoreEntitySet="HT_PhongBan_LoaiHopDong">
+          <ScalarProperty Name="IDLoaiHopDong" ColumnName="IDLoaiHopDong" />
+          <ScalarProperty Name="IDPB" ColumnName="IDPB" />
+          <ScalarProperty Name="IDPQPB" ColumnName="IDPQPB" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HT_ThamSo">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.HT_ThamSo">
+        <MappingFragment StoreEntitySet="HT_ThamSo">
+          <ScalarProperty Name="GiaTri" ColumnName="GiaTri" />
+          <ScalarProperty Name="Ten" ColumnName="Ten" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="KiemSoatSuKhongPhuHops">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.KiemSoatSuKhongPhuHop">
+        <MappingFragment StoreEntitySet="KiemSoatSuKhongPhuHop">
+          <ScalarProperty Name="NgayGiaHan" ColumnName="NgayGiaHan" />
+          <ScalarProperty Name="IdLapLai" ColumnName="IdLapLai" />
+          <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+          <ScalarProperty Name="SoPhieu" ColumnName="SoPhieu" />
+          <ScalarProperty Name="IdNguoiThamTra" ColumnName="IdNguoiThamTra" />
+          <ScalarProperty Name="NgayThamTra" ColumnName="NgayThamTra" />
+          <ScalarProperty Name="KetQuaThamTra" ColumnName="KetQuaThamTra" />
+          <ScalarProperty Name="DeXuatDonViGiaiQuyet" ColumnName="DeXuatDonViGiaiQuyet" />
+          <ScalarProperty Name="NgayPhatHien" ColumnName="NgayPhatHien" />
+          <ScalarProperty Name="MoLaiPhieu" ColumnName="MoLaiPhieu" />
+          <ScalarProperty Name="CoHanhDongKhacPhuc" ColumnName="CoHanhDongKhacPhuc" />
+          <ScalarProperty Name="IdTruongDonVi" ColumnName="IdTruongDonVi" />
+          <ScalarProperty Name="NgayXuLy" ColumnName="NgayXuLy" />
+          <ScalarProperty Name="NgayKiemSoat" ColumnName="NgayKiemSoat" />
+          <ScalarProperty Name="CachThucKiemSoat" ColumnName="CachThucKiemSoat" />
+          <ScalarProperty Name="BienPhap" ColumnName="BienPhap" />
+          <ScalarProperty Name="NguyenNhan" ColumnName="NguyenNhan" />
+          <ScalarProperty Name="MucDo" ColumnName="MucDo" />
+          <ScalarProperty Name="IdSuKph" ColumnName="IdSuKph" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PhongBanLienQuans">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.PhongBanLienQuan">
+        <MappingFragment StoreEntitySet="PhongBanLienQuan">
+          <ScalarProperty Name="NgayGiaHan" ColumnName="NgayGiaHan" />
+          <ScalarProperty Name="NgayHoanTatThucte" ColumnName="NgayHoanTatThucte" />
+          <ScalarProperty Name="NgayHoanTat" ColumnName="NgayHoanTat" />
+          <ScalarProperty Name="IdHanhDongKhacPhuc" ColumnName="IdHanhDongKhacPhuc" />
+          <ScalarProperty Name="IdPhongBan" ColumnName="IdPhongBan" />
+          <ScalarProperty Name="NoiDungHanhDong" ColumnName="NoiDungHanhDong" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PQ_PhanQuyenPhongBan">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.PQ_PhanQuyenPhongBan">
+        <MappingFragment StoreEntitySet="PQ_PhanQuyenPhongBan">
+          <ScalarProperty Name="IDLoai" ColumnName="IDLoai" />
+          <ScalarProperty Name="MaPB" ColumnName="MaPB" />
+          <ScalarProperty Name="IDPQPB" ColumnName="IDPQPB" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="GetInfoChucNangFromIdNhom" FunctionName="HopDongMgr.Models.Store.GetInfoChucNangFromIdNhom">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.GetInfoChucNangFromIdNhom_Result">
+          <ScalarProperty Name="oid" ColumnName="oid" />
+          <ScalarProperty Name="TenController" ColumnName="TenController" />
+          <ScalarProperty Name="TenAction" ColumnName="TenAction" />
+          <ScalarProperty Name="TenHienThi" ColumnName="TenHienThi" />
+          <ScalarProperty Name="TenMenu" ColumnName="TenMenu" />
+          <ScalarProperty Name="STT" ColumnName="STT" />
+          <ScalarProperty Name="oidParent" ColumnName="oidParent" />
+          <ScalarProperty Name="IsMenu" ColumnName="IsMenu" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetInfoDieuChinh" FunctionName="HopDongMgr.Models.Store.GetInfoDieuChinh">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.GetInfoDieuChinh_Result">
+          <ScalarProperty Name="IDHD" ColumnName="IDHD" />
+          <ScalarProperty Name="NgayDieuChinh" ColumnName="NgayDieuChinh" />
+          <ScalarProperty Name="GiatriSauDieuChinh" ColumnName="GiatriSauDieuChinh" />
+          <ScalarProperty Name="SoNgayGiaHanTienDo" ColumnName="SoNgayGiaHanTienDo" />
+          <ScalarProperty Name="TongDotDC" ColumnName="TongDotDC" />
+          <ScalarProperty Name="SoHopDong" ColumnName="SoHopDong" />
+          <ScalarProperty Name="SumGiatriSauDieuChinh" ColumnName="SumGiatriSauDieuChinh" />
+          <ScalarProperty Name="SumSoNgayGiaHanTienDo" ColumnName="SumSoNgayGiaHanTienDo" />
+          <ScalarProperty Name="MaCT" ColumnName="MaCT" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetPhanQuyen" FunctionName="HopDongMgr.Models.Store.GetPhanQuyen">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.GetPhanQuyen_Result">
+          <ScalarProperty Name="oid" ColumnName="oid" />
+          <ScalarProperty Name="TenController" ColumnName="TenController" />
+          <ScalarProperty Name="TenAction" ColumnName="TenAction" />
+          <ScalarProperty Name="TenHienThi" ColumnName="TenHienThi" />
+          <ScalarProperty Name="TenMenu" ColumnName="TenMenu" />
+          <ScalarProperty Name="STT" ColumnName="STT" />
+          <ScalarProperty Name="IsMenu" ColumnName="IsMenu" />
+          <ScalarProperty Name="Used" ColumnName="Used" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetPhanQuyen_TEST" FunctionName="HopDongMgr.Models.Store.GetPhanQuyen_TEST">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.GetPhanQuyen_TEST_Result">
+          <ScalarProperty Name="oid" ColumnName="oid" />
+          <ScalarProperty Name="TenController" ColumnName="TenController" />
+          <ScalarProperty Name="TenAction" ColumnName="TenAction" />
+          <ScalarProperty Name="TenHienThi" ColumnName="TenHienThi" />
+          <ScalarProperty Name="TenMenu" ColumnName="TenMenu" />
+          <ScalarProperty Name="STT" ColumnName="STT" />
+          <ScalarProperty Name="IsMenu" ColumnName="IsMenu" />
+          <ScalarProperty Name="Used" ColumnName="Used" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetPhanQuyenPhongBan" FunctionName="HopDongMgr.Models.Store.GetPhanQuyenPhongBan">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.GetPhanQuyenPhongBan_Result">
+          <ScalarProperty Name="IDLoai" ColumnName="IDLoai" />
+          <ScalarProperty Name="TenLoai" ColumnName="TenLoai" />
+          <ScalarProperty Name="Used" ColumnName="Used" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="KPH_GetSuKPH" FunctionName="HopDongMgr.Models.Store.KPH_GetSuKPH">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.KPH_GetSuKPH_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="SuKph" ColumnName="SuKph" />
+          <ScalarProperty Name="ThuocDonVi" ColumnName="ThuocDonVi" />
+          <ScalarProperty Name="TEN_DVIQLY" ColumnName="TEN_DVIQLY" />
+          <ScalarProperty Name="ViTri" ColumnName="ViTri" />
+          <ScalarProperty Name="SanPham" ColumnName="SanPham" />
+          <ScalarProperty Name="CanCu" ColumnName="CanCu" />
+          <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+          <ScalarProperty Name="IdLinhVuc" ColumnName="IdLinhVuc" />
+          <ScalarProperty Name="IdNguoiPhatHien" ColumnName="IdNguoiPhatHien" />
+          <ScalarProperty Name="oid" ColumnName="oid" />
+          <ScalarProperty Name="SoLanLapLai" ColumnName="SoLanLapLai" />
+          <ScalarProperty Name="MaxIdKiemSoat" ColumnName="MaxIdKiemSoat" />
+          <ScalarProperty Name="TinhTrang" ColumnName="TinhTrang" />
+          <ScalarProperty Name="NgayPhatHien" ColumnName="NgayPhatHien" />
+          <ScalarProperty Name="IdKiemSoat" ColumnName="IdKiemSoat" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="TK_TrangChu" FunctionName="HopDongMgr.Models.Store.TK_TrangChu">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.TK_TrangChu_Result">
+          <ScalarProperty Name="TenThongKe" ColumnName="TenThongKe" />
+          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+          <ScalarProperty Name="Class" ColumnName="Class" />
+          <ScalarProperty Name="Icon" ColumnName="Icon" />
+          <ScalarProperty Name="DuongDan" ColumnName="DuongDan" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="TK_TrangChu_AreaChart" FunctionName="HopDongMgr.Models.Store.TK_TrangChu_AreaChart">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.TK_TrangChu_AreaChart_Result">
+          <ScalarProperty Name="label" ColumnName="label" />
+          <ScalarProperty Name="value" ColumnName="value" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="SuKhongPhuHops">
+      <EntityTypeMapping TypeName="HopDongMgr.Models.SuKhongPhuHop">
+        <MappingFragment StoreEntitySet="SuKhongPhuHop">
+          <ScalarProperty Name="MaxIdKiemSoat" ColumnName="MaxIdKiemSoat" />
+          <ScalarProperty Name="SoLanLapLai" ColumnName="SoLanLapLai" />
+          <ScalarProperty Name="IdNguoiPhatHien" ColumnName="IdNguoiPhatHien" />
+          <ScalarProperty Name="IdLinhVuc" ColumnName="IdLinhVuc" />
+          <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+          <ScalarProperty Name="CanCu" ColumnName="CanCu" />
+          <ScalarProperty Name="SanPham" ColumnName="SanPham" />
+          <ScalarProperty Name="ViTri" ColumnName="ViTri" />
+          <ScalarProperty Name="ThuocDonVi" ColumnName="ThuocDonVi" />
+          <ScalarProperty Name="SuKph" ColumnName="SuKph" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="rptBM01_TheoDoiHopDong_GetByCongTrinh" FunctionName="HopDongMgr.Models.Store.rptBM01_TheoDoiHopDong_GetByCongTrinh">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.rptBM01_TheoDoiHopDong_GetByCongTrinh_Result">
+          <ScalarProperty Name="STT" ColumnName="STT" />
+          <ScalarProperty Name="MaNV" ColumnName="MaNV" />
+          <ScalarProperty Name="TenNV" ColumnName="TenNV" />
+          <ScalarProperty Name="MaCT" ColumnName="MaCT" />
+          <ScalarProperty Name="TenCT" ColumnName="TenCT" />
+          <ScalarProperty Name="NamGiaoA" ColumnName="NamGiaoA" />
+          <ScalarProperty Name="IDDV" ColumnName="IDDV" />
+          <ScalarProperty Name="TenDV" ColumnName="TenDV" />
+          <ScalarProperty Name="GiaTriGoiThau" ColumnName="GiaTriGoiThau" />
+          <ScalarProperty Name="IDHT" ColumnName="IDHT" />
+          <ScalarProperty Name="TenHinhThuc" ColumnName="TenHinhThuc" />
+          <ScalarProperty Name="SoHopDong" ColumnName="SoHopDong" />
+          <ScalarProperty Name="NgayKy" ColumnName="NgayKy" />
+          <ScalarProperty Name="GiaTriHopDong" ColumnName="GiaTriHopDong" />
+          <ScalarProperty Name="SoNgayThucHien" ColumnName="SoNgayThucHien" />
+          <ScalarProperty Name="SoNgayThiCong" ColumnName="SoNgayThiCong" />
+          <ScalarProperty Name="NgayDieuChinh" ColumnName="NgayDieuChinh" />
+          <ScalarProperty Name="GiaTriSauDieuChinh" ColumnName="GiaTriSauDieuChinh" />
+          <ScalarProperty Name="SoNgayGiaHanTienDo" ColumnName="SoNgayGiaHanTienDo" />
+          <ScalarProperty Name="LyDoDieuChinh" ColumnName="LyDoDieuChinh" />
+          <ScalarProperty Name="NgayTongNghiemThu" ColumnName="NgayTongNghiemThu" />
+          <ScalarProperty Name="NgayThanhLy" ColumnName="NgayThanhLy" />
+          <ScalarProperty Name="GiaTriThanhLy" ColumnName="GiaTriThanhLy" />
+          <ScalarProperty Name="GiaTriQuyetToan" ColumnName="GiaTriQuyetToan" />
+          <ScalarProperty Name="XuLyViPham" ColumnName="XuLyViPham" />
+          <ScalarProperty Name="GiaTriPhat" ColumnName="GiaTriPhat" />
+          <ScalarProperty Name="XuLyTranhChap" ColumnName="XuLyTranhChap" />
+          <ScalarProperty Name="IDHD" ColumnName="IDHD" />
+          <ScalarProperty Name="IDDC" ColumnName="IDDC" />
+          <ScalarProperty Name="TenLoai" ColumnName="TenLoai" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="rptTheoDoiHopDong_GetByNguonVon" FunctionName="HopDongMgr.Models.Store.rptTheoDoiHopDong_GetByNguonVon">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.rptTheoDoiHopDong_GetByNguonVon_Result">
+          <ScalarProperty Name="Column1" ColumnName="Column1" />
+          <ScalarProperty Name="MaNV" ColumnName="MaNV" />
+          <ScalarProperty Name="TenNV" ColumnName="TenNV" />
+          <ScalarProperty Name="MaCT" ColumnName="MaCT" />
+          <ScalarProperty Name="TenCT" ColumnName="TenCT" />
+          <ScalarProperty Name="NamGiaoA" ColumnName="NamGiaoA" />
+          <ScalarProperty Name="IDDV" ColumnName="IDDV" />
+          <ScalarProperty Name="TenDV" ColumnName="TenDV" />
+          <ScalarProperty Name="GiaTriGoiThau" ColumnName="GiaTriGoiThau" />
+          <ScalarProperty Name="IDHT" ColumnName="IDHT" />
+          <ScalarProperty Name="TenHinhThuc" ColumnName="TenHinhThuc" />
+          <ScalarProperty Name="SoHopDong" ColumnName="SoHopDong" />
+          <ScalarProperty Name="NgayKy" ColumnName="NgayKy" />
+          <ScalarProperty Name="GiaTriHopDong" ColumnName="GiaTriHopDong" />
+          <ScalarProperty Name="SoNgayThucHien" ColumnName="SoNgayThucHien" />
+          <ScalarProperty Name="SoNgayThiCong" ColumnName="SoNgayThiCong" />
+          <ScalarProperty Name="NgayDieuChinh" ColumnName="NgayDieuChinh" />
+          <ScalarProperty Name="GiaTriSauDieuChinh" ColumnName="GiaTriSauDieuChinh" />
+          <ScalarProperty Name="SoNgayGiaHanTienDo" ColumnName="SoNgayGiaHanTienDo" />
+          <ScalarProperty Name="LyDoDieuChinh" ColumnName="LyDoDieuChinh" />
+          <ScalarProperty Name="NgayTongNghiemThu" ColumnName="NgayTongNghiemThu" />
+          <ScalarProperty Name="NgayThanhLy" ColumnName="NgayThanhLy" />
+          <ScalarProperty Name="GiaTriThanhLy" ColumnName="GiaTriThanhLy" />
+          <ScalarProperty Name="GiaTriQuyetToan" ColumnName="GiaTriQuyetToan" />
+          <ScalarProperty Name="XuLyViPham" ColumnName="XuLyViPham" />
+          <ScalarProperty Name="GiaTriPhat" ColumnName="GiaTriPhat" />
+          <ScalarProperty Name="XuLyTranhChap" ColumnName="XuLyTranhChap" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="rptBM01_TheoDoiHopDong_GetByNguonVon" FunctionName="HopDongMgr.Models.Store.rptBM01_TheoDoiHopDong_GetByNguonVon">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.rptBM01_TheoDoiHopDong_GetByNguonVon_Result">
+          <ScalarProperty Name="STT_CT" ColumnName="STT_CT" />
+          <ScalarProperty Name="STT_HD" ColumnName="STT_HD" />
+          <ScalarProperty Name="STT_DC" ColumnName="STT_DC" />
+          <ScalarProperty Name="MaNV" ColumnName="MaNV" />
+          <ScalarProperty Name="TenNV" ColumnName="TenNV" />
+          <ScalarProperty Name="MaCT" ColumnName="MaCT" />
+          <ScalarProperty Name="TenCT" ColumnName="TenCT" />
+          <ScalarProperty Name="NamGiaoA" ColumnName="NamGiaoA" />
+          <ScalarProperty Name="IDDV" ColumnName="IDDV" />
+          <ScalarProperty Name="TenDV" ColumnName="TenDV" />
+          <ScalarProperty Name="GiaTriGoiThau" ColumnName="GiaTriGoiThau" />
+          <ScalarProperty Name="IDHD" ColumnName="IDHD" />
+          <ScalarProperty Name="TenLoai" ColumnName="TenLoai" />
+          <ScalarProperty Name="IDHT" ColumnName="IDHT" />
+          <ScalarProperty Name="TenHinhThuc" ColumnName="TenHinhThuc" />
+          <ScalarProperty Name="SoHopDong" ColumnName="SoHopDong" />
+          <ScalarProperty Name="NgayKy" ColumnName="NgayKy" />
+          <ScalarProperty Name="GiaTriHopDong" ColumnName="GiaTriHopDong" />
+          <ScalarProperty Name="SoNgayThucHien" ColumnName="SoNgayThucHien" />
+          <ScalarProperty Name="SoNgayThiCong" ColumnName="SoNgayThiCong" />
+          <ScalarProperty Name="NgayTongNghiemThu" ColumnName="NgayTongNghiemThu" />
+          <ScalarProperty Name="GiaTriQuyetToan" ColumnName="GiaTriQuyetToan" />
+          <ScalarProperty Name="NgayThanhLy" ColumnName="NgayThanhLy" />
+          <ScalarProperty Name="GiaTriThanhLy" ColumnName="GiaTriThanhLy" />
+          <ScalarProperty Name="XuLyViPham" ColumnName="XuLyViPham" />
+          <ScalarProperty Name="GiaTriPhat" ColumnName="GiaTriPhat" />
+          <ScalarProperty Name="XuLyTranhChap" ColumnName="XuLyTranhChap" />
+          <ScalarProperty Name="IDDC" ColumnName="IDDC" />
+          <ScalarProperty Name="DotDieuChinh" ColumnName="DotDieuChinh" />
+          <ScalarProperty Name="NgayDieuChinh" ColumnName="NgayDieuChinh" />
+          <ScalarProperty Name="GiaTriSauDieuChinh" ColumnName="GiaTriSauDieuChinh" />
+          <ScalarProperty Name="SoNgayGiaHanTienDo" ColumnName="SoNgayGiaHanTienDo" />
+          <ScalarProperty Name="LyDoDieuChinh" ColumnName="LyDoDieuChinh" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetList_HopDongHetHan" FunctionName="HopDongMgr.Models.Store.GetList_HopDongHetHan" />
+    <FunctionImportMapping FunctionImportName="GetTienDo_SauDieuChinh" FunctionName="HopDongMgr.Models.Store.GetTienDo_SauDieuChinh">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.GetTienDo_SauDieuChinh_Result">
+          <ScalarProperty Name="IDHD" ColumnName="IDHD" />
+          <ScalarProperty Name="SoNgayThucHien" ColumnName="SoNgayThucHien" />
+          <ScalarProperty Name="SoNgayThiCong" ColumnName="SoNgayThiCong" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="StrorePro_GetThongTinHopDong_DotDieuChinh" FunctionName="HopDongMgr.Models.Store.StrorePro_GetThongTinHopDong_DotDieuChinh">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HopDongMgr.Models.StrorePro_GetThongTinHopDong_DotDieuChinh_Result">
+          <ScalarProperty Name="IDHD" ColumnName="IDHD" />
+          <ScalarProperty Name="NgayDieuChinh" ColumnName="NgayDieuChinh" />
+          <ScalarProperty Name="MaCT" ColumnName="MaCT" />
+          <ScalarProperty Name="GiatriSauDieuChinh" ColumnName="GiatriSauDieuChinh" />
+          <ScalarProperty Name="SoNgayGiaHanTienDo" ColumnName="SoNgayGiaHanTienDo" />
+          <ScalarProperty Name="TongDotDC" ColumnName="TongDotDC" />
+          <ScalarProperty Name="SoHopDong" ColumnName="SoHopDong" />
+          <ScalarProperty Name="SumGiatriSauDieuChinh" ColumnName="SumGiatriSauDieuChinh" />
+          <ScalarProperty Name="SumSoNgayGiaHanTienDo" ColumnName="SumSoNgayGiaHanTienDo" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

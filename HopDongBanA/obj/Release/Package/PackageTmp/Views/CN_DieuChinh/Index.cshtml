@@ -1,0 +1,113 @@
+﻿@model IEnumerable<HopDongMgr.Models.CN_DieuChinh>
+@using HopDongMgr.Models;
+
+@{
+    ViewBag.Title = "DANH SÁCH ĐIỀU CHỈNH HỢP ĐỒNG";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa điều chỉnh của hợp đồng này không?";
+    List<GetInfoDieuChinh_Result> listHopDong = (List<GetInfoDieuChinh_Result>)ViewBag.StrorePro_GetThongTinHopDong_DotDieuChinh;
+
+}
+<div class="box-header">
+    <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+    <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhatDC" />
+</div>
+<input type="hidden" id="IDHD_TL" name="IDHD_TL" value=""/>
+<table id="example_HopDong" class="display nowrap dataTable dtr-inline luoi" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+    <thead>
+        <tr role="row">
+            <th>Số hợp đồng</th>
+            <th>Mã công trình</th>
+            <th>Tổng đợt điều chỉnh</th>
+            <th>Ngày điều chỉnh</th>
+            <th>TổngGiá trị sau điều chỉnh</th>
+            <th>Tổng ngày gia hạn tiến độ</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in listHopDong)
+        {
+            <tr role="row" id="@item.IDHD">
+                <td>
+                    @Html.DisplayFor(modelItem => item.SoHopDong)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaCT)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.TongDotDC)
+                </td>
+                <td class="text-right">
+                    @if (item.NgayDieuChinh.HasValue == true)
+        {
+            @String.Format("{0:dd-MM-yyyy}", item.NgayDieuChinh.Value);
+        }
+                </td>
+                <td class="text-right">
+                    @if (item.SumGiatriSauDieuChinh.HasValue == true)
+        {
+            @String.Format("{0:0,0}", item.SumGiatriSauDieuChinh.Value);
+        }
+                </td>
+
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.SumSoNgayGiaHanTienDo)
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+@section scripts
+    {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var ListDotDieuChinh = $('#example_HopDong').DataTable({
+                destroy: true,
+                select: true,
+                pageLength: 10
+            })
+            ListDotDieuChinh.on('select',
+                                function (e, dt, type, indexes)
+                                {
+                                    @*var idSelected = $("#example_HopDong .selected").attr("id");
+                                    if (idSelected != undefined)
+                                    {
+                                        var rowdata = ListDotDieuChinh.rows(indexes).data().toArray();
+                                        var id = rowdata[0]["DT_RowId"];
+                                        $("#IDHD_TL").val(id);
+                                        var url = '@Url.Action("Create", "CN_ThanhLy", new { idhd = "ID_replaCe" })';
+                                        url = url.replace('ID_replaCe', id);
+                                        $('#btnThanhLy').attr('Onclick', 'location.href=\'' + url.toString()+'\'');
+                                    }
+                                    else
+                                    {
+                                        $.notify({
+                                            // options
+                                            message: 'Bạn chưa chọn dòng nào'
+                                        }, {
+                                            // settings
+                                            type: 'danger'
+                                        });
+                                    }*@
+                                });
+            $('#btnCapNhatDC').click(function () {
+                var idSelected = $("#example_HopDong .selected").attr("id");
+                if (idSelected != undefined) {
+                    var url = '@Url.Action("Edit", "CN_DieuChinh", new { id = "ID_replaCe" })';
+                    url = url.replace('ID_replaCe', idSelected);
+                    window.location.href = url;
+                } else {
+                    $.notify({
+                        // options
+                        message: 'Bạn chưa chọn dòng nào'
+                    }, {
+                        // settings
+                        type: 'danger'
+                    });
+                }
+
+            });
+        });
+    </script>
+    }
+

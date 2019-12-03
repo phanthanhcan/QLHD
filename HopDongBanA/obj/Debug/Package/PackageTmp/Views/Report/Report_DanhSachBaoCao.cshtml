@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "Danh Sách Báo Cáo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    tr.group,
+    tr.group:hover {
+        background-color: #ddd !important;
+    }
+</style>
+<div id='myModal' class='modal fade in' role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="box-title">Biểu mẫu 01</h4>
+            </div>
+            <div class="modal-body" id="tableChiTiet">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5">
+        <table id="datatable_DSBaoCao" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+            <thead>
+                <tr role="row">
+                    @*<th style="display: none">Id</th>*@
+                    <th>Chọn báo Cáo</th>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr id="TheoDoiHopDong">
+                        <td>
+                            Theo dõi Hợp đồng
+                        </td>
+                    </tr>
+                    
+            </tbody>
+        </table>
+    </div>
+    <div class="row col-md-5">
+        <div>
+            <!-- Nav tabs -->
+            @*<ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="btn selected active"><a href="#tab_TheoDoiHopDong" aria-controls="Action" role="tab" aria-expanded="true" data-toggle="tab">Action</a></li>
+                <li role="presentation" class="btn"><a href="#tab_test" aria-controls="Menu" role="tab" data-toggle="tab">Menu</a></li>
+            </ul>*@
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="tab_TheoDoiHopDong">
+                    <button type="button" id="btnTheoDoiHopDong" class="btn btn-danger">Xem</button>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Chọn tham số</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tab_test">
+                    <button type="submit" id="btnPhanQuyenMenu" class="btn btn-primary">Xem</button>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Chọn tham số</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           55555555555555555555555555555555555555555555555555555555555555
+                        </tbody>
+                    </table>
+                </div>
+                div role="tabpanel" class="tab-pane" id="tab_test">
+                    <button type="submit" id="btnPhanQuyenMenu" class="btn btn-primary">Xem</button>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Chọn tham số</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           55555555555555555555555555555555555555555555555555555555555555
+                        </tbody>
+                    </table>
+                </div>
+
+                <!---->
+            </div>
+        </div>
+    </div>
+@section scripts
+{
+<script src="~/Scripts/App/Report/Report_DanhSachBaoCao.js"></script>
+<script type="text/javascript">
+    var table = $('#datatable_DSBaoCao').DataTable({
+        select: true,
+        seach: false,
+    });
+    table.on('select', function () {
+       
+        });
+</script>
+}
+

@@ -1,0 +1,53 @@
+﻿@model HopDongMgr.Models.DM_NguonVon
+
+@{
+    ViewBag.Title = "CẬP NHẬT THÔNG TIN NGUỒN VỐN";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.MaNV)
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.MaNV, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Mã Nguồn Vốn</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MaNV, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly"} })
+                @Html.ValidationMessageFor(model => model.MaNV, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.TenNV, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Tên nguồn vốn</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TenNV, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TenNV, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.Khoa, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Khóa</label>
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @{
+                        bool Khoa = Model.Khoa.GetValueOrDefault(false);
+                    }
+                    @Html.CheckBoxFor(Model => Khoa, new Dictionary<string, object>() { { "checked", "true" }, { "data-off-color", "danger" }, { "class", "cbootstrapSwitch" } })
+                    @Html.ValidationMessageFor(model => model.Khoa, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+                <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
+            </div>
+        </div>
+    </div>
+}

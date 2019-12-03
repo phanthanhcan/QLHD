@@ -1,0 +1,121 @@
+﻿@model HopDongMgr.Models.CN_ThanhLy
+
+@{
+    ViewBag.Title = "CẬP NHẬT THÔNG TIN THANH LÝ HỢP ĐỒNG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string sGiatriQT = Model.GiaTriQuyetToan.HasValue == false ? "0" : string.Format("{0:0,0}", Model.GiaTriQuyetToan.Value);
+    string sGiatriTL = Model.GiaTriThanhLy.HasValue == false ? "0" : string.Format("{0:0,0}", Model.GiaTriThanhLy.Value);
+}
+<div>
+    @Html.Raw(TempData["err"])
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.IDTL)
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.IDHD, "IDHD", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Số hợp đồng</label>
+            <div class="col-md-5">
+                @Html.DropDownList("IDHD", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDHD, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Ngày thanh lý <span style="color:red">(*)</span></label>
+            <div class="col-md-5">
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    @Html.TextBoxFor(model => model.NgayThanhLy, "{0:dd/MM/yyyy}", new { @class = "form-control pull-right cDataPicker", @placeholder = "DD/MM/YYYYY" })
+                    @Html.ValidationMessageFor(model => model.NgayThanhLy, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-9" id="errNgayKiemSoat"></div>
+            </div>
+        </div>
+
+            <div class="form-group">
+                @*@Html.LabelFor(model => model.GiaTriThanhLy, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                <label class="control-label col-md-2">Giá trị thanh lý <span style="color:red">(*)</span></label>
+                <div class="col-md-5">
+                    <input class="form-control CheckNumber Number-Get-GTTL" value="@sGiatriTL" />
+                    @Html.EditorFor(model => model.GiaTriThanhLy, new { htmlAttributes = new { @class = "form-control Number-Set-GTTL", @type = "Hidden" } })
+                    @Html.ValidationMessageFor(model => model.GiaTriThanhLy, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @*@Html.LabelFor(model => model.GiaTriQuyetToan, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                <label class="control-label col-md-2">Giá trị quyết toán <span style="color:red">(*)</span></label>
+                <div class="col-md-5">
+                    <input class="form-control CheckNumber Number-Get-GTQT" value="@sGiatriQT" />
+                    @Html.EditorFor(model => model.GiaTriQuyetToan, new { htmlAttributes = new { @class = "form-control Number-Set-GTQT", @type = "Hidden" } })
+                    @Html.ValidationMessageFor(model => model.GiaTriQuyetToan, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Lưu" class="btn btn-warning" />
+                    <input type="button" value="XoaThanhLy" class="btn btn-warning" id="btnXoaTL" style="display:none" />
+                    <input type="button" value="Quay lại" class="btn btn-info" onclick="location.href='@Url.Action("Index")'" />
+
+                </div>
+            </div>
+        </div>
+
+    @section scripts
+    {
+        <script>
+            $(document).ready(function () {
+                $(".Number-Get-GTQT").focusout(function () {
+                    var val = $(this).val().replace(/,/g,"");
+                    $(".Number-Set-GTQT").val(val);
+                });
+                $(".Number-Get-GTTL").focusout(function () {
+                    var val = $(this).val().replace(/,/g, "");
+                    $(".Number-Set-GTTL").val(val);
+                });
+
+            });
+            $('#btnXoaTL').click(function () {
+                var idSelected = $("#IDTL").attr("id");
+                if (idSelected != undefined) {
+                    Loading();
+                    $.ajax({
+                        method: 'POST',
+                        url: '@Url.Action("Delete","CN_ThanhLy")',
+                        data: { id: idSelected },
+                        success: function (data) {
+                            LoadingHide();
+
+                            $.notify({
+                                // options
+                                message: 'Xóa thành công'
+                            }, {
+                                // settings
+                                type: 'info'
+                            });
+                        },
+                        error: function (data) {
+                            $.notify({
+                                // options
+                                message: 'Có lỗi xảy ra.'
+                            }, {
+                                // settings
+                                type: 'Danger'
+                            });
+                        }
+
+                    })
+                }
+                
+            });
+        </script>
+    }
+}

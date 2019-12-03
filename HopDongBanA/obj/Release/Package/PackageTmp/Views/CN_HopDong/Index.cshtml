@@ -1,0 +1,167 @@
+﻿@model IEnumerable<HopDongMgr.Models.CN_HopDong>
+
+@{
+    ViewBag.Title = "DANH SÁCH HỢP ĐỒNG";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa hợp đồng này không?";
+}
+<div class="box-header">
+    <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+    <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
+    <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
+    <input type="button" value="Thanh lý" class="btn btn-default" onclick="" id="btnThanhLy" />
+    <input type="button" value="Xử phạt" class="btn btn-navy" onclick="" id="btnXuPhat" />
+    <input type="button" value="Hết hạn điều chỉnh" class="btn btn-danger" onclick="" id="btnHetHan" />
+</div>
+<table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+    <thead>
+        <tr role="row">
+            <th>Công trình</th>
+            <th>Số hợp đồng</th>
+            <th>Ngày ký</th>
+            <th>Giá trị hợp đồng</th>
+            <th>Số ngày thực hiện</th>
+            <th>Số ngày thi công</th>
+            <th>Năm giao A</th>
+            <th>Đơn vị thực hiện</th>
+            <th>Giá trị gói thầu</th>
+            <th>Tên hình thức hợp đồng</th>
+            <th>Nội dung</th>
+            <th>Người theo dõi</th>
+            <th>Ngày cập nhật</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr role="row" id="@item.IDHD">
+                <td>
+                    @Html.DisplayFor(modelItem => item.DM_CongTrinh.TenCT)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SoHopDong)
+                </td>
+                @{
+                    if (item.NgayKy.HasValue == false)
+                    {
+                        <td>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-right">
+                            @item.NgayKy.Value.ToString("dd/MM/yyyy")
+                        </td>
+                    }
+                }
+                @{
+                    if (item.GiaTriHopDong.HasValue == false)
+                    {
+                    <td></td>
+                    }
+                    else
+                    {
+                        <td class="text-right">
+                            @string.Format("{0:0,0}", item.GiaTriHopDong.Value)
+                        </td>
+                    }
+                }
+                <td class="text-right">
+                    @*@Html.DisplayFor(modelItem => item.SoNgayThucHien)*@
+                    @string.Format("{0:0,0}", item.SoNgayThucHien.GetValueOrDefault(0))
+                </td>
+                <td class="text-right">
+                    @*@Html.DisplayFor(modelItem => item.SoNgayThiCong)*@
+                    @string.Format("{0:0,0}", item.SoNgayThiCong.GetValueOrDefault(0))
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.NamGiaoA)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DM_DonViThucHien.TenDV)
+                </td>
+                @{
+                    if (item.GiaTriGoiThau.HasValue == false)
+                    {
+                        <td></td>
+                    }
+                    else
+                    {
+                        <td class="text-right">
+                            @string.Format("{0:0,0}", item.GiaTriGoiThau.Value)
+                        </td>
+                    }
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.DM_HinhThucHopDong.TenHinhThuc)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.NoiDung)*@
+                    @Html.TextAreaFor(model => item.NoiDung, new { rows = "3", cols = "110" })
+                    @*<div class="col-md-7">
+                        @Html.TextAreaFor(model => item.NoiDung, new { @class = "form-control ", rows = "3" })
+                    </div>*@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HT_NguoiDung.HoTen)
+                </td>
+                @{
+                    if (item.NgayCapNhat.HasValue == false)
+                    {
+                        <td></td>
+                    }
+                    else
+                    {
+                        <td class="text-right">
+                            @item.NgayCapNhat.Value.ToString("dd/MM/yyyy")
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+@section scripts
+    {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnThanhLy').click(function () {
+                var idSelected = $("#example .selected").attr("id");
+                if (idSelected != undefined) {
+                        var url = '@Url.Action("Create_CN_ThanhLy", "CN_ThanhLy", new { idhd = "ID_replaCe" })';
+                    url = url.replace('ID_replaCe', idSelected);
+                    window.location.href = url;
+                } else {
+                    $.notify({
+                        // options
+                        message: 'Bạn chưa chọn dòng nào'
+                    }, {
+                        // settings
+                        type: 'danger'
+                    });
+                }
+
+            });
+            $('#btnXuPhat').click(function () {
+                var idSelected = $("#example .selected").attr("id");
+                if (idSelected != undefined) {
+                    var url = '@Url.Action("Edit_XuPhatTranhChap", "CN_HopDong", new { idhd = "ID_replaCe" })';
+                    url = url.replace('ID_replaCe', idSelected);
+                    window.location.href = url;
+                } else {
+                    $.notify({
+                        // options
+                        message: 'Bạn chưa chọn dòng nào'
+                    }, {
+                        // settings
+                        type: 'danger'
+                    });
+                }
+
+            }); 
+            $('#btnHetHan').click(function () {
+                var url = '@Url.Action("Index_HetHanDieuChinh", "CN_HopDong")';
+                window.location.href = url;
+            });
+        });
+    </script>
+}

@@ -1,0 +1,42 @@
+﻿@model IEnumerable<HopDongMgr.Models.DM_LoaiHopDong>
+
+@{
+    ViewBag.Title = "DANH SÁCH LOẠI HỢP ĐỒNG";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa loại hợp đồng này không?";
+}
+
+<div class="box-header">
+    <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+    <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
+    <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
+</div>
+<table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+    <thead>
+        <tr role="row">
+            <th>Mã loại</th>
+            <th>Tên loại hợp đồng</th>
+            <th>Khóa</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr role="row" id="@item.IDLoai">
+                <td>
+                    @Html.DisplayFor(modelItem => item.IDLoai)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenLoai)
+                </td>
+                <td>
+                    @{
+                        bool Khoa = item.Khoa;
+                    }
+                    @Html.CheckBoxFor(Model => Khoa, new Dictionary<string, object>() { { "checked", "true" }, { "data-off-color", "danger" }, { "class", "cbootstrapSwitch" }, { "readonly", "readonly" } })
+
+                </td>
+            </tr>
+                        }
+    </tbody>
+
+</table>

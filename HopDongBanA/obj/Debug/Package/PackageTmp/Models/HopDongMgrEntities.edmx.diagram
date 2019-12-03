@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="deb6b610c0624be1a0548ae8cdc0754e" Name="Diagram1">
+        <EntityTypeShape EntityType="HopDongBanA.Models.CN_DieuChinh" Width="1.5" PointX="8.25" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.CN_HopDong" Width="1.5" PointX="3" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.CN_ThanhLy" Width="1.5" PointX="5.25" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.DM_CongTrinh" Width="1.5" PointX="0.75" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.DM_DiaDiem" Width="1.5" PointX="1.5" PointY="28.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.DM_DONVI" Width="1.5" PointX="1.5" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.DM_DonViThucHien" Width="1.5" PointX="0.75" PointY="35.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.DM_HinhThucHopDong" Width="1.5" PointX="0.75" PointY="39.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.DM_LoaiDieuChinh" Width="1.5" PointX="6" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.DM_LoaiHopDong" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.DM_NguonVon" Width="1.5" PointX="1.5" PointY="32.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.DM_PHONG" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.HT_CauHinh" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.HT_CHUCVU" Width="1.5" PointX="1.5" PointY="47.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.HT_DSChucNang" Width="1.5" PointX="8.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.HT_NguoiDung" Width="1.5" PointX="0.75" PointY="42.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.HT_Nhom" Width="1.5" PointX="3.75" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.HT_Nhom_ChucNang" Width="1.5" PointX="11" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.HT_Nhom_LoaiHopDong" Width="1.5" PointX="6" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.HT_PhongBan_LoaiHopDong" Width="1.5" PointX="6" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.HT_ThamSo" Width="1.5" PointX="10.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.PQ_PhanQuyenPhongBan" Width="1.5" PointX="6" PointY="17.5" IsExpanded="true" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_CN_DieuChinh_CN_DieuChinh" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_CN_DieuChinh_CN_HopDong" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_CN_HopDong_CN_HopDong" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_CN_HopDong_DM_CongTrinh" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_CN_HopDong_DM_DonViThucHien" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_CN_HopDong_DM_HinhThucHopDong" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_CN_HopDong_DM_LoaiHopDong" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_CN_HopDong_PQ_NguoiDung" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_CN_ThanhLy_CN_HopDong" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_DM_CongTrinh_DM_DiaDiem" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_DM_CongTrinh_DM_NguonVon" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_DM_PHONG_DM_DONVI" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_HT_Nhom_DM_DONVI" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_HT_Nhom_LoaiHopDong_DM_LoaiHopDong" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_HT_PhongBan_LoaiHopDong_DM_LoaiHopDong" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_HT_PhongBan_LoaiHopDong_DM_PHONG" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_PQ_PhanQuyenPhongBan_DM_PhongBan" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_HT_NguoiDung_HT_CHUCVU" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_HT_DSChucNang_HT_DSChucNang" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_HT_Nhom_ChucNang_HT_DSChucNang" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_HT_Nhom_ChucNang_HT_Nhom" ManuallyRouted="false" />
+        <AssociationConnector Association="HopDongBanA.Models.FK_HT_Nhom_LoaiHopDong_HT_Nhom" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

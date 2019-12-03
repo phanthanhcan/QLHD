@@ -1,0 +1,75 @@
+﻿@using ReportViewerForMvc;
+@using HopDongMgr.Models;
+
+@{
+    ViewBag.Title = "Báo cáo TEST";
+}
+
+<div id='myModal' class='modal fade in padding_left_17'>
+    <div class="modal-dialog modal-lg-mod">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id='myModalContent'></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="box box-danger">
+    @*<div class="box-header with-border">
+            <h3 class="box-title">Different Width</h3>
+        </div>*@
+    <div class="box-body">
+        <div class="row form-group">
+            <div class="col-xs-9">
+                @Html.DropDownList("liDMCT", (SelectList)ViewBag.Model, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-xs-3">
+                <button type="button" id="btn-baocao" class="btn btn-navy">Báo cáo</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $("#btn-baocao").click(function () {
+            Loading();
+            var liDMCT = $("#liDMCT").val();
+            var sdata  = {
+                MaCT: liDMCT
+            }
+
+            $.ajax({
+                url: '@Url.Action("Print", "BM02", null)',
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(sdata),
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    LoadingHide();
+                    $('#myModalContent').html(data);
+                    //hiện modal
+                    $("#myModal").modal('show');
+                },
+                error: function (xhr) {
+                    //console.log("error: " + data + " status: " + status + " er:" + er);
+                    LoadingHide();
+                    console.log(xhr);
+
+                }
+            });
+
+        })
+
+    </script>
+}
+

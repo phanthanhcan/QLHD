@@ -1,0 +1,271 @@
+﻿@model IEnumerable<HopDongMgr.Models.CN_HopDong>
+
+@{
+    ViewBag.Title = "DANH SÁCH HỢP ĐỒNG";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa hợp đồng này không?";
+}
+<link href="~/Content/dataTables.1.10.16/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/dataTables.1.10.16/dataTables.semanticui.min.css" rel="stylesheet" type="text/css">
+<link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" type="text/css">
+<link href="~/Content/dataTables.Ajax.semantic-ui/dataTables.semanticui.min.css" rel="stylesheet" type="text/css">
+<link href="~/Content/dataTables.1.10.16.Responsive.semanticui/responsive.semanticui.min.css" rel="stylesheet" type="text/css">
+@*<link href="https://cdn.datatables.net/1.10.16/css/dataTables.semanticui.min.css" rel="stylesheet" type="text/css">*@
+@*<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css" rel="stylesheet" type="text/css">*@
+<link href="~/Content/dataTables.semantic-ui.2.3.0/semantic.min.css" rel="stylesheet" type="text/css">
+
+@*toggel Đồng ý*@
+<div class="modal modal-danger fade in" id="modal-danger-DongBo" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog modal-MD">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Đồng bộ danh mục Hợp đồng từ chương trình ĐTXD</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-outline" data-dismiss="modal" id="btnDongYDB">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*---------*@
+<div class="box-header">
+    <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+    <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
+    <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
+    <input type="button" value="Thanh lý" class="btn btn-default" onclick="" id="btnThanhLy" />
+    <input type="button" value="Xử phạt" class="btn btn-navy" onclick="" id="btnXuPhat" />
+    <input type="button" value="Hết hạn điều chỉnh" class="btn btn-danger" onclick="" id="btnHetHan" />
+    <input type="button" value="Đồng Bộ" class="btn" id="btnDongBo" data-toggle="modal" data-target="#modal-danger-DongBo" />
+
+</div>
+
+@*<table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">*@
+<table id="example" class="ui celled table responsive nowrap display nowrap dataTable dtr-inline" role="grid" aria-describedby="example_info" style="width:100%">
+    <thead>
+        <tr role="row">
+            <th>Công trình</th>
+            <th>Số hợp đồng</th>
+            <th>Ngày ký</th>
+            <th>Giá trị hợp đồng</th>
+            <th>Giá trị gói thầu</th>
+            <th>Số ngày thực hiện</th>
+            <th>Số ngày thi công</th>
+            <th>Năm giao A</th>
+            <th>Đơn vị thực hiện</th>
+            <th>Hình thức hợp đồng</th>
+            <th>Nội dung</th>
+            <th>Người theo dõi</th>
+            <th>Ngày cập nhật</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr role="row">
+            <th>Công trình</th>
+            <th>Số hợp đồng</th>
+            <th>Ngày ký</th>
+            <th>Giá trị hợp đồng</th>
+            <th>Giá trị gói thầu</th>
+            <th>Số ngày thực hiện</th>
+            <th>Số ngày thi công</th>
+            <th>Năm giao A</th>
+            <th>Đơn vị thực hiện</th>
+            <th>Hình thức hợp đồng</th>
+            <th>Nội dung</th>
+            <th>Người theo dõi</th>
+            <th>Ngày cập nhật</th>
+        </tr>
+    </tfoot>
+
+</table>
+@section scripts
+    {
+    <script src="~/Scripts/jquery-1.12.4.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.1.10.16/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.1.10.16/dataTables.semanticui.min.js"></script>
+    <script src="~/Scripts/DataTables/responsive.2.2.1/dataTables.responsive.min.js"></script>
+    <script src="~/Scripts/DataTables/responsive.2.2.1/responsive.semanticui.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //#region processing-side
+            $("#example").DataTable({
+                responsive: true,
+                "ajax": {
+                    "url": "@Url.Action("GetList", "CN_HopDong")",
+                "type": "POST",
+                "datatype": "json"
+            },
+                columns: [
+                    { "data": "TenCT", "name": "TenCT", },
+                    { "data": "SoHD", "name": "SoHD" },
+                    { "data": "NgayKy", "name": "NgayKy" },
+                    { "data": "GiaTriHopDong", "name": "GiaTriHopDong" },
+                    { "data": "GiaTriGoiThau", "name": "GiaTriGoiThau" }, // giá trị gói thầu
+                    { "data": "SoNgayThucHien", "name": "SoNgayThucHien" },
+                    { "data": "SoNgayThiCong", "name": "SoNgayThiCong" },
+                    { "data": "NamGiaoA", "name": "NamGiaoA" },
+                    { "data": "TenDVTH", "name": "TenDVTH" },
+                    { "data": "TenHTHD", "name": "TenHTHD" },
+                    { "data": "NoiDung", "name": "NoiDung" },
+                    { "data": "NguoiTheoDoi", "name": "NguoiTheoDoi" },
+                    { "data": "NgayCapNhat", "name": "NgayCapNhat" },
+                ],
+                "columnDefs": [
+                    {
+                        "targets": 2,
+                        "className": "dt-right",
+                    }
+                    , {
+                        "targets": 3,
+                        "className": "dt-right",
+                    }
+                    , {
+                        "targets": 4,
+                        "className": "dt-right",
+                    }
+                    , {
+                        "targets": 5,
+                        "className": "dt-right",
+                    }
+                    , {
+                        "targets": 6,
+                        "className": "dt-right",
+                    }
+
+                ],
+                "fnDrawCallback": function() {
+                    //$('#example tbody .khoa').bootstrapToggle({
+                    //});
+                },
+            responsive: {
+                details: {
+                        renderer: function ( api, rowIdx, columns ) {
+                            var data = $.map(columns, function (col, i) {
+                                var string;
+                                if (col.title == "Nội dung")
+                                {
+                                    _string =   '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                                                '<td>' + col.title + ':' + '</td> ' +
+                                                '<td> <textarea rows="4" cols="50"> ' + col.data + '</textarea> </td>' +
+                                                '</tr>'
+                                }
+                                else
+                                {
+                                    _string =  '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+                                        '<td>' + col.title+':'+'</td> '+
+                                        '<td>' + col.data + '</td>' +
+                                        '</tr>'
+                                }
+                                return col.hidden ?
+                                    _string:
+                                    '';
+                            } ).join('');
+
+                            return data ?
+                                $('<table/>').append( data ) :
+                                false;
+                        }
+                }
+            },
+            "serverSide": "true",
+            "order": [0, "asc"],
+            "processing": "true",
+            "language": {
+                "processing": "processing ..... please"
+            }
+
+        });
+
+        $('#example tbody').on('click', 'tr', function () {
+
+            $('#example tbody tr').removeClass("selected");
+            $(this).toggleClass("selected");
+        });
+//#endregion processing-side
+
+
+            $('#btnThanhLy').click(function () {
+                var idSelected = $("#example .selected").attr("id");
+                if (idSelected != undefined) {
+                        var url = '@Url.Action("Create_CN_ThanhLy", "CN_ThanhLy", new { idhd = "ID_replaCe" })';
+                    url = url.replace('ID_replaCe', idSelected);
+                    window.location.href = url;
+                } else {
+                    $.notify({
+                        // options
+                        message: 'Bạn chưa chọn dòng nào'
+                    }, {
+                        // settings
+                        type: 'danger'
+                    });
+                }
+
+            });
+            $('#btnXuPhat').click(function () {
+                var idSelected = $("#example .selected").attr("id");
+                if (idSelected != undefined) {
+                    var url = '@Url.Action("Edit_XuPhatTranhChap", "CN_HopDong", new { idhd = "ID_replaCe" })';
+                    url = url.replace('ID_replaCe', idSelected);
+                    window.location.href = url;
+                } else {
+                    $.notify({
+                        // options
+                        message: 'Bạn chưa chọn dòng nào'
+                    }, {
+                        // settings
+                        type: 'danger'
+                    });
+                }
+
+            }); 
+            $('#btnHetHan').click(function () {
+                var url = '@Url.Action("Index_HetHanDieuChinh", "CN_HopDong")';
+                window.location.href = url;
+            });
+            $('#btnDongYDB').click(function () {
+                Loading();
+                $.ajax({
+                    url: "/CN_HopDong/DongBo_CNHopDong",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    async: true,
+                    processData: false,
+                    cache: false,
+                    success: function (data) {
+                        if (data == "1") {
+                            LoadingHide();
+                            $.notify({
+                                title: '<strong>Thông báo</strong>:',
+                                message: 'Đồng bộ thành công'
+                            }, {
+                                type: 'info'
+                            });
+                        }
+                        else {
+                            $.notify({
+                                title: '<strong>Thông báo</strong>:',
+                                message: data + 'Có lỗi xảy ra khi đồng bộ'
+                            }, {
+                                type: 'danger'
+                            });
+
+                            console.log(data);
+                            LoadingHide();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.log("error: " + data + " status: " + status + " er:" + er);
+                    }
+                });
+
+            });
+        });
+    </script>
+    <script src="~/Scripts/bootstrap-toggle.min.js"></script>
+}

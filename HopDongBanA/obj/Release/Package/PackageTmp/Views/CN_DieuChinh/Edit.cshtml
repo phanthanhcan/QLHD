@@ -1,0 +1,249 @@
+﻿@model HopDongMgr.Models.CN_DieuChinh
+@using HopDongMgr.Models;
+@using System;
+@{
+    ViewBag.Title = "CẬP NHẬT ĐIỀU CHÌNH HƠP DỒNG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa điều chỉnh này không?";
+    List<CN_DieuChinh> ListDotDieuChinh = new List<CN_DieuChinh>();
+    ListDotDieuChinh = (List<CN_DieuChinh>)ViewBag.ListDotDieuChinh;
+    int DotDieuChinhNew = (int)ViewBag.DotDieuChinhNew;
+    int IDDC = -1;
+    if (ListDotDieuChinh != null)
+    {
+        IDDC = ListDotDieuChinh.FirstOrDefault().IDDC;
+    }
+}
+<div id="err">
+    @Html.Raw(TempData["err"])
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <input type="hidden" id="IDDC" value="@IDDC" name="IDDC"/> 
+        <input type="hidden" id="FlagCreate" value="0" name="FlagCreate" /> @*0: cap nhat 1: them moi*@
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.IDHD, "IDHD", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2"> Đợt điều chỉnh</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.DotDieuChinh, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.DotDieuChinh, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.IDHD, "IDHD", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2"> Số hợp đồng</label>
+            <div class="col-md-4">
+                @Html.DropDownList("IDHD", null, htmlAttributes: new { @class = "form-control", @readonly= "readonly"})
+                @Html.ValidationMessageFor(model => model.IDHD, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Ngày điều chỉnh <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    @Html.TextBoxFor(model => model.NgayDieuChinh, "{0:dd/MM/yyyy}", new { @class = "form-control pull-right cDataPicker", @placeholder = "DD/MM/YYYYY" })
+                    @Html.ValidationMessageFor(model => model.NgayDieuChinh, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.GiaTriSauDieuChinh, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Giá trị sau điều chỉnh</label>
+            <div class="col-md-4">
+                <input class="form-control CheckNumber Number-Get-GTSDC"/>
+                @Html.EditorFor(model => model.GiaTriSauDieuChinh, new { htmlAttributes = new { @class = "form-control Number-Set-GTSDC", @type = "Hidden" } })
+                @Html.ValidationMessageFor(model => model.GiaTriSauDieuChinh, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2 small">Số ngày gia hạn tiến độ</label>
+            <div class="col-md-4">
+                <input class="form-control CheckNumber Number-Get-SNGHTD"/>
+                @Html.EditorFor(model => model.SoNgayGiaHanTienDo, new { htmlAttributes = new { @class = "form-control Number-Set-SNGHTD", @type = "Hidden" } })
+                @Html.ValidationMessageFor(model => model.SoNgayGiaHanTienDo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.NoiDung, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Lý do điều chỉnh</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.LyDoDieuChinh, new { @class = "form-control", @rows = "3" })
+                @Html.ValidationMessageFor(model => model.LyDoDieuChinh, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10 ">
+                <input type="button" id="ThemMoiDot" value="Thêm mới" class="btn btn-info col-md-2" style="margin-left:4px ;margin-right:2px"/>
+                <input type="submit" value="Lưu" class="btn btn-primary col-md-2" style="margin-left:2px ;margin-right:2px"/>
+                <input type="button" id="btnXoaDC"value="Xóa" class="btn btn-danger col-md-2" style="margin-left:2px ;margin-right:2px" data-toggle="" data-target="" />
+                <input type="button" value="Quay lại" class="btn btn-default col-md-2" style="margin-left:2px ;margin-right:4px"  onclick="location.href='@Url.Action("Index")'" />
+            </div>
+        </div>
+    </div>
+            @*lưới thông tin dot dieu chinh*@
+            <table id="example_DotDC" class="table table-condensed  nowrap dataTable dtr-inline ListDotDieuChinh" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+                <thead>
+                    <tr role="row">
+                        <th style="display:none">Số hợp đồng</th>
+                        <th>Đợt điều chỉnh</th>
+                        <th>Ngày điều chỉnh</th>
+                        <th>Giá trị sau điều chỉnh</th>
+                        <th>Số ngày gia hạn tiến độ</th>
+                        <th>Lý do điều chỉnh</th>
+                        <th style="display:none">IDDC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ListDotDieuChinh)
+                {
+                        <tr role="row" id="@item.IDDC">
+                            <td style="display:none">
+                                @Html.DisplayFor(modelItem => item.CN_HopDong.SoHopDong)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DotDieuChinh)
+                            </td>
+                            <td class="text-right">
+
+                                @if (item.NgayDieuChinh.HasValue == true)
+                                { @item.NgayDieuChinh.Value.ToString("dd/MM/yyyy");
+                                }
+                            </td>
+                            <td class="text-right">
+                                @if (item.GiaTriSauDieuChinh.HasValue == true)
+                                {
+                                    @String.Format("{0:0,0}", item.GiaTriSauDieuChinh.Value);
+                                }
+                            </td>
+                            <td class="text-right">
+                                @if (item.SoNgayGiaHanTienDo.HasValue == true)
+                                {
+                                    @String.Format("{0:0,0}", item.SoNgayGiaHanTienDo.Value);
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LyDoDieuChinh)
+                            </td>
+                            <td style="display:none">
+                                @Html.DisplayFor(modelItem => item.IDDC)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+    @section scripts
+    { 
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var ListDotDieuChinh = $('.ListDotDieuChinh').DataTable({
+                    destroy: true,
+                    select: true,
+                    searching: false,
+                    lengthChange: false,
+                    pageLength: 5
+                })
+                ListDotDieuChinh.on('select', function(e, dt, type, indexes){
+                    var rowdata = ListDotDieuChinh.rows(indexes).data().toArray();
+                    var id = rowdata[0][0];
+                    $("#DotDieuChinh").val(rowdata[0][1]);
+                    $("#SoHopDong").val(rowdata[0][0]);
+                    $("#NgayDieuChinh").val(rowdata[0][2]);
+
+                    $("#GiaTriSauDieuChinh").val(rowdata[0][3].replace(/,/g, ""));
+                    $(".Number-Get-GTSDC").val(rowdata[0][3]);
+
+                    $("#SoNgayGiaHanTienDo").val(rowdata[0][4].replace(/,/g,"")); 
+                    $(".Number-Get-SNGHTD").val(rowdata[0][4]);
+
+                    $("#LyDoDieuChinh").val(rowdata[0][5]);
+                    $("#IDDC").val(rowdata[0][6]);
+                    $("#FlagCreate").val("0");
+                });
+
+                $('#ThemMoiDot').click( function(){
+                    $("#DotDieuChinh").val("@DotDieuChinhNew");
+
+                    $("#NgayDieuChinh").val($.datepicker.formatDate("dd/mm/yy",new Date()));
+                    $("#GiaTriSauDieuChinh").val("0");
+                    $("#SoNgayGiaHanTienDo").val("0");
+                    $("#LyDoDieuChinh").val("");
+                    $("#FlagCreate").val("1");
+                });
+
+                $(".Number-Get-GTSDC").focusout(function () {
+                    var val = $(this).val().replace(/,/g, "");
+                    $(".Number-Set-GTSDC").val(val);
+                });
+                $(".Number-Get-SNGHTD").focusout(function () {
+                    var val = $(this).val().replace(/,/g, "");
+                    $(".Number-Set-SNGHTD").val(val);
+                });
+            });
+            $('#btnXoaDC').click(function () {
+                var idSelected = $("#example_DotDC .selected").attr("id");
+                if (idSelected != undefined) {
+                    Loading();
+                    $.ajax({
+                        method: 'POST',
+                        url: '@Url.Action("Delete")',
+                        data: { id: idSelected },
+                        success: function (data) {
+                            $('#example_DotDC').DataTable().row('.selected').remove().draw(false);
+                            LoadingHide();
+
+                            $.notify({
+                                // options
+                                message: 'Xóa thành công'
+                            }, {
+                                // settings
+                                type: 'info'
+                            });
+                        }
+                    })
+                }
+                else
+                {
+                    $.notify({
+                        // options
+                        message: 'Chưa chọn dòng điều chỉnh'
+                    }, {
+                        // settings
+                        type: 'danger'
+                    });
+                }
+            });
+            $("form").submit(function (e) {
+                var serr = "";
+                //if (isNaN($(".Number-Set-GTSDC").val()) == true || $(".Number-Set-GTSDC").val() <=0)
+                //{
+                //    serr =serr +  "Vui lòng nhập giá trị sau điều chỉnh <BR>";
+                //}
+                //if (isNaN($(".Number-Set-SNGHTD").val()) == true || $(".Number-Set-SNGHTD").val() <=0) {
+                //    serr = serr + "Vui lòng nhập số ngày gia hạn tiến dộ <BR>";
+                //}
+                //if ($("#NgayDieuChinh").val() == "") {
+                //    serr = serr + "Vui lòng nhập số ngày gia hạn tiến dộ <BR>";
+                //}
+                if (serr.length > 3)
+                {
+                    e.preventDefault();
+                    $.notify({
+                        // options
+                        message: serr
+                    }, {
+                        // settings
+                        type: 'danger'
+                    });
+                }
+            });
+
+        </script>
+    }
+}

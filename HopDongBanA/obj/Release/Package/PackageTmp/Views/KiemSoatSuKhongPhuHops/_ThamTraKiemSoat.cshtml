@@ -1,0 +1,100 @@
+﻿@model HopDongMgr.Models.KiemSoatSuKhongPhuHop
+
+@*<script src="@Url.Content("~/Scripts/IsoMgrJS.js")"></script>*@
+<style>
+    .dateNgay {
+        z-index:1151 !important;
+    }
+</style>
+<script src="~/Scripts/App/KiemSoatKhongPhuHop/ThamTraKiemSoat.js"></script>
+@using (Html.BeginForm("ThamTraKiemSoat", "KiemSoatSuKhongPhuHops", FormMethod.Post, new { id = "pgeThamTraKSKPH", @enctype = "multipart/form-data" }))
+{
+<div class="modal-body">
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        <div class="box-body">
+            <div class="form-group">
+                @Html.LabelFor(model => model.IdSuKph, "Sự không phù hợp", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.Editor("SuKPH", new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.SuKPH, @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.KetQuaThamTra, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.KetQuaThamTra, "Kết quả thẩm tra", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.DropDownList("KetQuaThamTra", new SelectList(ViewBag.LstKetQua, "Value", "Text"), htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.KetQuaThamTra, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NgayThamTra, "Ngày thẩm tra", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        @Html.TextBoxFor(model => model.NgayThamTra, "{0:dd/MM/yyyy}", new { @class = "form-control pull-right dateNgay" })
+                        @Html.ValidationMessageFor(model => model.NgayThamTra, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-sm-9 has-error" id="errNgayThamTra"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IdNguoiThamTra, "Người thẩm tra", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IdNguoiThamTra", (SelectList)ViewBag.IdNguoiThamTra, htmlAttributes: new { @class = "form-control select2" })
+                    @Html.ValidationMessageFor(model => model.IdNguoiThamTra, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.GhiChu, "Ghi chú", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.GhiChu, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SoPhieu, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group" id="ckMoLaiPhieu" name="ckMoLaiPhieu" hidden>
+                @Html.LabelFor(model => model.SoPhieu, "Yêu cầu mở lại phiếu, số phiếu", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SoPhieu, new { htmlAttributes = new { @class = "form-control", } })
+                    @Html.ValidationMessageFor(model => model.SoPhieu, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group" id="dtpNgayGiaHan" name="dtpNgayGiaHan" hidden>
+                @Html.LabelFor(model => model.NgayGiaHan, "Ngày gia hạn", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        @Html.TextBoxFor(model => model.NgayGiaHan, "{0:dd/MM/yyyy}",  new { @class = "form-control pull-right dateNgay" })
+                        @Html.ValidationMessageFor(model => model.NgayGiaHan, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-sm-9 has-error" id="errNgayGiaHan"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="box-footer">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="hidden" id="error" value="@ViewBag.err"/>
+                <input type="button" value="Lưu" id="btn-saveTTKS" name="btn-save" class="btn btn-success" />
+            </div>
+            <div class="form-group has-error" id="errThongBao"></div>
+        </div>
+    </div>
+</div>
+}

@@ -1,0 +1,196 @@
+﻿@model IEnumerable<HopDongMgr.Models.HanhDongKhacPhuc>
+
+@{
+    ViewBag.Title = "DANH SÁCH HÀNH ĐỘNG KHẮC PHỤC SỰ KHÔNG PHÙ HỢP";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn xóa hành động khắc phục này không?";
+}
+
+<script src="~/Scripts/App/HanhDongKhacPhuc/DsHanhDongKP.js"></script>
+
+<div id='myModal' class='modal fade in' role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="box-title">Thẩm tra hành động khắc phục</h4>
+            </div>
+            <div class="modal-body">
+                <div id='myModalContent'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-danger fade in" id="id-modal-danger" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog modal-MD">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>@ViewBag.ThongBaoXoa</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-outline" data-dismiss="modal" id="btnDel">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade in" id="id-modal-warning" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog modal-MD">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn tạo lại phiếu này không?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-outline" data-dismiss="modal" id="btnTaoPhieu">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <button type="button" value="@Url.Action("Edit", new { id = "_TOREPLACE_" })" class="btn btn-warning" id="btnUpdate">Chi tiết</button>
+        <button type="button" value="@Url.Action("Delete")" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#id-modal-danger">Xóa</button>
+        <select class="dropdownSearch" id="cboTinhTrang" name="cboTinhTrang">
+            <option value="">Tất cả</option>
+            <option value="Thẩm tra">Thẩm tra</option>
+            <option value="Đạt">Đạt</option>
+            <option value="Không đạt">Không đạt</option>
+            <option value="Tạo phiếu mới">Tạo phiếu mới</option>
+        </select>
+    </div>
+    <div class="box-body">
+        <table id="tblDsHanhDongKPH" class="display dataTable" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+            <thead>
+                <tr role="row">
+                    <th style="display:none"></th>
+                    <th>Kết quả thẩm tra</th>
+                    <th></th>
+                    <th>Sự không phù hợp</th>
+                    <th>Phân tích nguyên nhân</th>
+                    @*<th>Ngày phân tích</th>*@
+                    <th>Hành động đề xuất</th>
+                    <th>Ngày phê duyệt</th>
+                    <th>Thời gian hoàn tất</th>
+                    <th>Thời gian hoàn tất thực tế</th>
+                    <th>Kết quả giám sát</th>
+                    <th>Ngày gia hạn</th>
+                    <th>Ghi chú</th>
+
+                    @*<th width="90px"></th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @if ((List<HopDongMgr.Models.KPH_GetHanhDongKhacPhuc_Result>)ViewBag.LstHDKP != null)
+            {
+                foreach (var item in (List<HopDongMgr.Models.KPH_GetHanhDongKhacPhuc_Result>)ViewBag.LstHDKP)
+                {
+                        <tr role="row" id="@item.Id">
+                            <td style="display: none">
+                                @if (item.KetQuaThamTra.Equals("Thẩm tra"))
+                                {
+                                    @:Thẩm tra
+                                }
+                                else if (item.KetQuaThamTra.Equals("Đạt"))
+                                {
+                                    @:Đạt
+                                }
+                                else if (item.KetQuaThamTra.Equals("Tạo phiếu mới"))
+                                {
+                                    @:Tạo phiếu mới
+                                }
+                                else
+                                {
+                                    @:Không đạt
+                                }
+                            </td>
+                            <td style="min-width: 145px;">
+                                @*@Html.DisplayFor(modelItem => item.KetQuaThamTra)*@
+                                @if (item.KetQuaThamTra.Equals("Thẩm tra"))
+                                {
+                                    @Html.ActionLink("Thẩm tra", "ThamTraKiemSoat", "HanhDongKhacPhucs", new { id = item.Id }, new { @class = "btn btn-block btn-warning ", data_modal = "" })
+                                }
+                                else if (item.KetQuaThamTra.Equals("Đạt"))
+                                {
+                                    @Html.ActionLink("Đạt", "ThamTraKiemSoat", "HanhDongKhacPhucs", new { id = item.Id }, new { @class = "btn btn-block btn-primary", data_modal = "" })
+                                }
+                                else if (item.KetQuaThamTra.Equals("Tạo phiếu mới"))
+                                {
+                                    <div class="btn-group" role="group" style="width:100%;">
+                                        <button type="button" class="btn bg-maroon btnTaoPhieuMoi" data-toggle="modal" data-target="#id-modal-warning" style="width:85%;" value="@item.Id">Tạo phiếu mới</button>
+                                        <button type="button" class="btn bg-maroon dropdown-toggle" style="width:15%;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="caret"></span>
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                @Html.ActionLink("Thẩm tra lại", "ThamTraKiemSoat", "HanhDongKhacPhucs", new { id = item.Id }, new { @class = "btn bg-olive", data_modal = "" })
+                                            </li>
+                                        </ul>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Không đạt", "", "", new { id = item.Id }, new { @class = "btn btn-block btn-primary disabled" })
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    @Html.ActionLink(" ", "PrintBM03", "Report", new { id = item.Id, Madv = item.ThuocDonVi }, new { @class = "fa fa-print fa-lg", data_modal = "" })
+                                    <input type="hidden" id="error" value="@ViewBag.err" />
+                                </div>
+
+                            </td>
+                            <td style="min-width: 145px;">
+                                @Html.DisplayFor(modelItem => item.SuKph)
+                            </td>
+                            <td style="min-width: 145px;">
+                                @Html.DisplayFor(modelItem => item.PhanTichNguyenNhan)
+                            </td>
+                            @*<td>
+                                    @string.Format("{0:dd/MM/yyyy}", item.NgayPhanTich)
+                                </td>*@
+                            <td style="min-width: 145px;">
+                                @Html.DisplayFor(modelItem => item.DeXuatHanhDong)
+                            </td>
+                            <td style="min-width: 145px;">
+                                @string.Format("{0:dd/MM/yyyy}", item.NgayPheDuyet)
+                            </td>
+                            <td style="min-width: 145px;">
+                                @string.Format("{0:dd/MM/yyyy}", item.ThoiHanHoanTat)
+                            </td>
+                            <td style="min-width: 145px;">
+                                @string.Format("{0:dd/MM/yyyy}", item.ThoiHanHoanTatThucTe)
+                            </td>
+                            <td style="min-width: 145px;">
+                                @Html.DisplayFor(modelItem => item.KetQuaGiamSat)
+                            </td>
+                            <td style="min-width: 145px;">
+                                @string.Format("{0:dd/MM/yyyy}", item.NgayGiaHan)
+                            </td>
+                            <td style="min-width: 145px;">
+                                @Html.DisplayFor(modelItem => item.GhiChu)
+                            </td>
+
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

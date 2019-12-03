@@ -1,0 +1,12 @@
+﻿@using ReportViewerForMvc;
+@{
+    ViewBag.Title = "Báo cáo";
+}
+@*<div class="modal-body"><h1>CCC</h1></div>*@
+<div align="center">
+    @using (Html.BeginForm())
+    {
+        @Html.ReportViewer(ViewBag.ReportViewer as Microsoft.Reporting.WebForms.ReportViewer)
+    }
+
+</div>

@@ -1,0 +1,260 @@
+﻿@model HopDongMgr.Models.HT_NguoiDung
+
+@{
+    ViewBag.Title = "CẬP NHẬT THÔNG TIN NGƯỜI DÙNG";
+}
+
+<div>
+    @Html.Raw(TempData["err"])
+</div>
+@using (Html.BeginForm("Edit", "HT_NguoiDung", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.oid)
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.MaNguoiDung, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Mã người dùng</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.MaNguoiDung, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MaNguoiDung, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Mật khẩu</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.MatKhau, new { htmlAttributes = new { @class = "form-control", placeholder = "Mật khẩu", @type = "password" } })
+                @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.HoTen, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Họ tên</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.HoTen, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HoTen, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Bí danh</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.BiDanh, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BiDanh, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.MaDV, "MaDV", htmlAttributes: new { @class = "control-label col-md-2" })**@
+            <label class="control-label col-md-2">Đơn vị quản lý</label>
+            <div class="col-md-4">
+                @Html.DropDownList("MaDV", null, htmlAttributes: new { @class = "form-control", @id = "cbDonVi", @onchange = "DonViOnChange()" })
+                @Html.ValidationMessageFor(model => model.MaDV, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Phòng ban</label>
+            <div class="col-md-4">
+                @Html.DropDownList("IdPhong", null, htmlAttributes: new { @class = "form-control", @id = "cbPhong" })
+                @Html.ValidationMessageFor(model => model.IdPhong, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Chức vụ</label>
+            <div class="col-md-4">
+                @Html.DropDownList("ChucVu", null, "-- Không chọn --", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ChucVu, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Nhóm người dùng</label>
+            <div class="col-md-4">
+                @Html.DropDownList("IdNhom", null, "-- Không chọn --", htmlAttributes: new { @class = "form-control", @id = "cbNhom" })
+                @Html.ValidationMessageFor(model => model.IdNhom, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Email</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Giới tính</label>
+            <div class="col-md-4">
+                @Html.DropDownList("GioiTinh", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GioiTinh, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Ảnh đại diện</label>
+            <div class="col-md-10">
+                @if (File.Exists(Server.MapPath("/Content/images/avatars/" + Html.DisplayFor(modelItem => Model.AnhDaiDien))))
+                {
+                    <img class="img-lg" title="@Model.AnhDaiDien" alt="@Model.AnhDaiDien" src="/Content/images/avatars/@Html.DisplayFor(modelItem => Model.AnhDaiDien)" />
+
+                    @Html.EditorFor(model => model.AnhDaiDien, new { htmlAttributes = new { @class = "form-control", @style = "display: none;" } })
+                    if (Model.AnhDaiDien == "avatar.png")
+                    {
+                        <label for="photo">Chọn ảnh khác</label>
+                        <input id="photo" type="file" name="photo" accept="image/x-png,image/jpeg,image/jpg" class="btn btn-warning" />
+                        @*<input type="button" value="Đăng ảnh" onclick=UploadPhoto() />*@
+                        <input type="hidden" name="AnhDaiDien" value="@Html.DisplayFor(modelItem => Model.AnhDaiDien)" />
+                    }
+                    else
+                    {
+                        <input type="button" value="Xóa ảnh" id="btnDeletePhoto" class="btn btn-warning" style="margin-top: 66px;margin-left: 10px;" />
+                        <input type="hidden" name="AnhDaiDien" value="@Html.DisplayFor(modelItem => Model.AnhDaiDien)" />
+                    }
+                }
+                else
+                {
+                    <label for="photo" class="control-label col-md-2">Đường dẫn</label>
+                    <input id="photo" type="file" name="photo" accept="image/x-png,image/jpeg,image/jpg" class="btn btn-warning" />
+                    @*<input type="button" value="Đăng ảnh" onclick=UploadPhoto() />*@
+                    <input type="hidden" name="AnhDaiDien" value="@Html.DisplayFor(modelItem => Model.AnhDaiDien)" />
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Có hiệu lực</label>
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.CheckBoxFor(model => model.Active, new Dictionary<string, object>() { { "checked", "true" }, { "data-off-color", "danger" }, { "class", "cbootstrapSwitch" } })
+                    @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+                <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function DonViOnChange() {
+        var maDV = $("#cbDonVi").val();
+        $.ajax({
+            url: '@Url.Action("DonViOnChange")',
+            type: "GET",
+            dataType: "JSON",
+            data: { maDonVi: maDV },
+            success: function (data) {
+                $("#cbNhom").html(""); // clear before appending new list
+                $.each(data, function (i, nhom) {
+                    $("#cbNhom").append(
+                        $('<option></option>').val(nhom.Id).html(nhom.Ten));
+                })
+            },
+            error: function (xhr) {
+                console.log("error: " + " status: " + status + " er:");
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("DonViOnChangePhong")',
+            type: "GET",
+            dataType: "JSON",
+            data: { maDonVi: maDV },
+            success: function (data) {
+                $("#cbPhong").html(""); // clear before appending new list
+                $.each(data, function (i, nhom) {
+                    $("#cbPhong").append(
+                        $('<option></option>').val(nhom.Id).html(nhom.Ten));
+                })
+            },
+            error: function (xhr) {
+                console.log("error: " + " status: " + status + " er:");
+            }
+        });
+    }
+
+    function DonViOnChange() {
+        var maDV = $("#cbDonVi").val();
+        $.ajax({
+            url: '@Url.Action("DonViOnChange")',
+            type: "GET",
+            dataType: "JSON",
+            data: { maDonVi: maDV },
+            success: function (data) {
+                $("#cbNhom").html(""); // clear before appending new list
+                $.each(data, function (i, nhom) {
+                    $("#cbNhom").append(
+                        $('<option></option>').val(nhom.Id).html(nhom.Ten));
+                })
+            },
+            error: function (xhr) {
+                console.log("error: " + " status: " + status + " er:");
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("DonViOnChangePhong")',
+            type: "GET",
+            dataType: "JSON",
+            data: { maDonVi: maDV },
+            success: function (data) {
+                $("#cbPhong").html(""); // clear before appending new list
+                $.each(data, function (i, nhom) {
+                    $("#cbPhong").append(
+                        $('<option></option>').val(nhom.Id).html(nhom.Ten));
+                })
+            },
+            error: function (xhr) {
+                console.log("error: " + " status: " + status + " er:");
+            }
+        });
+    }
+
+    @*function UploadPhoto() {
+        if ($("#photo").length > 0) {
+            var ten = $("#photo")[0].files[0]['name'];
+            var files = $("#photo")[0].files;
+            if (files.length > 0) {
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    data.append(ten, files[0]);
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("UploadPhoto")',
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (result) {
+                            console.log(result);
+                        },
+                        error: function (xhr, status, p3, p4) {
+                            var err = "Error " + " " + status + " " + p3 + " " + p4;
+                            if (xhr.responseText && xhr.responseText[0] == "{")
+                                err = JSON.parse(xhr.responseText).Message;
+                            console.log(err);
+                        }
+                    });
+                } else {
+                    alert("This browser doesn't support HTML5 file uploads!");
+                }
+            }
+        }
+    }*@
+
+    $('#btnDeletePhoto').click(function () {
+        var ten = '@Model.AnhDaiDien';
+        var id = '@Model.oid';
+        $.ajax({
+            method: 'POST',
+            url: '@Url.Action("DeletePhoto")',
+            data: { nguoiDung: id, photoFileName: ten },
+            beforeSend: function () {
+                Loading();
+            },
+            success: function (data) {
+                LoadingHide();
+                $.notify({
+                    message: 'Xóa thành công'
+                }, {
+                    type: 'info'
+                });
+                location.reload();
+            },
+            error: function (xhr) {
+                LoadingHide();
+            }
+        })
+    });
+</script>

@@ -1,0 +1,93 @@
+﻿@model HopDongMgr.Models.SuKhongPhuHop
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>SuKhongPhuHop</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SuKph)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SuKph)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ThuocDonVi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ThuocDonVi)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ViTri)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ViTri)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SanPham)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SanPham)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CanCu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CanCu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoiDung)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoiDung)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IdLinhVuc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IdLinhVuc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SoLanLapLai)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SoLanLapLai)
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.MaxIdKiemSoat)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HT_NguoiDung.MaNguoiDung)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HT_NguoiDung.MaNguoiDung)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
