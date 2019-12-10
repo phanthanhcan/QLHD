@@ -49,6 +49,7 @@ namespace HopDongMgr.Models
         public virtual DbSet<HT_PhongBan_LoaiHopDong> HT_PhongBan_LoaiHopDong { get; set; }
         public virtual DbSet<HT_ThamSo> HT_ThamSo { get; set; }
         public virtual DbSet<PQ_PhanQuyenPhongBan> PQ_PhanQuyenPhongBan { get; set; }
+        public virtual DbSet<HT_LichSuHoatDong> HT_LichSuHoatDong { get; set; }
     
         public virtual int CapNhat_HopDong_GiaTriNgayThucTe(Nullable<int> iDHD)
         {

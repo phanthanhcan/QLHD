@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'E:\1.Project\QLHDBanA\Sub_QLHD_5\HopDongBanA\Models\HopDongMgrEntities.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\Models\HopDongMgrEntities.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

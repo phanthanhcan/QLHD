@@ -1,0 +1,96 @@
+﻿<table id="ListItem" class="table table-striped">
+    <thead>
+        <tr role="row">
+            <th>
+                Chức năng
+            </th>
+            <th>
+                Loại hoạt động
+            </th>
+            <th>
+                Ngày thực hiện
+            </th>
+            <th>
+                Người thực hiện
+            </th>
+            <th>
+                Chi tiết hoạt động
+            </th>
+        </tr>
+    </thead>
+    @foreach (HopDongMgr.Models.HT_LichSuHoatDong item in ViewBag.OnePageOfData)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChucNang)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoaiHoatDong)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NgayThucHien)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NguoiThucHien)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChiTietHoatDong)
+            </td>
+        </tr>
+    }
+
+</table>
+<div>
+    @if (ViewBag.OnePageOfData != null)
+    {
+        string str = $"Trang {ViewBag.OnePageOfData.PageNumber} trên tổng số {ViewBag.OnePageOfData.PageCount} trang";
+        @str
+    }
+</div>
+@if (TempData["Search"] == null) // gan them dieu kien khi sech bang rong
+{
+    @Html.PagedListPager(
+                            list: (IPagedList)ViewBag.OnePageOfData
+                            , generatePageUrl: Page => Url.Action("Index", new { Page = Page })
+                            , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
+                                (
+                                    options: new PagedListRenderOptions
+                                    {
+                                        ContainerDivClasses = new string[] { "dataTables_paginate ", "paging_simple_numbers", "text-right" },
+                                        LiElementClasses = new string[] { "page-item" },
+                                        PageClasses = new string[] { "page-link" },
+                                    }
+                                    , ajaxOptions: new AjaxOptions
+                                    {
+                                        UpdateTargetId = "DataUpdate",
+                                        InsertionMode = InsertionMode.Replace,
+                                        HttpMethod = "GET"
+                                    }
+                                )
+                        )
+
+}
+else
+{
+    var Seach = TempData["Search"];
+    @Html.PagedListPager(
+                            list: (IPagedList)ViewBag.OnePageOfData
+                            , generatePageUrl: Page => Url.Action("SeachIndex", new { Page = Page, Seach = Seach })
+                            , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
+                                (
+                                    options: new PagedListRenderOptions
+                                    {
+                                        ContainerDivClasses = new string[] { "dataTables_paginate ", "paging_simple_numbers", "text-right" },
+                                        LiElementClasses = new string[] { "page-item" },
+                                        PageClasses = new string[] { "page-link" },
+                                    }
+                                    , ajaxOptions: new AjaxOptions
+                                    {
+                                        UpdateTargetId = "DataUpdate",
+                                        InsertionMode = InsertionMode.Replace,
+                                        HttpMethod = "GET"
+                                    }
+                                )
+                        )
+
+}

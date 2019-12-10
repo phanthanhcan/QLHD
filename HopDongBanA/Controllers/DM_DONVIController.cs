@@ -42,6 +42,7 @@ namespace HopDongMgr.Controllers
         [CustomAuthorization]
         public ActionResult Create()
         {
+            db.Configuration.LazyLoadingEnabled = false;
             ViewBag.MA_DVICTREN = new SelectList(db.DM_DONVI, "MA_DVIQLY", "TEN_DVIQLY");
             return View();
         }
@@ -53,22 +54,36 @@ namespace HopDongMgr.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "MA_DVIQLY,TEN_DVIQLY,MA_DVICTREN,CAP_DVI,DIA_CHI,ID_DIA_CHINH,DIEN_THOAI,DTHOAI_KDOANH,DTHOAI_NONG,DTHOAI_TRUC,FAX,EMAIL,MA_STHUE,DAI_DIEN,CHUC_VU,SO_UQUYEN,NGAY_UQUYEN,TEN_DVIUQ,DCHI_DVIUQ,CVU_UQUYEN,TNGUOI_UQUYEN,TEN_TINH,WEBSITE,MaDiaChinh,TenTat")] DM_DONVI dM_DONVI)
         {
-            ViewBag.MA_DVICTREN = new SelectList(db.DM_DONVI, "MA_DVIQLY", "TEN_DVIQLY");
-            DM_DONVI dv = db.DM_DONVI.Find(dM_DONVI.MA_DVIQLY);
-            if (dv != null)
+
+            db.Configuration.LazyLoadingEnabled = false;
+            try
             {
-                TempData["err"] = "<div class='alert alert-info' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Mã đơn vị đã tồn tại</div> ";
+                DM_DONVI dv = db.DM_DONVI.Find(dM_DONVI.MA_DVIQLY);
+                if(dv != null) ModelState.AddModelError("MA_DVIQLY", $" Mã {dM_DONVI.MA_DVIQLY} đã tồn tại");
+                if (ModelState.IsValid)
+                {
+                    db.DM_DONVI.Add(dM_DONVI);
+                    db.SaveChanges();
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        this.ControllerContext.RouteData.Values["controller"].ToString()
+                        , "CREATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $" {this.ControllerContext.RouteData.Values["action"]?.ToString()} - {dM_DONVI.TEN_DVIQLY} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                ViewBag.MA_DVICTREN = new SelectList(db.DM_DONVI, "MA_DVIQLY", "TEN_DVIQLY");
                 return View(dM_DONVI);
             }
-            if (ModelState.IsValid)
+            catch (Exception ex)
             {
-                db.DM_DONVI.Add(dM_DONVI);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                string cauBaoLoi = "Không ghi được dữ liệu.<br/>Lý do: " + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
             }
-            return View(dM_DONVI);
         }
 
+        #region Update
         // GET: DM_DONVI/Edit/5
         [CustomAuthorization]
         public ActionResult Edit(string id)
@@ -77,6 +92,7 @@ namespace HopDongMgr.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            db.Configuration.LazyLoadingEnabled = false;
             DM_DONVI dM_DONVI = db.DM_DONVI.Find(id);
             if (dM_DONVI == null)
             {
@@ -93,16 +109,32 @@ namespace HopDongMgr.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "MA_DVIQLY,TEN_DVIQLY,MA_DVICTREN,CAP_DVI,DIA_CHI,ID_DIA_CHINH,DIEN_THOAI,DTHOAI_KDOANH,DTHOAI_NONG,DTHOAI_TRUC,FAX,EMAIL,MA_STHUE,DAI_DIEN,CHUC_VU,SO_UQUYEN,NGAY_UQUYEN,TEN_DVIUQ,DCHI_DVIUQ,CVU_UQUYEN,TNGUOI_UQUYEN,TEN_TINH,WEBSITE,MaDiaChinh,TenTat")] DM_DONVI dM_DONVI)
         {
-            if (ModelState.IsValid)
+            db.Configuration.LazyLoadingEnabled = false;
+            try
             {
-                db.Entry(dM_DONVI).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Entry(dM_DONVI).State = EntityState.Modified;
+                    db.SaveChanges();
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        this.ControllerContext.RouteData.Values["controller"].ToString()
+                        , "UPDATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $" {this.ControllerContext.RouteData.Values["action"]?.ToString()} - {dM_DONVI.TEN_DVIQLY} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                ViewBag.MA_DVICTREN = new SelectList(db.DM_DONVI, "MA_DVIQLY", "TEN_DVIQLY", dM_DONVI.MA_DVICTREN);
+                return View(dM_DONVI);
             }
-            ViewBag.MA_DVICTREN = new SelectList(db.DM_DONVI, "MA_DVIQLY", "TEN_DVIQLY", dM_DONVI.MA_DVICTREN);
-            return View(dM_DONVI);
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Lỗi ghi dữ liệu.<br/>Lý do:" + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
         }
-
+        #endregion
         // POST: DM_DONVI/Delete/5
         [CustomAuthorization]
         [HttpPost]

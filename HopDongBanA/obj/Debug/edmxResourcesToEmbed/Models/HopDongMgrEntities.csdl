@@ -852,6 +852,7 @@
       <Parameter Name="pSoNgay" Mode="In" Type="Int32" />
       <Parameter Name="pLoai" Mode="In" Type="String" />
     </FunctionImport>
+    <EntitySet Name="HT_LichSuHoatDong" EntityType="HopDongBanA.Models.HT_LichSuHoatDong" />
   </EntityContainer>
   <ComplexType Name="GetInfoChucNangFromIdNhom_Result">
     <Property Type="Guid" Name="oid" Nullable="false" />
@@ -1177,4 +1178,15 @@
     <Property Type="Int32" Name="SoNgayGiaHanTienDo" Nullable="true" />
     <Property Type="String" Name="LyDoDieuChinh" Nullable="true" />
   </ComplexType>
+  <EntityType Name="HT_LichSuHoatDong">
+    <Key>
+      <PropertyRef Name="IDLichSuHoatDong" />
+    </Key>
+    <Property Name="IDLichSuHoatDong" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ChucNang" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LoaiHoatDong" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NgayThucHien" Type="DateTime" Precision="3" />
+    <Property Name="NguoiThucHien" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ChiTietHoatDong" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+  </EntityType>
 </Schema>

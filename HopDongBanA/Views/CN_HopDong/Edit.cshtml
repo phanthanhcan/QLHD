@@ -11,6 +11,7 @@
     string sSNTC = Model.SoNgayThiCong.HasValue == false ? "0": string.Format("{0:0,0}", Model.SoNgayThiCong.Value);
     string sSNTH = Model.SoNgayThucHien.HasValue == false ? "0": string.Format("{0:0,0}", Model.SoNgayThucHien.Value);
     SelectList slCT = (SelectList)ViewBag.MaCT;
+    SelectList slIDDV = (SelectList)ViewBag.IDDV;
 }
 
 <div>
@@ -28,7 +29,7 @@
             @*@Html.LabelFor(model => model.IDLoai, "IDLoai", htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Loại hợp đồng <span style="color:red">(*)</span></label>
             <div class="col-md-10">
-                @Html.DropDownList("IDLoai", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("IDLoai", null, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true" })
                 @Html.ValidationMessageFor(model => model.IDLoai, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -67,7 +68,7 @@
             <label class="control-label col-md-2"> Công trình <span style="color:red">(*)</span></label>
             <div class="col-md-10">
                 @*@Html.DropDownList("MaCT", null, htmlAttributes: new { @class = "form-control" })*@
-                @Html.DropDownList("IDCT", slCT, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true", @title = "Chọn công trình..." })
+                @Html.DropDownList("IDCT", null, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true"})
                 @Html.ValidationMessageFor(model => model.MaCT, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -76,7 +77,7 @@
             @*@Html.LabelFor(model => model.IDDV, "IDDV", htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Đơn vị thực hiện</label>
             <div class="col-md-10">
-                @Html.DropDownList("IDDV", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("IDDV",null, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true" })
                 @Html.ValidationMessageFor(model => model.IDDV, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -85,7 +86,8 @@
                 @*@Html.LabelFor(model => model.IDHT, "IDHT", htmlAttributes: new { @class = "control-label col-md-2" })*@
                 <label class="control-label col-md-2">Hình thức hợp đồng <span style="color:red">(*)</span></label>
                 <div class="col-md-4">
-                    @Html.DropDownList("IDHT", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.DropDownList("IDHT", null, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true" })
+
                     @Html.ValidationMessageFor(model => model.IDHT, "", new { @class = "text-danger" })
                 </div>
             @*@Html.LabelFor(model => model.NamGiaoA, htmlAttributes: new { @class = "control-label col-md-2" })*@
@@ -114,13 +116,6 @@
         </div>
 
         <div class="form-group">
-            @*@Html.LabelFor(model => model.SoNgayThucHien, htmlAttributes: new { @class = "control-label col-md-2" })*@
-            <label class="control-label col-md-2">Số ngày thực hiện <span style="color:red">(*)</span></label>
-            <div class="col-md-4">
-                <input class="form-control CheckNumber Number-Get-SNTH " value="@sSNTH">
-                @Html.EditorFor(model => model.SoNgayThucHien, new { htmlAttributes = new { @class = "form-control Number-Set-SNTH", @type = "Hidden" } })
-                @Html.ValidationMessageFor(model => model.SoNgayThucHien, "", new { @class = "text-danger" })
-            </div>
             @*@Html.LabelFor(model => model.SoNgayThiCong, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Số ngày thi công <span style="color:red">(*)</span></label>
             <div class="col-md-4">
@@ -128,6 +123,14 @@
                 @Html.EditorFor(model => model.SoNgayThiCong, new { htmlAttributes = new { @class = "form-control Number-Set-SNTC", @type = "Hidden" } })
                 @Html.ValidationMessageFor(model => model.SoNgayThiCong, "", new { @class = "text-danger" })
             </div>
+            @*@Html.LabelFor(model => model.SoNgayThucHien, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Số ngày thực hiện <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                <input class="form-control CheckNumber Number-Get-SNTH " value="@sSNTH">
+                @Html.EditorFor(model => model.SoNgayThucHien, new { htmlAttributes = new { @class = "form-control Number-Set-SNTH", @type = "Hidden" } })
+                @Html.ValidationMessageFor(model => model.SoNgayThucHien, "", new { @class = "text-danger" })
+            </div>
+
         </div>
         <div class="form-group">
             <label class="control-label col-md-2">Ngày hết hạn <span style="color:red">(*)</span></label>
@@ -139,7 +142,8 @@
                     @Html.TextBoxFor(model => model.NgayHetHan, "{0:dd/MM/yyyy}", new { @class = "form-control pull-right cDataPicker setDate", @placeholder = "DD/MM/YYYYY" })
                     @Html.ValidationMessageFor(model => model.NgayKy, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-sm-9" id="errNgayKiemSoat"></div>
+                @Html.ValidationMessageFor(model => model.NgayHetHan, "", new { @class = "text-danger" })
+
             </div>
         </div>
 
@@ -238,10 +242,10 @@
                     NgayHetHan.setDate(NgayHetHan.getDate() + Number(val));
                     $("#NgayHetHan").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker("setDate", $.datepicker.formatDate('dd/mm/yy', NgayHetHan).toString());
                 });
-                $('#liDMCT').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
-                    // alert(e.target.value);
-                    $('#MaCT').val(e.target.value);
-                });
+                //$('#liDMCT').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+                //    alert(e.target.value);
+                //    $('#MaCT').val(e.target.value);
+                //});
             });
             </script>
         }

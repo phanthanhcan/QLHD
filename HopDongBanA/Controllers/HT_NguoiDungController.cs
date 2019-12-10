@@ -104,6 +104,13 @@ namespace HopDongMgr.Controllers
                 Session["avatar"] = hT_NguoiDung.AnhDaiDien;
                 db.HT_NguoiDung.Add(hT_NguoiDung);
                 db.SaveChanges();
+                HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                this.ControllerContext.RouteData.Values["controller"].ToString()
+                , "CREATE"
+                , DateTime.Now, Session["username"]?.ToString()
+                , $" {this.ControllerContext.RouteData.Values["action"]?.ToString()} - {hT_NguoiDung.MaNguoiDung} ");
+                db.HT_LichSuHoatDong.Add(ls);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(hT_NguoiDung);
@@ -179,6 +186,13 @@ namespace HopDongMgr.Controllers
                 }
                 Session["avatar"] = hT_NguoiDung.AnhDaiDien;
                 db.Entry(hT_NguoiDung).State = EntityState.Modified;
+                db.SaveChanges();
+                HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                this.ControllerContext.RouteData.Values["controller"].ToString()
+                , "UPDATE"
+                , DateTime.Now, Session["username"]?.ToString()
+                , $" {this.ControllerContext.RouteData.Values["action"]?.ToString()} - {hT_NguoiDung.MaNguoiDung} ");
+                db.HT_LichSuHoatDong.Add(ls);
                 db.SaveChanges();
                 Response.Redirect(Url.Action("Index"));
                 return RedirectToAction("Index");
@@ -287,6 +301,13 @@ namespace HopDongMgr.Controllers
                 string sqlQuery = "UpdateMatKhau @oid , @matkhau";
                 db.Database.ExecuteSqlCommand(sqlQuery, AParameter);
                 result = "Cập nhật thành công";
+                HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                this.ControllerContext.RouteData.Values["controller"].ToString()
+                , "UPDATE"
+                , DateTime.Now, Session["username"]?.ToString()
+                , $" {this.ControllerContext.RouteData.Values["action"]?.ToString()} - {username} ");
+                db.HT_LichSuHoatDong.Add(ls);
+                db.SaveChanges();
             }
             catch (Exception ex)
             {

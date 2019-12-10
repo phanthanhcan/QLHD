@@ -59,6 +59,13 @@ namespace HopDongMgr.Controllers
                 hT_Nhom.Id = Guid.NewGuid();
                 db.HT_Nhom.Add(hT_Nhom);
                 db.SaveChanges();
+                HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                    this.ControllerContext.RouteData.Values["controller"].ToString()
+                    , "CREATE"
+                    , DateTime.Now, Session["username"]?.ToString()
+                    , $" {this.ControllerContext.RouteData.Values["action"]?.ToString()} - {hT_Nhom.Ten} ");
+                db.HT_LichSuHoatDong.Add(ls);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -93,6 +100,13 @@ namespace HopDongMgr.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(hT_Nhom).State = EntityState.Modified;
+                db.SaveChanges();
+                HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                    this.ControllerContext.RouteData.Values["controller"].ToString()
+                    , "UPDATE"
+                    , DateTime.Now, Session["username"]?.ToString()
+                    , $" {this.ControllerContext.RouteData.Values["action"]?.ToString()} - {hT_Nhom.Ten} ");
+                db.HT_LichSuHoatDong.Add(ls);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

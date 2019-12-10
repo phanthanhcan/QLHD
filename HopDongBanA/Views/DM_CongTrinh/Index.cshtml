@@ -31,44 +31,29 @@
     <input type="button" value="Đồng Bộ" class="btn" id="btnDongBo" data-toggle="modal" data-target="#modal-danger-DongBo" style="display:none" />
 </div>
 
+@using (Ajax.BeginForm(
+        "SeachIndex",
+        //"Controler",
+        ajaxOptions: new AjaxOptions
+        {
+            HttpMethod = "GET",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "DataUpdate"
+        }))
+{
+    <div class="container">
+        <div class="row col-md-12">
+            <DIV class="col-md-3 col-md-offset-9">
+                <input class="form-control" type="text" name="Seach" id="Seach" placeholder="Tìm kiếm: Mã CT, Tên CT" />
+            </DIV>
 
-<table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
-    <thead>
-        <tr role="row">
-            <th>Mã công trình</th>
-            <th>Tên công trình</th>
-            <th>Tên nguồn vốn</th>
-            <th>Tên địa điểm</th>
-            @*<th>Khóa</th>*@
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-            {
-            <tr role="row" id="@item.IDCT">
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaCT)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TenCT)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DM_NguonVon.TenNV)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DM_DiaDiem.TenDD)
-                </td>
-                @*<td>
-                    @{
-                        bool Khoa = item.Khoa.GetValueOrDefault(false);
-                    }
-                    @Html.CheckBoxFor(Model => Khoa, new Dictionary<string, object>() { { "checked", "true" }, { "data-off-color", "danger" }, { "class", "cbootstrapSwitch" }, { "readonly", "readonly" } })
-                </td>*@
-            </tr>
-            }
-    </tbody>
-
-</table>
+            <input id="submit" type="submit" hidden />
+        </div>
+    </div>
+}
+<div id="DataUpdate" class="table-responsive">
+    @Html.Partial("_IndexPartial")
+</div>
 
 
 @section scripts {
@@ -113,8 +98,17 @@
                 });
 
             });
+            $('#Seach').keydown(function (event) {
+                //alert(event.keyCode );
+                if (event.keyCode == 27) {
+                    $('#Seach').val("");
+                    $('#submit').submit();
+                    return true;
+                }
+            })
         });
     </script>
     @*<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>*@
     <script src="~/Scripts/bootstrap-toggle.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 }

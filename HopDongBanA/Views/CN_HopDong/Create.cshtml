@@ -8,7 +8,6 @@
     string dNgayHetHan = (Model == null) ? DateTime.Now.ToString("dd/MM/yyyy") : Model.NgayHetHan.Value.ToString("dd/MM/yyyy");
     string NamGiaoA =  DateTime.Now.Year.ToString();
     bool IsHoanThanh = false;
-    SelectList slCT = (SelectList)ViewBag.MaCT;
 }
 <div>
     @Html.Raw(TempData["err"])
@@ -24,7 +23,8 @@
             @*@Html.LabelFor(model => model.IDLoai, "IDLoai", htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Loại hợp đồng <span style="color:red">(*)</span></label>
             <div class="col-md-10">
-                @Html.DropDownList("IDLoai", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("IDLoai", null, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true" })
+
                 @Html.ValidationMessageFor(model => model.IDLoai, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -65,7 +65,7 @@
             <label class="control-label col-md-2">Công trình <span style="color:red">(*)</span></label>
             <div class="col-md-10">
                 @*@Html.DropDownList("MaCT", null, htmlAttributes: new { @class = "form-control" })*@
-                @Html.DropDownList("IDCT", slCT, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true", @title = "Chọn công trình..." }) 
+                @Html.DropDownList("IDCT", null, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true", @title = "Chọn công trình..." }) 
                 @*@Html.ValidationMessageFor(model => model.MaCT, "", new { @class = "text-danger" })*@
             </div>
         </div>
@@ -73,8 +73,8 @@
         <div class="form-group">
             @*@Html.LabelFor(model => model.IDDV, "IDDV", htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Đơn vị thực hiện</label>
-            <div class="col-md-10">
-                @Html.DropDownList("IDDV", null, htmlAttributes: new { @class = "form-control" })
+            <div class="col-md-10">s
+                @Html.DropDownList("IDDV", null, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true"})
                 @Html.ValidationMessageFor(model => model.IDDV, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -83,7 +83,8 @@
             @*@Html.LabelFor(model => model.IDHT, "IDHT", htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Hình thức hợp dồng <span style="color:red">(*)</span></label>
             <div class="col-md-4">
-                @Html.DropDownList("IDHT", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("IDHT", null, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true" })
+
                 @Html.ValidationMessageFor(model => model.IDHT, "", new { @class = "text-danger" })
             </div>
 

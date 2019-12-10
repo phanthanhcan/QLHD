@@ -11,6 +11,8 @@ using HopDongMgr.Class.Common;
 using HopDongMgr.DungChung;
 using System.Linq.Dynamic;
 using System.Data.SqlClient;
+using System.ComponentModel.DataAnnotations;
+using X.PagedList;
 
 namespace HopDongMgr.Controllers
 {
@@ -18,12 +20,75 @@ namespace HopDongMgr.Controllers
     {
         private HopDongMgrEntities db = new HopDongMgrEntities();
         private Common _Common = new Common();
+        private string ChucNang = "Danh mục công trình";
+
+        #region index
         // GET: DM_CongTrinh
         [CustomAuthorization]
-        public ActionResult Index()
+        public ActionResult IndexBackup()
         {
+            db.Configuration.LazyLoadingEnabled = false;
             var dM_CongTrinh = db.DM_CongTrinh.Include(d => d.DM_NguonVon).Include(d => d.DM_DiaDiem);
             return View(dM_CongTrinh.ToList());
+        }
+
+        public ActionResult Index(int? page = 1)
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+            int totalData = db.DM_CongTrinh.Count();
+            List<DM_CongTrinh> items = db.DM_CongTrinh.Include(d => d.DM_NguonVon).Include(d => d.DM_DiaDiem).OrderByDescending(p => p.TenCT).Skip(n).Take(pageSize).ToList();
+            ViewBag.OnePageOfData = new StaticPagedList<DM_CongTrinh>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View();
+        }
+
+        public ActionResult SeachIndex(string Seach = "", int? page = 1)
+        {
+            int totalData;
+            List<DM_CongTrinh> items;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+            if (string.IsNullOrEmpty(Seach))
+            {
+                TempData["Search"] = null;
+                totalData = db.DM_CongTrinh.Count();
+                items = db.DM_CongTrinh
+                    .Include(d => d.DM_NguonVon)
+                    .Include(d => d.DM_DiaDiem)
+                    .OrderByDescending(p => p.TenCT)
+                    .Skip(n)
+                    .Take(pageSize)
+                    .ToList();
+
+            }
+            else
+            {
+                TempData["Search"] = Seach;
+                totalData = db.DM_CongTrinh
+                            .Where(o => (o.TenCT.Contains(Seach) || Seach == "") || (o.MaCT.Contains(Seach) || Seach == ""))
+                            .Count();
+                items = db.DM_CongTrinh
+                    .Include(d => d.DM_NguonVon)
+                    .Include(d => d.DM_DiaDiem)
+                    .Where(o => (o.TenCT.Contains(Seach) || Seach == "") || (o.MaCT.Contains(Seach) || Seach == ""))
+                    .OrderByDescending(p => p.TenCT)
+                    .Skip(n).Take(pageSize)
+                    .ToList();
+
+            }
+            ViewBag.OnePageOfData = new StaticPagedList<DM_CongTrinh>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View("Index");
         }
 
         // GET: DM_CongTrinh/Details/5
@@ -41,13 +106,15 @@ namespace HopDongMgr.Controllers
             }
             return View(dM_CongTrinh);
         }
+        #endregion
 
+        #region Create
         // GET: DM_CongTrinh/Create
         [CustomAuthorization]
         public ActionResult Create()
         {
-            ViewBag.MaNV = new SelectList(db.DM_NguonVon.Where(o => o.Khoa.Value.CompareTo(false) == 0).OrderBy(o => o.TenNV), "MaNV", "TenNV");
-            ViewBag.MaDD = new SelectList(db.DM_DiaDiem.Where(o => o.Khoa.Value.CompareTo(false) == 0).OrderBy(o => o.TenDD), "MaDD", "TenDD");
+            ViewBag.MaNV = DanhSachNguonVon();
+            ViewBag.MaDD = DanhSachDiaDiem();
             return View();
         }
 
@@ -58,32 +125,43 @@ namespace HopDongMgr.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IDCT,MaCT,TenCT,MaNV,MaDD,Khoa,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat")] DM_CongTrinh dM_CongTrinh)
         {
-            ViewBag.MaNV = new SelectList(db.DM_NguonVon.Where(o => o.Khoa.Value.CompareTo(false) == 0).OrderBy(o => o.TenNV), "MaNV", "TenNV", dM_CongTrinh.MaNV);
-            ViewBag.MaDD = new SelectList(db.DM_DiaDiem.Where(o => o.Khoa.Value.CompareTo(false) == 0).OrderBy(o => o.TenDD), "MaDD", "TenDD", dM_CongTrinh.MaDD);
-            if (ModelState.IsValid)
-            {//Check data
-                if (string.IsNullOrEmpty(dM_CongTrinh.MaCT) || string.IsNullOrWhiteSpace(dM_CongTrinh.MaCT))
+            db.Configuration.LazyLoadingEnabled = false;
+            try
+            {
+                int d = db.DM_CongTrinh.Count(p => string.Compare(p.MaCT.Trim().Replace("\n", "").Replace("\r", ""), dM_CongTrinh.MaCT.Trim()) == 0);
+                if (d > 0) ModelState.AddModelError("MaCT", $"Mã công trình {dM_CongTrinh.MaCT} đã tồn tại");
+                if (dM_CongTrinh.MaDD == "-1") ModelState.AddModelError("MaDD", $"Chưa chọn địa điểm");
+                if (dM_CongTrinh.MaNV == "-1") ModelState.AddModelError("MaNV", $"Chưa chọn nguồn vốn");
+                if (ModelState.IsValid)
                 {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Nhập mã Công trình</div> ";
-                    return View(dM_CongTrinh);
+                    List<SelectListItem> list = _Common.getThongTinBang();
+                    dM_CongTrinh.NguoiTao = list.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text;
+                    dM_CongTrinh.NgayTao = DateTime.Parse(list.Where(o => o.Value == "NgayTao").SingleOrDefault().Text);
+                    dM_CongTrinh.MaCT_DA = dM_CongTrinh.MaCT;// mã công trình sử dụng khi nhâp trên chương trình
+                    db.DM_CongTrinh.Add(dM_CongTrinh);
+                    db.SaveChanges();
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        ChucNang
+                        , "CREATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $" Thêm mới - Mã CT {dM_CongTrinh.MaCT} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
                 }
-                if (string.IsNullOrEmpty(dM_CongTrinh.TenCT) || string.IsNullOrWhiteSpace(dM_CongTrinh.TenCT))
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Nhập mã tên Công trình</div> ";
-                    return View(dM_CongTrinh);
-                }
-                List<SelectListItem> list = _Common.getThongTinBang();
-                dM_CongTrinh.NguoiTao = list.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text;
-                dM_CongTrinh.NgayTao = DateTime.Parse(list.Where(o => o.Value == "NgayTao").SingleOrDefault().Text);
-                dM_CongTrinh.MaCT_DA = dM_CongTrinh.MaCT;// mã công trình sử dụng khi nhâp trên chương trình
-                db.DM_CongTrinh.Add(dM_CongTrinh);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                ViewBag.MaNV = DanhSachNguonVon(dM_CongTrinh.MaNV);
+                ViewBag.MaDD = DanhSachDiaDiem(dM_CongTrinh.MaDD);
+                return View(dM_CongTrinh);
             }
-
-            return View(dM_CongTrinh);
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Không ghi được dữ liệu.<br/>Lý do: " + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
         }
+        #endregion
 
+        #region Update
         // GET: DM_CongTrinh/Edit/5
         [CustomAuthorization]
         public ActionResult Edit(string id)
@@ -92,13 +170,14 @@ namespace HopDongMgr.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            db.Configuration.LazyLoadingEnabled = false;
             DM_CongTrinh dM_CongTrinh = db.DM_CongTrinh.Find(decimal.Parse(id));
             if (dM_CongTrinh == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.MaNV = new SelectList(db.DM_NguonVon.Where(o => o.Khoa.Value.CompareTo(false) == 0).OrderBy(o => o.TenNV), "MaNV", "TenNV", dM_CongTrinh.MaNV);
-            ViewBag.MaDD = new SelectList(db.DM_DiaDiem.Where(o => o.Khoa.Value.CompareTo(false) == 0).OrderBy(o => o.TenDD), "MaDD", "TenDD", dM_CongTrinh.MaDD);
+            ViewBag.MaNV = DanhSachNguonVon(dM_CongTrinh.MaNV);
+            ViewBag.MaDD = DanhSachDiaDiem(dM_CongTrinh.MaDD);
             return View(dM_CongTrinh);
         }
 
@@ -109,25 +188,40 @@ namespace HopDongMgr.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "IDCT,MaCT,TenCT,MaNV,MaDD,Khoa,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat,MaCT_DA")] DM_CongTrinh dM_CongTrinh)
         {
-            ViewBag.MaNV = new SelectList(db.DM_NguonVon.Where(o => o.Khoa.Value.CompareTo(false) == 0).OrderBy(o => o.TenNV), "MaNV", "TenNV", dM_CongTrinh.MaNV);
-            ViewBag.MaDD = new SelectList(db.DM_DiaDiem.Where(o => o.Khoa.Value.CompareTo(false) == 0).OrderBy(o => o.TenDD), "MaDD", "TenDD", dM_CongTrinh.MaDD);
-
-            if (ModelState.IsValid)
+            db.Configuration.LazyLoadingEnabled = false;
+            try
             {
-                if (string.IsNullOrEmpty(dM_CongTrinh.TenCT) || string.IsNullOrWhiteSpace(dM_CongTrinh.TenCT))
+                int d = db.DM_CongTrinh.Count(p => p.IDCT != dM_CongTrinh.IDCT && string.Compare(p.MaCT.Trim().Replace("\n", "").Replace("\r", ""), dM_CongTrinh.MaCT.Trim()) == 0);
+                if (d > 0) ModelState.AddModelError("MaCT", $"Mã công trình {dM_CongTrinh.MaCT} bị trùng.");
+                if (dM_CongTrinh.MaDD == "-1") ModelState.AddModelError("MaDD", $"Chưa chọn địa điểm");
+                if (dM_CongTrinh.MaNV == "-1") ModelState.AddModelError("MaNV", $"Chưa chọn nguồn vốn");
+                if (ModelState.IsValid)
                 {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Nhập mã tên Công trình</div> ";
-                    return View(dM_CongTrinh);
+                    List<SelectListItem> list = _Common.getThongTinBang();
+                    dM_CongTrinh.NguoiCapNhat = list.Where(o => o.Value == "NguoiCapNhat").SingleOrDefault().Text;
+                    dM_CongTrinh.NgayCapNhat = DateTime.Parse(list.Where(o => o.Value == "NgayCapNhat").SingleOrDefault().Text);
+                    db.Entry(dM_CongTrinh).State = EntityState.Modified;
+                    db.SaveChanges();
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        ChucNang
+                        , "UPDATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $" Cập nhật - Mã CT {dM_CongTrinh.MaCT} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
                 }
-                List<SelectListItem> list = _Common.getThongTinBang();
-                dM_CongTrinh.NguoiCapNhat = list.Where(o => o.Value == "NguoiCapNhat").SingleOrDefault().Text;
-                dM_CongTrinh.NgayCapNhat = DateTime.Parse(list.Where(o => o.Value == "NgayCapNhat").SingleOrDefault().Text);
-                db.Entry(dM_CongTrinh).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                ViewBag.MaNV = DanhSachNguonVon(dM_CongTrinh.MaNV);
+                ViewBag.MaDD = DanhSachDiaDiem(dM_CongTrinh.MaDD);
+                return View(dM_CongTrinh);
             }
-            return View(dM_CongTrinh);
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Lỗi ghi dữ liệu.<br/>Lý do:" + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
         }
+        #endregion
 
         // POST: DM_CongTrinh/Delete/5
         [HttpPost]
@@ -207,7 +301,34 @@ namespace HopDongMgr.Controllers
             base.Dispose(disposing);
         }
 
-
+        #region private methods
+        private  SelectList DanhSachNguonVon(string selectedValue = "")
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            var items =  db.DM_NguonVon.Where(o => o.Khoa.Value.CompareTo(false) == 0)
+                                     .Select(p => new {
+                                         p.MaNV,
+                                         ThongTin = p.MaNV + " - " + p.TenNV
+                                     })
+                                     .ToList();
+            items.Insert(0, new { MaNV = "-1", ThongTin = "------ Chọn loại------ " });
+            var result = new SelectList(items, "MaNV", "ThongTin", selectedValue: selectedValue);
+            return result;
+        }
+        private SelectList DanhSachDiaDiem(string selectedValue = "")
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            var items = db.DM_DiaDiem.Where(o => o.Khoa.Value.CompareTo(false) == 0)
+                                     .Select(p => new {
+                                         p.MaDD,
+                                         ThongTin = p.MaDD + " - " + p.TenDD
+                                     })
+                                     .ToList();
+            items.Insert(0, new { MaDD = "-1", ThongTin = "------ Chọn loại------ " });
+            var result = new SelectList(items, "MaDD", "ThongTin", selectedValue: selectedValue);
+            return result;
+        }
+        #endregion
     }
     public class oCongtrinh_Data
     {

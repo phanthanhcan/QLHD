@@ -716,5 +716,17 @@
     <FunctionImportMapping FunctionImportName="rptTheoDoiHopDong_GetByNguonVon" FunctionName="HopDongBanA.Models.Store.rptTheoDoiHopDong_GetByNguonVon" />
     <FunctionImportMapping FunctionImportName="StrorePro_GetThongTinHopDong_DotDieuChinh" FunctionName="HopDongBanA.Models.Store.StrorePro_GetThongTinHopDong_DotDieuChinh" />
     <FunctionImportMapping FunctionImportName="GetList_HopDongHetHan_ALL" FunctionName="HopDongBanA.Models.Store.GetList_HopDongHetHan_ALL" />
+    <EntitySetMapping Name="HT_LichSuHoatDong">
+      <EntityTypeMapping TypeName="HopDongBanA.Models.HT_LichSuHoatDong">
+        <MappingFragment StoreEntitySet="HT_LichSuHoatDong">
+          <ScalarProperty Name="ChiTietHoatDong" ColumnName="ChiTietHoatDong" />
+          <ScalarProperty Name="NguoiThucHien" ColumnName="NguoiThucHien" />
+          <ScalarProperty Name="NgayThucHien" ColumnName="NgayThucHien" />
+          <ScalarProperty Name="LoaiHoatDong" ColumnName="LoaiHoatDong" />
+          <ScalarProperty Name="ChucNang" ColumnName="ChucNang" />
+          <ScalarProperty Name="IDLichSuHoatDong" ColumnName="IDLichSuHoatDong" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

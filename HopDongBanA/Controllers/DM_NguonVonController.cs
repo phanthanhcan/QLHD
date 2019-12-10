@@ -18,6 +18,7 @@ namespace HopDongMgr.Controllers
     {
         private HopDongMgrEntities db = new HopDongMgrEntities();
         private Common _Common = new Common();
+        private string ChucNang = "Danh mục nguồn vốn";
         // GET: DM_NguonVon
         [CustomAuthorization]
         public ActionResult Index()
@@ -41,6 +42,7 @@ namespace HopDongMgr.Controllers
             return View(dM_NguonVon);
         }
 
+        #region Create
         // GET: DM_NguonVon/Create
         [CustomAuthorization]
         public ActionResult Create()
@@ -55,21 +57,38 @@ namespace HopDongMgr.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "MaNV,TenNV,Khoa,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat")] DM_NguonVon dM_NguonVon)
         {
-            if (ModelState.IsValid)
+            db.Configuration.LazyLoadingEnabled = false;
+            try
             {
-                List<SelectListItem> ListTTin = _Common.getThongTinBang();
-                dM_NguonVon.NguoiTao = ListTTin.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text;
-                dM_NguonVon.NgayTao = DateTime.Parse(ListTTin.Where(o => o.Value == "NgayTao").SingleOrDefault().Text);
-                dM_NguonVon.NguoiCapNhat = ListTTin.Where(o => o.Value == "NguoiCapNhat").SingleOrDefault().Text;
-                dM_NguonVon.NgayCapNhat = DateTime.Parse(ListTTin.Where(o => o.Value == "NgayCapNhat").SingleOrDefault().Text);
-                db.DM_NguonVon.Add(dM_NguonVon);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    List<SelectListItem> ListTTin = _Common.getThongTinBang();
+                    dM_NguonVon.NguoiTao = ListTTin.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text;
+                    dM_NguonVon.NgayTao = DateTime.Parse(ListTTin.Where(o => o.Value == "NgayTao").SingleOrDefault().Text);
+                    dM_NguonVon.NguoiCapNhat = ListTTin.Where(o => o.Value == "NguoiCapNhat").SingleOrDefault().Text;
+                    dM_NguonVon.NgayCapNhat = DateTime.Parse(ListTTin.Where(o => o.Value == "NgayCapNhat").SingleOrDefault().Text);
+                    db.DM_NguonVon.Add(dM_NguonVon);
+                    db.SaveChanges();
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        ChucNang
+                        , "CREATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $"Thêm mới - Tên nguồn vốn {dM_NguonVon.TenNV} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(dM_NguonVon);
             }
-
-            return View(dM_NguonVon);
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Không ghi được dữ liệu.<br/>Lý do: " + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
         }
+        #endregion
 
+        #region Update
         // GET: DM_NguonVon/Edit/5
         [CustomAuthorization]
         public ActionResult Edit(string id)
@@ -78,6 +97,7 @@ namespace HopDongMgr.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            db.Configuration.LazyLoadingEnabled = false;
             DM_NguonVon dM_NguonVon = db.DM_NguonVon.Find(id);
             if (dM_NguonVon == null)
             {
@@ -93,18 +113,35 @@ namespace HopDongMgr.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "MaNV,TenNV,Khoa,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat")] DM_NguonVon dM_NguonVon)
         {
-            if (ModelState.IsValid)
+            db.Configuration.LazyLoadingEnabled = false;
+            try
             {
-                List<SelectListItem> ListTTin = _Common.getThongTinBang();
-                dM_NguonVon.NguoiCapNhat = ListTTin.Where(o => o.Value == "NguoiCapNhat").SingleOrDefault().Text;
-                dM_NguonVon.NgayCapNhat = DateTime.Parse(ListTTin.Where(o => o.Value == "NgayCapNhat").SingleOrDefault().Text);
-                db.Entry(dM_NguonVon).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    List<SelectListItem> ListTTin = _Common.getThongTinBang();
+                    dM_NguonVon.NguoiCapNhat = ListTTin.Where(o => o.Value == "NguoiCapNhat").SingleOrDefault().Text;
+                    dM_NguonVon.NgayCapNhat = DateTime.Parse(ListTTin.Where(o => o.Value == "NgayCapNhat").SingleOrDefault().Text);
+                    db.Entry(dM_NguonVon).State = EntityState.Modified;
+                    db.SaveChanges();
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        ChucNang
+                        , "UPDATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $" Cập nhật - Tên nguồn vốn {dM_NguonVon.TenNV} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(dM_NguonVon);
             }
-            return View(dM_NguonVon);
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Lỗi ghi dữ liệu.<br/>Lý do:" + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
         }
 
+        #endregion
         [CustomAuthorization]
         [HttpPost]
         public ActionResult Delete(string id)

@@ -49,6 +49,7 @@
         <AssociationConnector Association="HopDongBanA.Models.FK_HT_Nhom_ChucNang_HT_DSChucNang" ManuallyRouted="false" />
         <AssociationConnector Association="HopDongBanA.Models.FK_HT_Nhom_ChucNang_HT_Nhom" ManuallyRouted="false" />
         <AssociationConnector Association="HopDongBanA.Models.FK_HT_Nhom_LoaiHopDong_HT_Nhom" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="HopDongBanA.Models.HT_LichSuHoatDong" Width="1.5" PointX="10.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

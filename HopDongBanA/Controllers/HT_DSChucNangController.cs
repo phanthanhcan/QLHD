@@ -147,6 +147,13 @@ namespace HopDongMgr.Controllers
                 }
             }
             db.SaveChanges();
+            HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+            this.ControllerContext.RouteData.Values["controller"].ToString()
+            , "UPDATE"
+            , DateTime.Now, Session["username"]?.ToString()
+            , $" {this.ControllerContext.RouteData.Values["action"]?.ToString()} ");
+            db.HT_LichSuHoatDong.Add(ls);
+            db.SaveChanges();
             TempData["err"] = "<div class='alert alert-info' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Cập nhật thành công</div> ";
             return RedirectToAction("Index");
         }

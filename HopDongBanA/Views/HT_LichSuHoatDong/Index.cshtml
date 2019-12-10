@@ -1,0 +1,48 @@
+﻿@model IEnumerable<HopDongMgr.Models.HT_LichSuHoatDong>
+
+@{
+    ViewBag.Title = "Lịch sử hoạt động";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Ajax.BeginForm(
+        "SeachIndex",
+        //"Controler",
+        ajaxOptions: new AjaxOptions
+        {
+            HttpMethod = "GET",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "DataUpdate"
+        }))
+{
+    <div class="container">
+        <div class="row col-md-12">
+            <DIV class="col-md-3 col-md-offset-9">
+                <input class="form-control" type="text" name="Seach" id="Seach" placeholder="Tìm kiếm" />
+            </DIV>
+
+            <input id="submit" type="submit" hidden />
+        </div>
+    </div>
+}
+<div id="DataUpdate" class="table-responsive">
+    @Html.Partial("_IndexPartial")
+</div>
+@section Scripts{
+    <script>
+        $('#Seach').keydown(function(event) {
+            //alert(event.keyCode );
+            if (event.keyCode == 27) {
+                $('#Seach').val("");
+                $('#submit').submit();
+                return true;
+            }
+        })
+        $("#ListItem tbody").on("click", "tr", function () {
+            alert($(this).attr("class"));
+            $("#ListItem tbody tr").removeClass("info");
+            $(this).addClass("info");
+        });
+    </script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+}

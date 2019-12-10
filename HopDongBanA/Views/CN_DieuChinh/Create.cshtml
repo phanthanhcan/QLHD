@@ -5,13 +5,13 @@
     ViewBag.Title = "THÊM MỚI ĐIỀU CHỈNH HỢP ĐỒNG";
     Layout = "~/Views/Shared/_Layout.cshtml";
     SelectList NgayKyHD = (SelectList)ViewBag.NgayKyHD;
-     List<HopDongDC> HD = (List<HopDongDC>)ViewBag.DSHD;
+    List<HopDongDC> HD = (List<HopDongDC>)ViewBag.DSHD;
     Array HD1 = (Array)ViewBag.HD;
 }
 <div>
     @Html.Raw(TempData["err"])
 </div>
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
@@ -20,7 +20,7 @@
             @*@Html.LabelFor(model => model.IDHD, "IDHD", htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2"> Số hợp đồng</label>
             <div class="col-md-4">
-                @Html.DropDownList("IDHD", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("IDHD", null, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true" })
                 @Html.ValidationMessageFor(model => model.IDHD, "", new { @class = "text-danger" })
             </div>
             <label class="control-label col-md-2">Ngày điều chỉnh <span style="color:red">(*)</span></label>
@@ -68,25 +68,25 @@
                 @Html.DropDownList("IDLoaiDieuChinh", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.IDLoaiDieuChinh, "", new { @class = "text-danger" })
             </div>
-            
+
         </div>
         <div class="form-group">
             <label class="control-label col-md-2">Chênh lệch</label>
             <div class="col-md-4">
-                <input class="form-control CheckNumber Number-Get-GTCL"/>
-                @Html.EditorFor(model => model.ChenhLech, new { htmlAttributes = new { @class = "form-control Number-Set-GTCL" , @type = "Hidden" } })
+                <input class="form-control CheckNumber Number-Get-GTCL" />
+                @Html.EditorFor(model => model.ChenhLech, new { htmlAttributes = new { @class = "form-control Number-Set-GTCL", @type = "Hidden" } })
                 @Html.ValidationMessageFor(model => model.ChenhLech, "", new { @class = "text-danger" })
             </div>
             <label class="control-label col-md-2">Giá trị trước điều chỉnh</label>
             <div class="col-md-4">
-                <input class="form-control CheckNumber"id="GTTDC" type="text" />
+                <input class="form-control CheckNumber" id="GTTDC" type="text" />
             </div>
         </div>
         <div class="form-group">
             @*@Html.LabelFor(model => model.NoiDung, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Lý do điều chỉnh</label>
             <div class="col-md-10">
-                @Html.TextAreaFor(model => model.LyDoDieuChinh,  new { @class = "form-control", @rows = "3"  })
+                @Html.TextAreaFor(model => model.LyDoDieuChinh, new { @class = "form-control", @rows = "3" })
                 @Html.ValidationMessageFor(model => model.LyDoDieuChinh, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -132,6 +132,7 @@
     </div>
     @section scripts
     {
+        <script src="~/Content/plugins/bootstrap-select-1.12.4/js/bootstrap-select.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
                 @*var array = @Html.Raw(Json.Encode(

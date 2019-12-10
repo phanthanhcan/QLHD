@@ -225,6 +225,17 @@
     <Property Name="oidParent" Type="uniqueidentifier" />
     <Property Name="IsMenu" Type="bit" />
   </EntityType>
+  <EntityType Name="HT_LichSuHoatDong">
+    <Key>
+      <PropertyRef Name="IDLichSuHoatDong" />
+    </Key>
+    <Property Name="IDLichSuHoatDong" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ChucNang" Type="varchar" MaxLength="50" />
+    <Property Name="LoaiHoatDong" Type="nvarchar" MaxLength="50" />
+    <Property Name="NgayThucHien" Type="datetime" />
+    <Property Name="NguoiThucHien" Type="nvarchar" MaxLength="50" />
+    <Property Name="ChiTietHoatDong" Type="nvarchar" MaxLength="500" />
+  </EntityType>
   <EntityType Name="HT_NguoiDung">
     <Key>
       <PropertyRef Name="oid" />
@@ -713,6 +724,7 @@
     <EntitySet Name="HT_CauHinh" EntityType="Self.HT_CauHinh" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="HT_CHUCVU" EntityType="Self.HT_CHUCVU" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="HT_DSChucNang" EntityType="Self.HT_DSChucNang" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HT_LichSuHoatDong" EntityType="Self.HT_LichSuHoatDong" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="HT_NguoiDung" EntityType="Self.HT_NguoiDung" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="HT_Nhom" EntityType="Self.HT_Nhom" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="HT_Nhom_ChucNang" EntityType="Self.HT_Nhom_ChucNang" Schema="dbo" store:Type="Tables" />

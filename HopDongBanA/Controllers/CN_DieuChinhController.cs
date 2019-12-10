@@ -20,6 +20,7 @@ namespace HopDongMgr.Controllers
         private HopDongMgrEntities db = new HopDongMgrEntities();
         private Common _common = new Common();
         private string err1 = "";
+        private string ChucNang = "Chức năng điều chỉnh hợp đồng";
 
         // GET: CN_DieuChinh
         [CustomAuthorization]
@@ -111,6 +112,7 @@ namespace HopDongMgr.Controllers
                                                                       GiaTriThucTe = s.GiaTriThucTe.HasValue == true ? s.GiaTriThucTe.ToString() : s.GiaTriHopDong.ToString(),
                                                                       ngayKy = s.NgayKy.ToString()
                                                                   }).ToList();
+            CN_HopDong hopDong = db.CN_HopDong.Find(cN_DieuChinh.IDHD);
             if (ModelState.IsValid)
             {
                 //Check data
@@ -237,7 +239,16 @@ namespace HopDongMgr.Controllers
                 #endregion
 
                 db.Database.ExecuteSqlCommand("Insert_CN_DieuChinh_HopDong  @IDDC, @IDHD, @NgayDieuChinh, @GiaTriDieuChinh, @ChenhLech, @SoNgayGiaHanTienDo, @LyDoDieuChinh, @NguoiTao,@NgayTao, @NguoiCapNhat, @NgayCapNhat, @DotDieuChinh, @NgayHetHanDC, @IDLoaiDieuChinh, @FlagCreate", AParameter);
-
+                #region luu lich su
+                // luu lich su
+                HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                    ChucNang
+                    , "CREATE"
+                    , DateTime.Now, Session["username"]?.ToString()
+                    , $" Thêm mới điều chỉnh - Số HD {hopDong.SoHopDong} - lần điều chỉnh {cN_DieuChinh.DotDieuChinh}");
+                db.HT_LichSuHoatDong.Add(ls);
+                db.SaveChanges();
+                #endregion
                 return RedirectToAction("Index");
             }
             TempData["err"] = "< div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Có lỗi xãy ra</div> ";
@@ -293,10 +304,12 @@ namespace HopDongMgr.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "IDDC,IDHD,NgayDieuChinh,GiaTriDieuChinh,SoNgayGiaHanTienDo,LyDoDieuChinh,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat,DotDieuChinh,NgayHetHanDC,IDLoaiDieuChinh,ChenhLech")] CN_DieuChinh cN_DieuChinh, FormCollection _FormCollection)
         {
+            CN_HopDong hopDong = db.CN_HopDong.Find(cN_DieuChinh.IDHD);
             if (ModelState.IsValid)
             {
                 string FlagCreate = _FormCollection["FlagCreate"]; //0: cap nhat 1: them moi
                 List<SelectListItem> lThongTin = _common.getThongTinBang();
+
                 string err = "";
                 if (cN_DieuChinh.NgayDieuChinh.HasValue == false)
                 {
@@ -453,6 +466,16 @@ namespace HopDongMgr.Controllers
                 #endregion
 
                 db.Database.ExecuteSqlCommand("Insert_CN_DieuChinh_HopDong  @IDDC, @IDHD, @NgayDieuChinh, @GiaTriDieuChinh, @ChenhLech, @SoNgayGiaHanTienDo, @LyDoDieuChinh, @NguoiTao,@NgayTao, @NguoiCapNhat, @NgayCapNhat, @DotDieuChinh, @NgayHetHanDC, @IDLoaiDieuChinh, @FlagCreate", AParameter);
+                #region luu lich su
+                // luu lich su
+                HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                   ChucNang
+                   , "UPDATE"
+                   , DateTime.Now, Session["username"]?.ToString()
+                   , $"Cập nhật điều chỉnh - Số HD {hopDong?.SoHopDong} - lần điều chỉnh {cN_DieuChinh.DotDieuChinh}");
+                db.HT_LichSuHoatDong.Add(ls);
+                db.SaveChanges();
+                #endregion
                 return RedirectToAction("Edit", cN_DieuChinh.IDDC);
             }
             return RedirectToAction("Edit", cN_DieuChinh.IDDC);
@@ -464,7 +487,8 @@ namespace HopDongMgr.Controllers
         [CustomAuthorization]
         public ActionResult Delete(int id)
         {
-            //CN_DieuChinh cN_DieuChinh = db.CN_DieuChinh.Find(id);
+            CN_DieuChinh cN_DieuChinh = db.CN_DieuChinh.Find(id);
+            CN_HopDong hopDong = db.CN_HopDong.Find(cN_DieuChinh.IDHD);
             //db.CN_DieuChinh.Remove(cN_DieuChinh);
             //db.SaveChanges();
             SqlParameter sParameter = new SqlParameter();
@@ -472,6 +496,15 @@ namespace HopDongMgr.Controllers
             sParameter.Value = id;
             sParameter.SqlDbType = SqlDbType.Int;
             db.Database.ExecuteSqlCommand("Delete_CN_DieuChinh_HopDong @IDDC", sParameter);
+            #region luu lich su
+            // luu lich su
+            HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+            ChucNang
+            , "DELETE"
+            , DateTime.Now, Session["username"]?.ToString()
+            , $" Xóa điều chỉnh - Số HD {hopDong?.SoHopDong} - lần điều chỉnh {cN_DieuChinh.DotDieuChinh}"); db.HT_LichSuHoatDong.Add(ls);
+            db.SaveChanges();
+            #endregion
             return RedirectToAction("Index");
         }
 

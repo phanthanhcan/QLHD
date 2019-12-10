@@ -14,7 +14,7 @@ namespace HopDongMgr.Controllers
     public class DM_PHONGController : Controller
     {
         private HopDongMgrEntities db = new HopDongMgrEntities();
-
+        private string ChucNang = "Danh mục phòng";
         // GET: DM_PHONG
         [CustomAuthorization]
         public ActionResult Index()
@@ -39,10 +39,12 @@ namespace HopDongMgr.Controllers
             return View(dM_PHONG);
         }
 
+        #region Create
         // GET: DM_PHONG/Create
         [CustomAuthorization]
         public ActionResult Create()
         {
+            db.Configuration.LazyLoadingEnabled = false;
             ViewBag.MaDV = new SelectList(db.DM_DONVI, "MA_DVIQLY", "TEN_DVIQLY");
             return View();
         }
@@ -54,18 +56,37 @@ namespace HopDongMgr.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Ten,MaDV,TenTat")] DM_PHONG dM_PHONG)
         {
-            if (ModelState.IsValid)
-            {
-                dM_PHONG.Id = Guid.NewGuid();
-                db.DM_PHONG.Add(dM_PHONG);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
 
-            ViewBag.MaDV = new SelectList(db.DM_DONVI, "MA_DVIQLY", "TEN_DVIQLY", dM_PHONG.MaDV);
-            return View(dM_PHONG);
+            db.Configuration.LazyLoadingEnabled = false;
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    dM_PHONG.Id = Guid.NewGuid();
+                    db.DM_PHONG.Add(dM_PHONG);
+                    db.SaveChanges();
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        ChucNang
+                        , "CREATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $"Thêm mới - Tên phòng{dM_PHONG.Ten} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                ViewBag.MaDV = new SelectList(db.DM_DONVI, "MA_DVIQLY", "TEN_DVIQLY", dM_PHONG.MaDV);
+                return View(dM_PHONG);
+            }
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Không ghi được dữ liệu.<br/>Lý do: " + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
         }
 
+        #endregion 
+
+        #region Edit
         // GET: DM_PHONG/Edit/5
         [CustomAuthorization]
         public ActionResult Edit(Guid? id)
@@ -74,6 +95,7 @@ namespace HopDongMgr.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            db.Configuration.LazyLoadingEnabled = false;
             DM_PHONG dM_PHONG = db.DM_PHONG.Find(id);
             if (dM_PHONG == null)
             {
@@ -81,6 +103,7 @@ namespace HopDongMgr.Controllers
             }
             ViewBag.MaDV = new SelectList(db.DM_DONVI, "MA_DVIQLY", "TEN_DVIQLY", dM_PHONG.MaDV);
             return View(dM_PHONG);
+
         }
 
         // POST: DM_PHONG/Edit/5
@@ -90,15 +113,36 @@ namespace HopDongMgr.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Ten,MaDV,TenTat")] DM_PHONG dM_PHONG)
         {
-            if (ModelState.IsValid)
+            db.Configuration.LazyLoadingEnabled = false;
+            try
             {
-                db.Entry(dM_PHONG).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                //int d = db.DM_DongTien.Count(p => p.MaDongTien != dM_DongTien.MaDongTien && string.Compare(p.TenDongTien.Trim().Replace("\n", "").Replace("\r", ""), dM_DongTien.TenDongTien.Trim()) == 0);
+                //if (d > 0) ModelState.AddModelError("TenDongTien", "Tên dồng tiền bị trùng.");
+                if (ModelState.IsValid)
+                {
+                    db.Entry(dM_PHONG).State = EntityState.Modified;
+                    db.SaveChanges();
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        ChucNang
+                        ,"UPDATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $"Cập nhật - Tên phòng {dM_PHONG.Ten} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                ViewBag.MaDV = new SelectList(db.DM_DONVI, "MA_DVIQLY", "TEN_DVIQLY", dM_PHONG.MaDV);
+                return View(dM_PHONG);
             }
-            ViewBag.MaDV = new SelectList(db.DM_DONVI, "MA_DVIQLY", "TEN_DVIQLY", dM_PHONG.MaDV);
-            return View(dM_PHONG);
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Lỗi ghi dữ liệu.<br/>Lý do:" + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
+
         }
+
+        #endregion
 
         // POST: DM_PHONG/Delete/5
         [CustomAuthorization]

@@ -17,6 +17,7 @@ namespace HopDongMgr.Controllers
     {
         private HopDongMgrEntities db = new HopDongMgrEntities();
         private Common _Common = new Common();
+        private string ChucNang = "Danh mục địa điểm";
 
         // GET: DM_DiaDiem
         [CustomAuthorization]
@@ -40,7 +41,7 @@ namespace HopDongMgr.Controllers
             }
             return View(dM_DiaDiem);
         }
-
+        #region Create
         // GET: DM_DiaDiem/Create
         [CustomAuthorization]
         public ActionResult Create()
@@ -55,19 +56,40 @@ namespace HopDongMgr.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "MaDD,TenDD,Khoa,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat")] DM_DiaDiem dM_DiaDiem)
         {
-            if (ModelState.IsValid)
+            db.Configuration.LazyLoadingEnabled = false;
+            try
             {
-                List<SelectListItem> list = _Common.getThongTinBang();
-                dM_DiaDiem.NguoiTao = list.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text;
-                dM_DiaDiem.NgayTao = DateTime.Parse(list.Where(o => o.Value == "NgayTao").SingleOrDefault().Text);
-                db.DM_DiaDiem.Add(dM_DiaDiem);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                DM_DiaDiem dd = db.DM_DiaDiem.Find(dM_DiaDiem.MaDD);
+                if (dd != null) ModelState.AddModelError("MaDD", $"Mã Địa điểm {dM_DiaDiem.MaDD} đã tồn tại");
+                int d = db.DM_DiaDiem.Count(p =>string.Compare(p.TenDD.Trim().Replace("\n", "").Replace("\r", ""), dM_DiaDiem.TenDD.Trim()) == 0);
+                if (dd != null) ModelState.AddModelError("TenDD", $"Tên Địa điểm {dM_DiaDiem.TenDD} đã tồn tại");
+                if (ModelState.IsValid)
+                {
+                    List<SelectListItem> list = _Common.getThongTinBang();
+                    dM_DiaDiem.NguoiTao = list.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text;
+                    dM_DiaDiem.NgayTao = DateTime.Parse(list.Where(o => o.Value == "NgayTao").SingleOrDefault().Text);
+                    db.DM_DiaDiem.Add(dM_DiaDiem);
+                    db.SaveChanges();
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        ChucNang
+                        , "CREATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $" Thêm mới - {dM_DiaDiem.TenDD} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(dM_DiaDiem);
             }
-
-            return View(dM_DiaDiem);
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Không ghi được dữ liệu.<br/>Lý do: " + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
         }
+        #endregion
 
+        #region Update
         // GET: DM_DiaDiem/Edit/5
         [CustomAuthorization]
         public ActionResult Edit(string id)
@@ -76,6 +98,7 @@ namespace HopDongMgr.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            db.Configuration.LazyLoadingEnabled = false;
             DM_DiaDiem dM_DiaDiem = db.DM_DiaDiem.Find(id);
             if (dM_DiaDiem == null)
             {
@@ -91,18 +114,36 @@ namespace HopDongMgr.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "MaDD,TenDD,Khoa,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat")] DM_DiaDiem dM_DiaDiem)
         {
-            if (ModelState.IsValid)
+            db.Configuration.LazyLoadingEnabled = false;
+            try
             {
-                List<SelectListItem> list = _Common.getThongTinBang();
-                dM_DiaDiem.NguoiCapNhat = list.Where(o => o.Value == "NguoiCapNhat").SingleOrDefault().Text;
-                dM_DiaDiem.NgayCapNhat = DateTime.Parse(list.Where(o => o.Value == "NgayCapNhat").SingleOrDefault().Text);
-                db.Entry(dM_DiaDiem).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                int d = db.DM_DiaDiem.Count(p => p.MaDD != dM_DiaDiem.MaDD && string.Compare(p.TenDD.Trim().Replace("\n", "").Replace("\r", ""), dM_DiaDiem.TenDD.Trim()) == 0);
+                if (d > 0) ModelState.AddModelError("TenDD", $"Tên Địa điểm {dM_DiaDiem.TenDD} bị trùng.");
+                if (ModelState.IsValid)
+                {
+                    List<SelectListItem> list = _Common.getThongTinBang();
+                    dM_DiaDiem.NguoiCapNhat = list.Where(o => o.Value == "NguoiCapNhat").SingleOrDefault().Text;
+                    dM_DiaDiem.NgayCapNhat = DateTime.Parse(list.Where(o => o.Value == "NgayCapNhat").SingleOrDefault().Text);
+                    db.Entry(dM_DiaDiem).State = EntityState.Modified;
+                    db.SaveChanges();
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        ChucNang
+                        , "UPDATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $" Cập nhật - tên địa điểm {dM_DiaDiem.TenDD} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(dM_DiaDiem);
             }
-            return View(dM_DiaDiem);
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Lỗi ghi dữ liệu.<br/>Lý do:" + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
         }
-
+        #endregion
         // GET: DM_DiaDiem/Delete/5
         //public ActionResult Delete(string id)
         //{

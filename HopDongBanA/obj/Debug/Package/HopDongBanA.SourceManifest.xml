@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<sitemanifest>
-  <IisApp path="E:\1.Project\QLHDBanA\Sub_QLHD_5\HopDongBanA\obj\Debug\Package\PackageTmp" />
-  <setAcl path="E:\1.Project\QLHDBanA\Sub_QLHD_5\HopDongBanA\obj\Debug\Package\PackageTmp" setAclResourceType="Directory" />
-  <setAcl path="E:\1.Project\QLHDBanA\Sub_QLHD_5\HopDongBanA\obj\Debug\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
-</sitemanifest>

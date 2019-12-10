@@ -115,6 +115,13 @@ namespace HopDongMgr.Controllers
 
                     db.SaveChanges();
                 }
+                HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                this.ControllerContext.RouteData.Values["controller"].ToString()
+                , "UPDATE"
+                , DateTime.Now, Session["username"]?.ToString()
+                , $" {this.ControllerContext.RouteData.Values["action"]?.ToString()} ");
+                db.HT_LichSuHoatDong.Add(ls);
+                db.SaveChanges();
 
                 error = "1";
             }

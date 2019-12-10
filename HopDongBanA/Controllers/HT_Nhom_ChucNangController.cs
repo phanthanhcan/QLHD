@@ -99,7 +99,12 @@ namespace HopDongMgr.Controllers
                             db.HT_Nhom_ChucNang.Remove(ncn);
                         }
                     }
-
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        this.ControllerContext.RouteData.Values["controller"].ToString()
+                        , "UPDATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $" {this.ControllerContext.RouteData.Values["action"]?.ToString()}");
+                    db.HT_LichSuHoatDong.Add(ls);
                     db.SaveChanges();
                 }
 
@@ -152,7 +157,12 @@ namespace HopDongMgr.Controllers
                         db.SaveChanges();
                     }
                 }
-
+                HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                this.ControllerContext.RouteData.Values["controller"].ToString()
+                , "UPDATE"
+                , DateTime.Now, Session["username"]?.ToString()
+                , $" {this.ControllerContext.RouteData.Values["action"]?.ToString() }");
+                db.HT_LichSuHoatDong.Add(ls);
                 error = "1";
             }
             catch (Exception ex)

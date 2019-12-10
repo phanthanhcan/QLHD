@@ -230,6 +230,17 @@
           <Property Name="oidParent" Type="uniqueidentifier" />
           <Property Name="IsMenu" Type="bit" />
         </EntityType>
+        <EntityType Name="HT_LichSuHoatDong">
+          <Key>
+            <PropertyRef Name="IDLichSuHoatDong" />
+          </Key>
+          <Property Name="IDLichSuHoatDong" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ChucNang" Type="varchar" MaxLength="50" />
+          <Property Name="LoaiHoatDong" Type="nvarchar" MaxLength="50" />
+          <Property Name="NgayThucHien" Type="datetime" />
+          <Property Name="NguoiThucHien" Type="nvarchar" MaxLength="50" />
+          <Property Name="ChiTietHoatDong" Type="nvarchar" MaxLength="500" />
+        </EntityType>
         <EntityType Name="HT_NguoiDung">
           <Key>
             <PropertyRef Name="oid" />
@@ -718,6 +729,7 @@
           <EntitySet Name="HT_CauHinh" EntityType="Self.HT_CauHinh" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HT_CHUCVU" EntityType="Self.HT_CHUCVU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HT_DSChucNang" EntityType="Self.HT_DSChucNang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HT_LichSuHoatDong" EntityType="Self.HT_LichSuHoatDong" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HT_NguoiDung" EntityType="Self.HT_NguoiDung" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HT_Nhom" EntityType="Self.HT_Nhom" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HT_Nhom_ChucNang" EntityType="Self.HT_Nhom_ChucNang" Schema="dbo" store:Type="Tables" />
@@ -1670,6 +1682,7 @@
             <Parameter Name="pSoNgay" Mode="In" Type="Int32" />
             <Parameter Name="pLoai" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="HT_LichSuHoatDong" EntityType="HopDongBanA.Models.HT_LichSuHoatDong" />
         </EntityContainer>
         <ComplexType Name="GetInfoChucNangFromIdNhom_Result">
           <Property Type="Guid" Name="oid" Nullable="false" />
@@ -1995,6 +2008,17 @@
           <Property Type="Int32" Name="SoNgayGiaHanTienDo" Nullable="true" />
           <Property Type="String" Name="LyDoDieuChinh" Nullable="true" />
         </ComplexType>
+        <EntityType Name="HT_LichSuHoatDong">
+          <Key>
+            <PropertyRef Name="IDLichSuHoatDong" />
+          </Key>
+          <Property Name="IDLichSuHoatDong" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ChucNang" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LoaiHoatDong" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NgayThucHien" Type="DateTime" Precision="3" />
+          <Property Name="NguoiThucHien" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ChiTietHoatDong" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2716,6 +2740,18 @@
           <FunctionImportMapping FunctionImportName="rptTheoDoiHopDong_GetByNguonVon" FunctionName="HopDongBanA.Models.Store.rptTheoDoiHopDong_GetByNguonVon" />
           <FunctionImportMapping FunctionImportName="StrorePro_GetThongTinHopDong_DotDieuChinh" FunctionName="HopDongBanA.Models.Store.StrorePro_GetThongTinHopDong_DotDieuChinh" />
           <FunctionImportMapping FunctionImportName="GetList_HopDongHetHan_ALL" FunctionName="HopDongBanA.Models.Store.GetList_HopDongHetHan_ALL" />
+          <EntitySetMapping Name="HT_LichSuHoatDong">
+            <EntityTypeMapping TypeName="HopDongBanA.Models.HT_LichSuHoatDong">
+              <MappingFragment StoreEntitySet="HT_LichSuHoatDong">
+                <ScalarProperty Name="ChiTietHoatDong" ColumnName="ChiTietHoatDong" />
+                <ScalarProperty Name="NguoiThucHien" ColumnName="NguoiThucHien" />
+                <ScalarProperty Name="NgayThucHien" ColumnName="NgayThucHien" />
+                <ScalarProperty Name="LoaiHoatDong" ColumnName="LoaiHoatDong" />
+                <ScalarProperty Name="ChucNang" ColumnName="ChucNang" />
+                <ScalarProperty Name="IDLichSuHoatDong" ColumnName="IDLichSuHoatDong" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

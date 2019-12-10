@@ -20,6 +20,7 @@ namespace HopDongMgr.Controllers
     {
         private HopDongMgrEntities db = new HopDongMgrEntities();
         private Common _common = new Common();
+        private string ChucNang = "Chức năng hợp đồng";
 
         #region lấy danh sách 
         // GET: CN_HopDong
@@ -125,376 +126,6 @@ namespace HopDongMgr.Controllers
             }
 
         }
-        #endregion
-        // GET: CN_HopDong/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CN_HopDong cN_HopDong = db.CN_HopDong.Find(id);
-            if (cN_HopDong == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cN_HopDong);
-        }
-        
-
-        // GET: CN_HopDong/Create
-        [CustomAuthorization]
-        public ActionResult Create()
-        {
-
-            List<DM_LoaiHopDong> LiQuyenLoaiHD = new List<DM_LoaiHopDong>();
-            Guid gIDMaPhongBan = (Guid)Session["IDMaPhongBan"];
-            Guid guserid = (Guid)Session["userid"];
-            //Load combobox
-            //Loai hop dong
-            List<HT_PhongBan_LoaiHopDong> LiQuyen = db.HT_PhongBan_LoaiHopDong.Where(o => o.IDPB.CompareTo(gIDMaPhongBan) == 0).ToList();
-            List<HT_NguoiDung> LiNguoiDung = db.HT_NguoiDung.Where(o => o.oid.CompareTo(guserid) == 0).ToList();
-            DM_LoaiHopDong iLoaiHD = new DM_LoaiHopDong();
-            foreach (var item in LiQuyen)
-            {
-                iLoaiHD = new DM_LoaiHopDong();
-                iLoaiHD = db.DM_LoaiHopDong.Find(item.IDLoaiHopDong);
-                LiQuyenLoaiHD.Add(iLoaiHD);
-
-            }
-            iLoaiHD = new DM_LoaiHopDong();
-            iLoaiHD.IDLoai = -1;
-            iLoaiHD.TenLoai = "-- Chọn loại hợp đồng --";
-            LiQuyenLoaiHD.Insert(0, iLoaiHD);
-            ViewBag.IDLoai = new SelectList(LiQuyenLoaiHD.OrderBy(o => o.TenLoai), "IDLoai", "TenLoai");
-            //Cong trinh
-            List<DM_CongTrinh> liCongTrinh = db.DM_CongTrinh.OrderBy(o => o.TenCT).ToList();
-            DM_CongTrinh iCongTrinh = new DM_CongTrinh();
-            iCongTrinh.MaCT = "";
-            iCongTrinh.TenCT = "-- Chọn công trình --";
-            liCongTrinh.Insert(0, iCongTrinh);
-            ViewBag.MaCT = new SelectList(liCongTrinh, "IDCT", "TenCT");
-            //Don vi thuc hien
-            List<DM_DonViThucHien> liDonViThuHien = db.DM_DonViThucHien.Where(o => o.Khoa.Value.CompareTo(false) == 0).OrderBy(o => o.TenDV).ToList();
-            DM_DonViThucHien iDonViThucHien = new DM_DonViThucHien();
-            iDonViThucHien.IDDV = -1000;
-            iDonViThucHien.TenDV = "-- Chọn Đơn vị thực hiện --";
-            liDonViThuHien.Insert(0, iDonViThucHien);
-            ViewBag.IDDV = new SelectList(liDonViThuHien, "IDDV", "TenDV");
-            //Hinh thuc hop dong
-            List<DM_HinhThucHopDong> liHinhThuc = db.DM_HinhThucHopDong.Where(o => o.Khoa.Value.CompareTo(false) == 0).OrderBy(o => o.TenHinhThuc).ToList();
-            DM_HinhThucHopDong iHinhThuc = new DM_HinhThucHopDong();
-            iHinhThuc.IDHT = -1;
-            iHinhThuc.TenHinhThuc = "-- Chọn hình thức hợp đồng --";
-            liHinhThuc.Insert(0, iHinhThuc);
-            ViewBag.IDHT = new SelectList(liHinhThuc, "IDHT", "TenHinhThuc");
-            //
-            ViewBag.NguoiTao = new SelectList(LiNguoiDung, "oid", "HoTen");
-
-            return View();
-        }
-
-
-        // POST: CN_HopDong/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IDHD,IDLoai,MaCT,NoiDung,MaDD,NamGiaoA,IDDV,GiaTriGoiThau,IDHT,SoHopDong,NgayKy,GiaTriHopDong,SoNgayThucHien,SoNgayThiCong,NgayTongNghiemThu,XuLyViPham,GiaTriPhat,XuLyTranhChap,IsHoanThanh,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat,NgayHetHan,IDCT")] CN_HopDong cN_HopDong)
-        {
-            ViewBag.IDCT = new SelectList(db.DM_CongTrinh, "IDCT", "TenCT", cN_HopDong.IDCT);
-            ViewBag.IDDV = new SelectList(db.DM_DonViThucHien, "IDDV", "TenDV", cN_HopDong.IDDV);
-            ViewBag.IDHT = new SelectList(db.DM_HinhThucHopDong, "IDHT", "TenHinhThuc", cN_HopDong.IDHT);
-            ViewBag.NguoiTao = new SelectList(db.HT_NguoiDung, "oid", "MaNguoiDung", cN_HopDong.NguoiTao);
-            ViewBag.IDLoai = new SelectList(db.DM_LoaiHopDong, "IDLoai", "TenLoai", cN_HopDong.IDLoai);
-            if (ModelState.IsValid)
-            {
-                //Check data
-                if (db.CN_HopDong.Where(X => X.SoHopDong.ToLower().Trim().Contains(cN_HopDong.SoHopDong.ToLower().Trim())).Count() > 0)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Số Hợp đồng đã tồn tại. Vui lòng kiểm tra lại</div> ";
-                    //return RedirectToAction("Create", "CN_HopDong");
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.IDLoai.Value == -1)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng chọn loại hợp đồng</div> ";
-                    return View(cN_HopDong);
-                }
-                if (string.IsNullOrEmpty(cN_HopDong.SoHopDong))
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng nhập số hợp đồng</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.IDCT.HasValue == false)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng chọn công trình</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.IDHT.Value == -1)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng chọn hình thức hợp đồng</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.GiaTriGoiThau.HasValue == false || cN_HopDong.GiaTriGoiThau.GetValueOrDefault(0) <= 0)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng nhập giá trị gói thầu</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.GiaTriHopDong.HasValue == false || cN_HopDong.GiaTriHopDong.GetValueOrDefault(0) <= 0)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng nhập giá trị hợp đồng</div> ";
-                    return View(cN_HopDong);
-                }
-                else
-                {
-                    if (cN_HopDong.GiaTriHopDong.Value> cN_HopDong.GiaTriGoiThau.Value)
-                    {
-                        TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>o	“Giá trị hợp đồng” không được lớn hơn “Giá gói thầu”</div> ";
-                        return View(cN_HopDong);
-                    }
-                }
-                if (cN_HopDong.SoNgayThucHien.HasValue == false || cN_HopDong.SoNgayThucHien.GetValueOrDefault(0) <= 0)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng nhập thời gian thực hiện hợp đồng</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.SoNgayThiCong.HasValue == false || cN_HopDong.SoNgayThiCong.GetValueOrDefault(0) <=0)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng nhập tiến độ thi công</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.SoNgayThiCong.Value > cN_HopDong.SoNgayThucHien.Value)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>“Tiến độ thi công” không được lớn hơn “Thời gian thực hiện hợp đồng”</div> ";
-                    return View(cN_HopDong);
-                }
-                if(cN_HopDong.IDDV < -999)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng nhập tên Đơn vị thực hiện (Chọn \"Không xác định\" nếu để trống)</div> ";
-                    return View(cN_HopDong);
-                }
-                //
-                List<SelectListItem> list = _common.getThongTinBang();
-                cN_HopDong.NguoiTao = Guid.Parse(list.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text);
-                cN_HopDong.NgayTao = DateTime.Parse(list.Where(o => o.Value == "NgayTao").SingleOrDefault().Text);
-                db.CN_HopDong.Add(cN_HopDong);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(cN_HopDong);
-        }
-
-
-        // GET: CN_HopDong/Edit/5
-        [CustomAuthorization]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CN_HopDong cN_HopDong = db.CN_HopDong.Find(id);
-            if (cN_HopDong == null)
-            {
-                return HttpNotFound();
-            }
-            List<DM_LoaiHopDong> LiQuyenLoaiHD = new List<DM_LoaiHopDong>();
-            Guid gIDMaPhongBan = (Guid)Session["IDMaPhongBan"];
-            Guid guserid = (Guid)Session["userid"];
-            List<HT_PhongBan_LoaiHopDong> LiQuyen = db.HT_PhongBan_LoaiHopDong.Where(o => o.IDPB.CompareTo(gIDMaPhongBan) == 0).ToList();
-            foreach (var item in LiQuyen)
-            {
-                DM_LoaiHopDong o = db.DM_LoaiHopDong.Find(item.IDLoaiHopDong);
-                LiQuyenLoaiHD.Add(o);
-
-            }
-            List<HT_NguoiDung> LiNguoiDung = db.HT_NguoiDung.Where(o => o.oid.CompareTo(guserid) == 0).ToList();
-            ViewBag.MaCT = new SelectList(db.DM_CongTrinh.OrderBy(o => o.TenCT), "IDCT", "TenCT", cN_HopDong.IDCT);
-
-            ViewBag.IDDV = new SelectList(db.DM_DonViThucHien.OrderBy(o => o.TenDV), "IDDV", "TenDV", cN_HopDong.IDDV);
-            ViewBag.IDHT = new SelectList(db.DM_HinhThucHopDong.OrderBy(o => o.TenHinhThuc), "IDHT", "TenHinhThuc", cN_HopDong.IDHT);
-            ViewBag.NguoiTao = new SelectList(LiNguoiDung, "oid", "HoTen", cN_HopDong.NguoiTao);
-            ViewBag.IDLoai = new SelectList(LiQuyenLoaiHD.OrderBy(o => o.TenLoai), "IDLoai", "TenLoai", cN_HopDong.IDLoai);
-            return View(cN_HopDong);
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IDHD,IDLoai,MaCT,NoiDung,MaDD,NamGiaoA,IDDV,GiaTriGoiThau,IDHT,SoHopDong,NgayKy,GiaTriHopDong,SoNgayThucHien,SoNgayThiCong,NgayTongNghiemThu,XuLyViPham,GiaTriPhat,XuLyTranhChap,IsHoanThanh,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat, NgayHetHan,IDCT")] CN_HopDong cN_HopDong)
-        {
-            ViewBag.MaCT = new SelectList(db.DM_CongTrinh, "IDCT", "TenCT", cN_HopDong.MaCT);
-            ViewBag.IDDV = new SelectList(db.DM_DonViThucHien, "IDDV", "TenDV", cN_HopDong.IDDV);
-            ViewBag.IDHT = new SelectList(db.DM_HinhThucHopDong, "IDHT", "TenHinhThuc", cN_HopDong.IDHT);
-            ViewBag.NguoiTao = new SelectList(db.HT_NguoiDung, "oid", "MaNguoiDung", cN_HopDong.NguoiTao);
-            ViewBag.IDLoai = new SelectList(db.DM_LoaiHopDong, "IDLoai", "TenLoai", cN_HopDong.IDLoai);
-            ViewBag.MaCT = new SelectList(db.DM_CongTrinh.OrderBy(o => o.TenCT), "IDCT", "TenCT", cN_HopDong.IDCT);
-            if (ModelState.IsValid)
-            {
-                //Check data
-                //Check data
-                if (db.CN_HopDong.Where(X => X.SoHopDong.ToLower().Trim().Contains(cN_HopDong.SoHopDong.ToLower().Trim()) && X.IDHD != cN_HopDong.IDHD).Count() > 0)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Số Hợp đồng đã tồn tại. Vui lòng kiểm tra lại</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.IDLoai.Value == -1)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng chọn loại hợp đồng</div> ";
-                    return View(cN_HopDong);
-                }
-                if (string.IsNullOrEmpty(cN_HopDong.SoHopDong))
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng nhập số hợp đồng</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.IDCT.HasValue == false)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng chọn công trình</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.IDHT.Value == -1)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng chọn hình thức hợp đồng</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.GiaTriGoiThau.HasValue == false || cN_HopDong.GiaTriGoiThau.GetValueOrDefault(0) <= 0)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng nhập giá trị gói thầu</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.GiaTriHopDong.HasValue == false || cN_HopDong.GiaTriHopDong.GetValueOrDefault(0) <= 0)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng nhập giá trị hợp đồng</div> ";
-                    return View(cN_HopDong);
-                }
-                else
-                {
-                    if (cN_HopDong.GiaTriHopDong.Value > cN_HopDong.GiaTriGoiThau.Value)
-                    {
-                        TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>o	“Giá trị hợp đồng” không được lớn hơn “Giá gói thầu”</div> ";
-                        return View(cN_HopDong);
-                    }
-                }
-                if (cN_HopDong.SoNgayThucHien.HasValue == false || cN_HopDong.SoNgayThucHien.GetValueOrDefault(0) <= 0)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng nhập thời gian thực hiện hợp đồng</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.SoNgayThiCong.HasValue == false || cN_HopDong.SoNgayThiCong.GetValueOrDefault(0) <= 0)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Vui lòng nhập tiến độ thi công</div> ";
-                    return View(cN_HopDong);
-                }
-                if (cN_HopDong.SoNgayThiCong.Value > cN_HopDong.SoNgayThucHien.Value)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>“Tiến độ thi công” không được lớn hơn “Thời gian thực hiện hợp đồng”</div> ";
-                    return View(cN_HopDong);
-                }
-                //
-                List<SelectListItem> list = _common.getThongTinBang();
-                cN_HopDong.NguoiCapNhat = list.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text;
-                cN_HopDong.NgayCapNhat = DateTime.Parse(list.Where(o => o.Value == "NgayTao").SingleOrDefault().Text);
-
-                //db.Entry(cN_HopDong).State = EntityState.Modified;
-                db.CN_HopDong.Attach(cN_HopDong);
-                db.Entry(cN_HopDong).Property(o => o.IDLoai).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.SoHopDong).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.NgayKy).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.NoiDung).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.IDCT).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.IDDV).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.IDHT).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.NamGiaoA).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.IDCT).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.GiaTriHopDong).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.GiaTriGoiThau).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.SoNgayThucHien).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.NgayHetHan).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.NguoiCapNhat).IsModified = true;
-                db.Entry(cN_HopDong).Property(o => o.NgayCapNhat).IsModified = true;
-                db.SaveChanges();
-                TempData["err"] = "<div class='alert alert-success' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span> Cập nhật thành công</div> ";
-                return RedirectToAction("Index");
-            }
-            return View(cN_HopDong);
-        }
-
-
-        public ActionResult Edit_XuPhatTranhChap(int? IDHD)
-        {
-            if (IDHD == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CN_HopDong cN_HopDong = db.CN_HopDong.Find(IDHD);
-            if (cN_HopDong == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cN_HopDong);
-        }
-        
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit_XuPhatTranhChap([Bind(Include = "IDHD,IDLoai,MaCT,NoiDung,MaDD,NamGiaoA,IDDV,GiaTriGoiThau,IDHT,SoHopDong,NgayKy,GiaTriHopDong,SoNgayThucHien,SoNgayThiCong,NgayTongNghiemThu,XuLyViPham,GiaTriPhat,XuLyTranhChap,IsHoanThanh,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat")] CN_HopDong cN_HopDong)
-        {
-            string err = "";
-            if (ModelState.IsValid)
-            {
-                if (cN_HopDong.GiaTriPhat.HasValue == false || cN_HopDong.GiaTriPhat.GetValueOrDefault(0) <= 0)
-                {
-                    err = err + "Vui lòng nhập giá trị phạt";
-                }
-                if (err.Length > 1)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>" + err + "</div> ";
-                    return View(cN_HopDong);
-                }
-                var Hopdong = new CN_HopDong();
-                Hopdong.IDHD = cN_HopDong.IDHD;
-                Hopdong.GiaTriPhat = cN_HopDong.GiaTriPhat;
-                Hopdong.XuLyTranhChap = cN_HopDong.XuLyTranhChap;
-                Hopdong.XuLyViPham = cN_HopDong.XuLyViPham;
-
-                db.CN_HopDong.Attach(Hopdong);
-                db.Entry(Hopdong).Property(o => o.GiaTriPhat).IsModified = true;
-                db.Entry(Hopdong).Property(o => o.XuLyTranhChap).IsModified = true;
-                db.Entry(Hopdong).Property(o => o.XuLyViPham).IsModified = true;
-
-                //db.Entry(cN_HopDong).State = EntityState.Modified;
-                db.SaveChanges();
-                TempData["err"] = "<div class='alert alert-success' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Cập nhật thành công</div> ";
-
-                return View(cN_HopDong);
-            }
-
-            return View(cN_HopDong);
-        }
-        
-        
-        // POST: CN_HopDong/Delete/5
-        [HttpPost]
-        [CustomAuthorization]
-        public ActionResult Delete(int id)
-        {
-            CN_HopDong cN_HopDong = db.CN_HopDong.Find(id);
-            db.CN_HopDong.Remove(cN_HopDong);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
 
         [HttpPost]
         public ActionResult GetList_HetHanDieuChinh()
@@ -575,7 +206,7 @@ namespace HopDongMgr.Controllers
         [HttpPost]
         public ActionResult GetList1()
         {
-            Guid gIDMaPhongBan = (Guid)Session["IDMaPhongBan"];          
+            Guid gIDMaPhongBan = (Guid)Session["IDMaPhongBan"];
             int start = Convert.ToInt32(Request["start"]);
             int length = Convert.ToInt32(Request["length"]);
             string searchVale = Request["search[Value]"];
@@ -609,7 +240,276 @@ namespace HopDongMgr.Controllers
                 return RedirectToAction("Login", "Home");
         }
 
+        #endregion
 
+        #region create
+        // GET: CN_HopDong/Create
+        [CustomAuthorization]
+        public ActionResult Create()
+        {
+            try
+            {
+                ViewBag.IDLoai = DanhSachLoaiHopDongPhanQuyen();
+                //Cong trinh
+                ViewBag.IDCT = DanhSachCongTrinh();
+                //Don vi thuc hien
+                ViewBag.IDDV = DanhSachDonViThucHien();
+                //Hinh thuc hop dong
+                ViewBag.IDHT = DanhSachHinhThucHopDong();
+                //
+                ViewBag.NguoiTao = DanhSachNguoiTao();
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Không lấy được dữ liệu.<br/>Lý do: " + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
+        }
+
+        // POST: CN_HopDong/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "IDHD,IDLoai,MaCT,NoiDung,MaDD,NamGiaoA,IDDV,GiaTriGoiThau,IDHT,SoHopDong,NgayKy,GiaTriHopDong,SoNgayThucHien,SoNgayThiCong,NgayTongNghiemThu,XuLyViPham,GiaTriPhat,XuLyTranhChap,IsHoanThanh,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat,NgayHetHan,IDCT")] CN_HopDong cN_HopDong)
+        {
+            try
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+                int dHopDong = db.CN_HopDong.Where(p => !string.IsNullOrEmpty(cN_HopDong.SoHopDong) && string.Compare(p.SoHopDong.Trim().Replace("\n", "").Replace("\r", ""), cN_HopDong.SoHopDong.Trim()) == 0).Count();
+                if (dHopDong > 0) ModelState.AddModelError("SoHopDong", "Số hợp đồng đã tồn tại.");
+                if (cN_HopDong.IDLoai.GetValueOrDefault(-1) == -1) ModelState.AddModelError("IDLoai", "Chọn loại hợp đồng.");
+                if (cN_HopDong.IDCT.GetValueOrDefault(-1) == -1) ModelState.AddModelError("IDCT", "Chọn công trình.");
+                if (cN_HopDong.IDHT.GetValueOrDefault(-1) == -1) ModelState.AddModelError("IDHT", "Chọn hình thức hợp đồng.");
+                // giá trị hợp đông nhỏ hơn giá trị gói thầu
+                if(cN_HopDong.GiaTriHopDong.GetValueOrDefault(-1) > cN_HopDong.GiaTriGoiThau.GetValueOrDefault(-1)) ModelState.AddModelError("GiaTriHopDong", "Giá trị hợp đồng < Giá trị gói thầu.");
+                //số ngày thi công nhỏ hơn số ngày thực hiện
+                if (cN_HopDong.SoNgayThiCong.GetValueOrDefault(-1) > cN_HopDong.SoNgayThucHien.GetValueOrDefault(-1)) ModelState.AddModelError("GiaTriHopDong", "Số ngày thi công < Số ngày thực hiện.");
+                if (cN_HopDong.IDDV == -1) cN_HopDong.IDDV = null;
+                if (cN_HopDong.NgayHetHan < cN_HopDong.NgayKy) ModelState.AddModelError("NgayHetHan", "Ngày hết hạn HĐ phải lớn hơn ngày ký HĐ");
+                DateTime cNgayHetHan = cN_HopDong.NgayKy.Value;
+                if (cN_HopDong.NgayHetHan < cNgayHetHan.AddDays(cN_HopDong.SoNgayThucHien.GetValueOrDefault(0))) ModelState.AddModelError("NgayHetHan", "Ngày hết hạn HĐ phải lớn hơn ngày ký HĐ + Số ngày thực hiện");
+                if (ModelState.IsValid)
+                {
+                    //
+                    List<SelectListItem> list = _common.getThongTinBang();
+                    cN_HopDong.NguoiTao = Guid.Parse(list.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text);
+                    cN_HopDong.NgayTao = DateTime.Parse(list.Where(o => o.Value == "NgayTao").SingleOrDefault().Text);
+                    db.CN_HopDong.Add(cN_HopDong);
+                    db.SaveChanges();
+                    // luu lich su
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        ChucNang
+                        , "CREATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $" Thêm mới - Số hợp đồng {cN_HopDong.SoHopDong} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                ViewBag.IDCT = DanhSachCongTrinh(cN_HopDong.IDCT);
+                ViewBag.IDDV = DanhSachDonViThucHien(cN_HopDong.IDDV);
+                ViewBag.IDHT = DanhSachHinhThucHopDong(cN_HopDong.IDHT);
+                ViewBag.NguoiTao = DanhSachNguoiTao( cN_HopDong.NguoiTao?.ToString());
+                ViewBag.IDLoai = DanhSachLoaiHopDong( cN_HopDong.IDLoai);
+                return View(cN_HopDong);
+            }
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Không ghi được dữ liệu.<br/>Lý do: " + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
+        }
+
+        #endregion
+
+        #region update
+        // GET: CN_HopDong/Edit/5
+        [CustomAuthorization]
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            try
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+                CN_HopDong cN_HopDong = db.CN_HopDong.Find(id);
+                if (cN_HopDong == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.IDLoai = DanhSachLoaiHopDongPhanQuyen(cN_HopDong.IDLoai);
+                //Cong trinh
+                ViewBag.IDCT = DanhSachCongTrinh(cN_HopDong.IDCT);
+                //Don vi thuc hien
+                ViewBag.IDDV = DanhSachDonViThucHien(cN_HopDong.IDDV);
+                //Hinh thuc hop dong
+                ViewBag.IDHT = DanhSachHinhThucHopDong(cN_HopDong.IDHT);
+                //
+                ViewBag.NguoiTao = DanhSachNguoiTao(cN_HopDong.NguoiTao.GetValueOrDefault(Guid.Empty).ToString());
+
+                return View(cN_HopDong);
+            }
+            catch(Exception ex)
+            {
+                string cauBaoLoi = "Không lấy được dữ liệu.<br/>Lý do: " + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
+
+        }
+
+        // POST: CN_HopDong/Edit
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit( CN_HopDong cN_HopDong)
+        {
+            try
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+                int dHopDong = db.CN_HopDong.Where(p => !string.IsNullOrEmpty(cN_HopDong.SoHopDong) && p.IDHD != cN_HopDong.IDHD && string.Compare(p.SoHopDong.Trim().Replace("\n", "").Replace("\r", ""), cN_HopDong.SoHopDong.Trim()) == 0).Count();
+                if (dHopDong > 0) ModelState.AddModelError("SoHopDong", "Số hợp đồng đã tồn tại.");
+                if (cN_HopDong.IDLoai.GetValueOrDefault(-1) == -1) ModelState.AddModelError("IDLoai", "Chọn loại hợp đồng.");
+                if (cN_HopDong.IDCT.GetValueOrDefault(-1) == -1) ModelState.AddModelError("IDCT", "Chọn công trình.");
+                if (cN_HopDong.IDHT.GetValueOrDefault(-1) == -1) ModelState.AddModelError("IDHT", "Chọn hình thức hợp đồng.");
+                // giá trị hợp đông nhỏ hơn giá trị gói thầu
+                if (cN_HopDong.GiaTriHopDong.GetValueOrDefault(-1) > cN_HopDong.GiaTriGoiThau.GetValueOrDefault(-1)) ModelState.AddModelError("GiaTriHopDong", "Giá trị hợp đồng < Giá trị gói thầu.");
+                //số ngày thi công nhỏ hơn số ngày thực hiện
+                if (cN_HopDong.SoNgayThiCong.GetValueOrDefault(-1) > cN_HopDong.SoNgayThucHien.GetValueOrDefault(-1)) ModelState.AddModelError("SoNgayThiCong", "Số ngày thi công < Số ngày thực hiện.");
+                if (cN_HopDong.IDDV == -1) cN_HopDong.IDDV = null;
+                if (cN_HopDong.NgayHetHan < cN_HopDong.NgayKy) ModelState.AddModelError("NgayHetHan", "Ngày hết hạn HĐ phải lớn hơn ngày ký HĐ");
+                DateTime cNgayHetHan = cN_HopDong.NgayKy.Value;
+                if (cN_HopDong.NgayHetHan < cNgayHetHan.AddDays(cN_HopDong.SoNgayThucHien.GetValueOrDefault(0))) ModelState.AddModelError("NgayHetHan", "Ngày hết hạn HĐ phải lớn hơn ngày ký HĐ + Số ngày thực hiện");
+
+                if (ModelState.IsValid)
+                {
+                    List<SelectListItem> list = _common.getThongTinBang();
+                    cN_HopDong.NguoiCapNhat = list.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text;
+                    cN_HopDong.NgayCapNhat = DateTime.Parse(list.Where(o => o.Value == "NgayTao").SingleOrDefault().Text);
+
+                    var cN_HopDongUpdate = db.CN_HopDong.Find(cN_HopDong.IDHD);
+                    TryUpdateModel(cN_HopDongUpdate, new string[] {
+                        "IDLoai","SoHopDong","NgayKy","NoiDung","IDCT", "IDDV", "IDHT", "NamGiaoA", "GiaTriHopDong", "GiaTriGoiThau",
+                        "SoNgayThiCong", "SoNgayThucHien", "NgayHetHan", "NguoiCapNhat", "NgayCapNhat"
+                    });
+                    db.SaveChanges();
+                    TempData["err"] = "<div class='alert alert-success' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span> Cập nhật thành công</div> ";
+                    // luu lich su
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                    ChucNang
+                    , "UPDATE"
+                    , DateTime.Now, Session["username"]?.ToString()
+                    , $" Cập nhật - Tên hợp đồng {cN_HopDong.SoHopDong} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                ViewBag.IDLoai = DanhSachLoaiHopDongPhanQuyen(cN_HopDong.IDLoai);
+                //Cong trinh
+                ViewBag.IDCT = DanhSachCongTrinh(cN_HopDong.IDCT);
+                //Don vi thuc hien
+                ViewBag.IDDV = DanhSachDonViThucHien(cN_HopDong.IDDV);
+                //Hinh thuc hop dong
+                ViewBag.IDHT = DanhSachHinhThucHopDong(cN_HopDong.IDHT);
+                //nguoi tao
+                ViewBag.NguoiTao = DanhSachNguoiTao(cN_HopDong.NguoiTao.GetValueOrDefault(Guid.Empty).ToString());
+                return View(cN_HopDong);
+
+            }
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Không lấy được dữ liệu.<br/>Lý do: " + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
+        }
+
+        #endregion
+        
+        #region Xử phạt
+        public ActionResult Edit_XuPhatTranhChap(int? IDHD)
+        {
+            if (IDHD == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            db.Configuration.LazyLoadingEnabled = false;
+            CN_HopDong cN_HopDong = db.CN_HopDong.Find(IDHD);
+            if (cN_HopDong == null)
+            {
+                return HttpNotFound();
+            }
+            return View(cN_HopDong);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit_XuPhatTranhChap( CN_HopDong cN_HopDong)
+        {
+            try
+            {
+                if (cN_HopDong.GiaTriPhat.GetValueOrDefault(0) < 1000) ModelState.AddModelError("GiaTriPhat", "Số tiền phải lớn hơn 1,000VND");
+                if (string.IsNullOrWhiteSpace(cN_HopDong.XuLyTranhChap)) ModelState.AddModelError("GiaTriPhat", "Nhập nội dung xử lý tranh chấp");
+                if (string.IsNullOrWhiteSpace(cN_HopDong.XuLyViPham)) ModelState.AddModelError("XuLyViPham", "Nhập nội dung xử lý vi phạm");
+                if (ModelState.IsValid)
+                {
+                    var cN_HopDongUpdate = db.CN_HopDong.Find(cN_HopDong.IDHD);
+                    TryUpdateModel(cN_HopDongUpdate, new string[] {
+                        "GiaTriPhat","XuLyTranhChap","XuLyViPham"
+                    });
+                    db.SaveChanges();
+                    TempData["err"] = "<div class='alert alert-success' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Cập nhật thành công</div> ";
+                    // luu lich su
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                         ChucNang
+                        , "UPDATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $" Cập nhật - xử phat tranh chấp - Hợp đồng {cN_HopDong.SoHopDong} ");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    return View(cN_HopDong);
+                }
+
+                return View(cN_HopDong);
+            }
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Không lấy được dữ liệu.<br/>Lý do: " + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
+        }
+        #endregion
+
+        #region Delete
+        // POST: CN_HopDong/Delete/5
+        [HttpPost]
+        [CustomAuthorization]
+        public ActionResult Delete(int id)
+        {
+            CN_HopDong cN_HopDong = db.CN_HopDong.Find(id);
+            db.CN_HopDong.Remove(cN_HopDong);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        #endregion
+
+        #region Dispose
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+        #endregion
+
+        #region Đồng bộ
         [HttpPost]
         public ActionResult DongBo_CNHopDong()
         {
@@ -631,6 +531,89 @@ namespace HopDongMgr.Controllers
 
             return Json(err);
         }
+        #endregion
+
+        #region private methods
+        private SelectList DanhSachCongTrinh(Decimal? selectedValue = -1)
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            var items = db.DM_CongTrinh.OrderBy(o => o.TenCT).Select(p => new {
+                                         p.IDCT,
+                                         ThongTin = p.MaCT + " - " + p.TenCT
+                                     })
+                                     .ToList();
+            items.Insert(0, new {  IDCT = Decimal.Parse("-1"), ThongTin = "------ Chọn Công trình------ " });
+            var result = new SelectList(items, "IDCT", "ThongTin", selectedValue: selectedValue);
+            return result;
+        }
+        private SelectList DanhSachDonViThucHien(int? selectedValue = -1)
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            var items = db.DM_DonViThucHien.Select(p => new {
+                                                             IDDV = p.IDDV.ToString(),
+                                                             ThongTin = p.IDDV + " - " + p.TenDV
+                                                            }).ToList();
+            items.Insert(0, new { IDDV = "-1", ThongTin = "------ Chọn ĐV thực hiện------ " });
+            var result = new SelectList(items, "IDDV", "ThongTin", selectedValue: "1001");
+            return result;
+        }
+        private SelectList DanhSachHinhThucHopDong(int? selectedValue = -1)
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            var items = db.DM_HinhThucHopDong.Select(p => new{
+                                                                p.IDHT,
+                                                                ThongTin = p.IDHT + " - " + p.TenHinhThuc
+                                                                }).ToList();
+            items.Insert(0, new { IDHT = -1, ThongTin = "------ Chọn hình thức HĐ------ " });
+            var result = new SelectList(items, "IDHT", "ThongTin", selectedValue: selectedValue);
+            return result;
+        }
+        private SelectList DanhSachNguoiTao(String  selectedValue = "-1")
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            Guid gucerid = (Guid)Session["userid"];
+            var items = db.HT_NguoiDung.Where(p => p.oid == gucerid).Select(p => new {
+                                                            oid = p.oid.ToString(),
+                                                            ThongTin = p.HoTen
+                                                        }).ToList();
+            var result = new SelectList(items, "oid", "ThongTin");
+            return result;
+        }
+        private SelectList DanhSachLoaiHopDong(int? selectedValue = -1)
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            var items = db.DM_LoaiHopDong.Select(p => new {
+                                                            p.IDLoai,
+                                                            ThongTin = p.IDLoai + " - " + p.TenLoai
+                                                        }).ToList();
+            items.Insert(0, new { IDLoai = -1, ThongTin = "------ Chọn loại HĐ------ " });
+            var result = new SelectList(items, "IDLoai", "ThongTin", selectedValue: selectedValue);
+            return result;
+        }
+        private SelectList DanhSachLoaiHopDongPhanQuyen(int? selectedValue = -1)
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            List<DM_LoaiHopDong> LiQuyenLoaiHD = new List<DM_LoaiHopDong>();
+            Guid gIDMaPhongBan = (Guid)Session["IDMaPhongBan"];
+            Guid guserid = (Guid)Session["userid"];
+            //Load combobox
+            //Loai hop dong
+            List<HT_PhongBan_LoaiHopDong> LiQuyen = db.HT_PhongBan_LoaiHopDong.Where(o => o.IDPB.CompareTo(gIDMaPhongBan) == 0).ToList();
+            DM_LoaiHopDong LoaiHD = new DM_LoaiHopDong();
+            List<dynamic> listHD = new List<dynamic>();
+            foreach (var item in LiQuyen)
+            {
+                LoaiHD = db.DM_LoaiHopDong.Find(item.IDLoaiHopDong);
+                dynamic ItemHD = new { LoaiHD.IDLoai, ThongTin = $"{LoaiHD.IDLoai} - {LoaiHD.TenLoai}" };
+                listHD.Add(ItemHD);
+
+            }
+
+            listHD.Insert(0, new { IDLoai = -1, ThongTin = "------ Chọn loại HĐ------ " });
+            var result = new SelectList(listHD, "IDLoai", "ThongTin", selectedValue: selectedValue);
+            return result;
+        }
+        #endregion
     }
 
     public class oCN_HopDong
