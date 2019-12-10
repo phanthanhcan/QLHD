@@ -10,28 +10,44 @@
     <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
     <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
 </div>
-<table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
-    <thead>
-        <tr role="row">
-            <th>Tên phòng ban</th>
-            <th>Tên tắt</th>
-            <th>Đơn vị quản lý</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+@using (Ajax.BeginForm(
+        "SeachIndex",
+        //"Controler",
+        ajaxOptions: new AjaxOptions
         {
-            <tr role="row" id="@item.Id">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Ten)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TenTat)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DM_DONVI.TEN_DVIQLY)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            HttpMethod = "GET",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "DataUpdate"
+        }))
+{
+    <div class="container">
+        <div class="row col-md-12">
+            <DIV class="col-md-3 col-md-offset-9">
+                <input class="form-control" type="text" name="Seach" id="Seach" placeholder="Tìm kiếm: Mã CT, Tên CT" />
+            </DIV>
+
+            <input id="submit" type="submit" hidden />
+        </div>
+    </div>
+}
+<div id="DataUpdate" class="table-responsive">
+    @Html.Partial("_IndexPartial")
+</div>
+
+
+@section scripts {
+    <script>
+
+        $(document).ready(function () {
+            $('#Seach').keydown(function (event) {
+                //alert(event.keyCode );
+                if (event.keyCode == 27) {
+                    $('#Seach').val("");
+                    $('#submit').submit();
+                    return true;
+                }
+            })
+        });
+    </script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}

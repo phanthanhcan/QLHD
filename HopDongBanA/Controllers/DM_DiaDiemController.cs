@@ -10,6 +10,7 @@ using HopDongMgr.Models;
 using HopDongMgr.Class.Common;
 using HopDongMgr.DungChung;
 using System.Data.SqlClient;
+using X.PagedList;
 
 namespace HopDongMgr.Controllers
 {
@@ -19,28 +20,67 @@ namespace HopDongMgr.Controllers
         private Common _Common = new Common();
         private string ChucNang = "Danh mục địa điểm";
 
+        #region lấy danh sách
         // GET: DM_DiaDiem
         [CustomAuthorization]
-        public ActionResult Index()
+        public ActionResult Index(int? page = 1)
         {
-            return View(db.DM_DiaDiem.Where(o => o.MaDD.CompareTo("00") != 0).OrderBy(o => o.TenDD).ToList());
+            db.Configuration.LazyLoadingEnabled = false;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+            int totalData = db.DM_DiaDiem.Count();
+            List<DM_DiaDiem> items = db.DM_DiaDiem.OrderBy(p => p.TenDD).Skip(n).Take(pageSize).ToList();
+            ViewBag.OnePageOfData = new StaticPagedList<DM_DiaDiem>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View();
         }
 
-        // GET: DM_DiaDiem/Details/5
-        [CustomAuthorization]
-        public ActionResult Details(string id)
+        // GET: DM_CongTrinh
+        public ActionResult SeachIndex(string Seach = "", int? page = 1)
         {
-            if (id == null)
+            db.Configuration.LazyLoadingEnabled = false;
+            int totalData;
+            List<DM_DiaDiem> items;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+            if (string.IsNullOrEmpty(Seach))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["Search"] = null;
+                totalData = db.DM_DiaDiem.Count();
+                items = db.DM_DiaDiem
+                    .OrderBy(p => p.TenDD)
+                    .Skip(n)
+                    .Take(pageSize)
+                    .ToList();
+
             }
-            DM_DiaDiem dM_DiaDiem = db.DM_DiaDiem.Find(id);
-            if (dM_DiaDiem == null)
+            else
             {
-                return HttpNotFound();
+                TempData["Search"] = Seach;
+                totalData = db.DM_DiaDiem
+                            .Where(o => (o.TenDD.Contains(Seach) || Seach == "") || (o.MaDD.Contains(Seach) || Seach == ""))
+                            .Count();
+                items = db.DM_DiaDiem
+                    .Where(o => (o.TenDD.Contains(Seach) || Seach == "") || (o.MaDD.Contains(Seach) || Seach == ""))
+                    .OrderBy(p => p.TenDD)
+                    .Skip(n).Take(pageSize)
+                    .ToList();
+
             }
-            return View(dM_DiaDiem);
+            ViewBag.OnePageOfData = new StaticPagedList<DM_DiaDiem>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View("Index");
         }
+        #endregion
+
         #region Create
         // GET: DM_DiaDiem/Create
         [CustomAuthorization]
@@ -144,22 +184,8 @@ namespace HopDongMgr.Controllers
             }
         }
         #endregion
-        // GET: DM_DiaDiem/Delete/5
-        //public ActionResult Delete(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    DM_DiaDiem dM_DiaDiem = db.DM_DiaDiem.Find(id);
-        //    if (dM_DiaDiem == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(dM_DiaDiem);
-        //}
 
-        // POST: DM_DiaDiem/Delete/5
+        #region Delete
         [HttpPost]
         [CustomAuthorization]
         public ActionResult Delete(string id)
@@ -170,6 +196,9 @@ namespace HopDongMgr.Controllers
             return RedirectToAction("Index");
         }
 
+        #endregion
+
+        #region Dispose
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -178,6 +207,9 @@ namespace HopDongMgr.Controllers
             }
             base.Dispose(disposing);
         }
+        #endregion
+
+        #region DongBo
         [HttpPost]
         public ActionResult DongBo_DanhMucDiaDiem()
         {
@@ -199,6 +231,6 @@ namespace HopDongMgr.Controllers
                 
             return Json(err);
         }
-
+        #endregion
     }
 }

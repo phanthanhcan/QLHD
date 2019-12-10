@@ -34,80 +34,85 @@
     <input type="button" value="Đồng Bộ" class="btn" id="btnDongBo" data-toggle="modal" data-target="#modal-danger-DongBo" style="display:none" />
 </div>
 
-<table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
-    <thead>
-        <tr role="row">
-            <th>Mã địa điểm</th>
-            <th>Tên địa điểm</th>
-            @*<th>Khóa</th>*@
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+@using (Ajax.BeginForm(
+        "SeachIndex",
+        //"Controler",
+        ajaxOptions: new AjaxOptions
         {
-            <tr role="row" id="@item.MaDD">
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaDD)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TenDD)
-                </td>
-                <@*td>
-                    @{
-                        bool Khoa = item.Khoa.GetValueOrDefault(false);
-                    }
-                    @Html.CheckBox("Khoa",Khoa ,new Dictionary<string, object>() { { "data-off-color", "danger" }, { "class", "cbootstrapSwitch" }, { "readonly", "readonly" } })
-                </td>*@
-            </tr>
-        }
-    </tbody>
-</table>
+            HttpMethod = "GET",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "DataUpdate"
+        }))
+{
+    <div class="container">
+        <div class="row col-md-12">
+            <DIV class="col-md-3 col-md-offset-9">
+                <input class="form-control" type="text" name="Seach" id="Seach" placeholder="Tìm kiếm: Mã ĐD, Tên ĐD" />
+            </DIV>
+
+            <input id="submit" type="submit" hidden />
+        </div>
+    </div>
+}
+<div id="DataUpdate" class="table-responsive">
+    @Html.Partial("_IndexPartial")
+</div>
+
 
 @section scripts
 {
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('#btnDongYDB').click(function () {
-            Loading();
-            $.ajax({
-                url: "/DM_DiaDiem/DongBo_DanhMucDiaDiem",
-                dataType: "json",
-                type: "POST",
-                contentType: 'application/json; charset=utf-8',
-                async: true,
-                processData: false,
-                cache: false,
-                success: function (data) {
-                    if (data == "1") {
-                        LoadingHide();
-                        $.notify({
-                            title: '<strong>Thông báo</strong>:',
-                            message: 'Đồng bộ thành công'
-                        }, {
-                            type: 'info'
-                        });
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#btnDongYDB').click(function (){
+                Loading();
+                $.ajax({
+                    url: "/DM_DiaDiem/DongBo_DanhMucDiaDiem",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    async: true,
+                    processData: false,
+                    cache: false,
+                    success: function (data) {
+                        if (data == "1")
+                        {
+                            LoadingHide();
+                            $.notify({
+                                title: '<strong>Thông báo</strong>:',
+                                message: 'Đồng bộ thành công'
+                            }, {
+                                type: 'info'
+                            });
 
-                        var url = '@Url.Action("Index", "DM_DiaDiem")';
-                        window.location.href = url;
-                    }
-                    else {
-                        $.notify({
-                            title: '<strong>Thông báo</strong>:',
-                            message: data + 'Có lỗi xảy ra khi đồng bộ'
-                        }, {
-                            type: 'danger'
-                        });
+                            var url = '@Url.Action("Index", "DM_DiaDiem")';
+                            window.location.href = url;
+                        }
+                        else {
+                            $.notify({
+                                title: '<strong>Thông báo</strong>:',
+                                message: data + 'Có lỗi xảy ra khi đồng bộ'
+                            }, {
+                                type: 'danger'
+                            });
 
-                        console.log(data);
-                        LoadingHide();
+                            console.log(data);
+                            LoadingHide();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.log("error: " + data + " status: " + status + " er:" + er);
                     }
-                },
-                error: function (xhr) {
-                    console.log("error: " + data + " status: " + status + " er:" + er);
+                });
+            });
+            $('#Seach').keydown(function (event) {
+                //alert(event.keyCode );
+                if (event.keyCode == 27) {
+                    $('#Seach').val("");
+                    $('#submit').submit();
+                    return true;
                 }
+            })
         });
-
-        });
-    });
-</script>
+    </script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 }

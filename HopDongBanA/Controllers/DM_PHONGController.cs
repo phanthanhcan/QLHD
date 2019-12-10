@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using HopDongMgr.Models;
 using HopDongMgr.Class.Common;
+using X.PagedList;
 
 namespace HopDongMgr.Controllers
 {
@@ -15,29 +16,66 @@ namespace HopDongMgr.Controllers
     {
         private HopDongMgrEntities db = new HopDongMgrEntities();
         private string ChucNang = "Danh mục phòng";
+
+        #region Lấy danh sách
         // GET: DM_PHONG
         [CustomAuthorization]
-        public ActionResult Index()
+        public ActionResult Index(int? page = 1)
         {
-            var dM_PHONG = db.DM_PHONG.Include(d => d.DM_DONVI).OrderBy(a => a.MaDV);
-            return View(dM_PHONG.ToList());
+            db.Configuration.LazyLoadingEnabled = false;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+            int totalData = db.DM_PHONG.Count();
+            List<DM_PHONG> items = db.DM_PHONG.OrderBy(p => p.Ten).Skip(n).Take(pageSize).ToList();
+            ViewBag.OnePageOfData = new StaticPagedList<DM_PHONG>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View();
         }
 
-        // GET: DM_PHONG/Details/5
-        [CustomAuthorization]
-        public ActionResult Details(Guid? id)
+        // GET: DM_CongTrinh
+        public ActionResult SeachIndex(string Seach = "", int? page = 1)
         {
-            if (id == null)
+            db.Configuration.LazyLoadingEnabled = false;
+            int totalData;
+            List<DM_PHONG> items;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+            if (string.IsNullOrEmpty(Seach))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["Search"] = null;
+                totalData = db.DM_PHONG.Count();
+                items = db.DM_PHONG
+                    .OrderBy(p => p.Ten)
+                    .Skip(n)
+                    .Take(pageSize)
+                    .ToList();
             }
-            DM_PHONG dM_PHONG = db.DM_PHONG.Find(id);
-            if (dM_PHONG == null)
+            else
             {
-                return HttpNotFound();
+                TempData["Search"] = Seach;
+                totalData = db.DM_PHONG
+                            .Where(o => o.Ten.Contains(Seach) || Seach == "")
+                            .Count();
+                items = db.DM_PHONG
+                            .Where(o => o.Ten.Contains(Seach) || Seach == "")
+                            .OrderBy(p => p.Ten)
+                            .Skip(n).Take(pageSize)
+                            .ToList();
+
             }
-            return View(dM_PHONG);
+            ViewBag.OnePageOfData = new StaticPagedList<DM_PHONG>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View("Index");
         }
+        #endregion
 
         #region Create
         // GET: DM_PHONG/Create
@@ -144,6 +182,7 @@ namespace HopDongMgr.Controllers
 
         #endregion
 
+        #region Delete
         // POST: DM_PHONG/Delete/5
         [CustomAuthorization]
         [HttpPost]
@@ -154,7 +193,9 @@ namespace HopDongMgr.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        #endregion
 
+        #region Dispose
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -163,5 +204,6 @@ namespace HopDongMgr.Controllers
             }
             base.Dispose(disposing);
         }
+        #endregion
     }
 }

@@ -1985,6 +1985,12 @@
     <Content Include="Views\HT_LichSuHoatDong\_IndexPartial.cshtml" />
     <Content Include="Views\Shared\_TestLayout.cshtml" />
     <Content Include="Views\DM_CongTrinh\_IndexPartial.cshtml" />
+    <Content Include="Views\DM_DiaDiem\_IndexPartial.cshtml" />
+    <Content Include="Views\DM_DonViThucHien\_IndexPartial.cshtml" />
+    <Content Include="Views\DM_HinhThucHopDong\_IndexPartial.cshtml" />
+    <Content Include="Views\DM_LoaiHopDong\_IndexPartial.cshtml" />
+    <Content Include="Views\DM_NguonVon\_IndexPartial.cshtml" />
+    <Content Include="Views\DM_PHONG\_IndexPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

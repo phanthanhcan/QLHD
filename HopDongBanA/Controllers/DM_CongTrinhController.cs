@@ -23,15 +23,9 @@ namespace HopDongMgr.Controllers
         private string ChucNang = "Danh mục công trình";
 
         #region index
+
         // GET: DM_CongTrinh
         [CustomAuthorization]
-        public ActionResult IndexBackup()
-        {
-            db.Configuration.LazyLoadingEnabled = false;
-            var dM_CongTrinh = db.DM_CongTrinh.Include(d => d.DM_NguonVon).Include(d => d.DM_DiaDiem);
-            return View(dM_CongTrinh.ToList());
-        }
-
         public ActionResult Index(int? page = 1)
         {
             db.Configuration.LazyLoadingEnabled = false;
@@ -39,7 +33,7 @@ namespace HopDongMgr.Controllers
             var pageSize = 10;
             int n = (pageIndex - 1) * pageSize;
             int totalData = db.DM_CongTrinh.Count();
-            List<DM_CongTrinh> items = db.DM_CongTrinh.Include(d => d.DM_NguonVon).Include(d => d.DM_DiaDiem).OrderByDescending(p => p.TenCT).Skip(n).Take(pageSize).ToList();
+            List<DM_CongTrinh> items = db.DM_CongTrinh.Include(d => d.DM_NguonVon).Include(d => d.DM_DiaDiem).OrderBy(p => p.TenCT).Skip(n).Take(pageSize).ToList();
             ViewBag.OnePageOfData = new StaticPagedList<DM_CongTrinh>(items, pageIndex, pageSize, totalData);
             if (Request.IsAjaxRequest())
             {
@@ -48,8 +42,10 @@ namespace HopDongMgr.Controllers
             return View();
         }
 
+        // GET: DM_CongTrinh
         public ActionResult SeachIndex(string Seach = "", int? page = 1)
         {
+            db.Configuration.LazyLoadingEnabled = false;
             int totalData;
             List<DM_CongTrinh> items;
             int pageIndex = (page < 1 ? 1 : page.Value);
@@ -62,11 +58,10 @@ namespace HopDongMgr.Controllers
                 items = db.DM_CongTrinh
                     .Include(d => d.DM_NguonVon)
                     .Include(d => d.DM_DiaDiem)
-                    .OrderByDescending(p => p.TenCT)
+                    .OrderBy(p => p.TenCT)
                     .Skip(n)
                     .Take(pageSize)
                     .ToList();
-
             }
             else
             {
@@ -78,7 +73,7 @@ namespace HopDongMgr.Controllers
                     .Include(d => d.DM_NguonVon)
                     .Include(d => d.DM_DiaDiem)
                     .Where(o => (o.TenCT.Contains(Seach) || Seach == "") || (o.MaCT.Contains(Seach) || Seach == ""))
-                    .OrderByDescending(p => p.TenCT)
+                    .OrderBy(p => p.TenCT)
                     .Skip(n).Take(pageSize)
                     .ToList();
 

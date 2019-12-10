@@ -10,6 +10,7 @@ using HopDongMgr.Models;
 using HopDongMgr.Class.Common;
 using HopDongMgr.DungChung;
 using System.Data.SqlClient;
+using X.PagedList;
 
 namespace HopDongMgr.Controllers
 {
@@ -19,27 +20,67 @@ namespace HopDongMgr.Controllers
         private Common _common = new Common();
         private string ChucNang = "Danh mục hình thức hợp dồng";
 
+        #region Lấy danh sách
         // GET: DM_HinhThucHopDong
         [CustomAuthorization]
-        public ActionResult Index()
+        public ActionResult Index(int? page = 1)
         {
-            return View(db.DM_HinhThucHopDong.ToList());
+            db.Configuration.LazyLoadingEnabled = false;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+            int totalData = db.DM_HinhThucHopDong.Count();
+            List<DM_HinhThucHopDong> items = db.DM_HinhThucHopDong.OrderBy(p => p.TenHinhThuc).Skip(n).Take(pageSize).ToList();
+            ViewBag.OnePageOfData = new StaticPagedList<DM_HinhThucHopDong>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View();
         }
 
-        // GET: DM_HinhThucHopDong/Details/5
-        public ActionResult Details(int? id)
+        // GET: DM_CongTrinh
+        public ActionResult SeachIndex(string Seach = "", int? page = 1)
         {
-            if (id == null)
+            db.Configuration.LazyLoadingEnabled = false;
+            int totalData;
+            List<DM_HinhThucHopDong> items;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+            if (string.IsNullOrEmpty(Seach))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["Search"] = null;
+                totalData = db.DM_HinhThucHopDong.Count();
+                items = db.DM_HinhThucHopDong
+                    .OrderBy(p => p.TenHinhThuc)
+                    .Skip(n)
+                    .Take(pageSize)
+                    .ToList();
             }
-            DM_HinhThucHopDong dM_HinhThucHopDong = db.DM_HinhThucHopDong.Find(id);
-            if (dM_HinhThucHopDong == null)
+            else
             {
-                return HttpNotFound();
+                TempData["Search"] = Seach;
+                totalData = db.DM_HinhThucHopDong
+                            .Where(o => (o.TenHinhThuc.Contains(Seach) || Seach == ""))
+                            .Count();
+                items = db.DM_HinhThucHopDong
+                            .Where(o => (o.TenHinhThuc.Contains(Seach) || Seach == ""))
+                            .OrderBy(p => p.TenHinhThuc)
+                            .Skip(n).Take(pageSize)
+                            .ToList();
+
             }
-            return View(dM_HinhThucHopDong);
+            ViewBag.OnePageOfData = new StaticPagedList<DM_HinhThucHopDong>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View("Index");
         }
+
+        #endregion
+
         #region Create
         // GET: DM_HinhThucHopDong/Create
         [CustomAuthorization]
@@ -140,6 +181,8 @@ namespace HopDongMgr.Controllers
         }
 
         #endregion
+
+        #region Delete
         // POST: DM_HinhThucHopDong/Delete/5
         [HttpPost]
         [CustomAuthorization]
@@ -151,6 +194,9 @@ namespace HopDongMgr.Controllers
             return RedirectToAction("Index");
         }
 
+        #endregion
+
+        #region Dispose
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -159,6 +205,10 @@ namespace HopDongMgr.Controllers
             }
             base.Dispose(disposing);
         }
+
+        #endregion
+
+        #region DongBo
         [HttpPost]
         public ActionResult DongBo_DanhMucHinhThucHopDong()
         {
@@ -180,5 +230,6 @@ namespace HopDongMgr.Controllers
 
             return Json(err);
         }
+        #endregion
     }
 }

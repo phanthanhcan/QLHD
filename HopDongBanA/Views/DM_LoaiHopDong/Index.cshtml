@@ -10,33 +10,43 @@
     <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
     <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
 </div>
-<table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
-    <thead>
-        <tr role="row">
-            <th>Mã loại</th>
-            <th>Tên loại hợp đồng</th>
-            @*<th>Khóa</th>*@
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+@using (Ajax.BeginForm(
+        "SeachIndex",
+        //"Controler",
+        ajaxOptions: new AjaxOptions
         {
-            <tr role="row" id="@item.IDLoai">
-                <td>
-                    @Html.DisplayFor(modelItem => item.IDLoai)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TenLoai)
-                </td>
-                @*<td>
-                    @{
-                        bool Khoa = item.Khoa;
-                    }
-                    @Html.CheckBoxFor(Model => Khoa, new Dictionary<string, object>() { { "checked", "true" }, { "data-off-color", "danger" }, { "class", "cbootstrapSwitch" }, { "readonly", "readonly" } })
+            HttpMethod = "GET",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "DataUpdate"
+        }))
+{
+    <div class="container">
+        <div class="row col-md-12">
+            <DIV class="col-md-3 col-md-offset-9">
+                <input class="form-control" type="text" name="Seach" id="Seach" placeholder="Tìm kiếm: Mã Loại, Tên Loại" />
+            </DIV>
 
-                </td>*@
-            </tr>
-        }
-    </tbody>
+            <input id="submit" type="submit" hidden />
+        </div>
+    </div>
+}
+<div id="DataUpdate" class="table-responsive">
+    @Html.Partial("_IndexPartial")
+</div>
 
-</table>
+@section scripts {
+    <script>
+
+        $(document).ready(function () {
+            $('#Seach').keydown(function (event) {
+                //alert(event.keyCode );
+                if (event.keyCode == 27) {
+                    $('#Seach').val("");
+                    $('#submit').submit();
+                    return true;
+                }
+            })
+        });
+    </script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}

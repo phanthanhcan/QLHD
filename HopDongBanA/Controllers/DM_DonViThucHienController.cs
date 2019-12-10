@@ -10,6 +10,7 @@ using HopDongMgr.Models;
 using HopDongMgr.Class.Common;
 using HopDongMgr.DungChung;
 using System.Data.SqlClient;
+using X.PagedList;
 
 namespace HopDongMgr.Controllers
 {
@@ -19,12 +20,64 @@ namespace HopDongMgr.Controllers
         private Common _common = new Common();
         private string ChucNang = "Danh mục đơn vị thực hiện";
 
+        #region lấy danh sách
         // GET: DM_DonViThucHien
         [CustomAuthorization]
-        public ActionResult Index()
+        public ActionResult Index(int? page = 1)
         {
-            return View(db.DM_DonViThucHien.ToList());
+            db.Configuration.LazyLoadingEnabled = false;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+            int totalData = db.DM_DonViThucHien.Count();
+            List<DM_DonViThucHien> items = db.DM_DonViThucHien.OrderBy(p => p.TenDV).Skip(n).Take(pageSize).ToList();
+            ViewBag.OnePageOfData = new StaticPagedList<DM_DonViThucHien>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View();
         }
+
+        // GET: DM_CongTrinh
+        public ActionResult SeachIndex(string Seach = "", int? page = 1)
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            int totalData;
+            List<DM_DonViThucHien> items;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+            if (string.IsNullOrEmpty(Seach))
+            {
+                TempData["Search"] = null;
+                totalData = db.DM_DonViThucHien.Count();
+                items = db.DM_DonViThucHien
+                    .OrderBy(p => p.TenDV)
+                    .Skip(n)
+                    .Take(pageSize)
+                    .ToList();
+            }
+            else
+            {
+                TempData["Search"] = Seach;
+                totalData = db.DM_DonViThucHien
+                            .Where(o => o.TenDV.Contains(Seach) || Seach == "")
+                            .Count();
+                items = db.DM_DonViThucHien
+                            .Where(o => o.TenDV.Contains(Seach) || Seach == "").OrderBy(p => p.TenDV)
+                            .Skip(n).Take(pageSize)
+                            .ToList();
+
+            }
+            ViewBag.OnePageOfData = new StaticPagedList<DM_DonViThucHien>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View("Index");
+        }
+
 
         // GET: DM_DonViThucHien/Details/5
         [CustomAuthorization]
@@ -41,6 +94,7 @@ namespace HopDongMgr.Controllers
             }
             return View(dM_DonViThucHien);
         }
+        #endregion
 
         #region Create 
         // GET: DM_DonViThucHien/Create
@@ -141,6 +195,7 @@ namespace HopDongMgr.Controllers
 
         #endregion
 
+        #region delete
         // POST: DM_DonViThucHien/Delete/5
         [HttpPost]
         [CustomAuthorization]
@@ -152,6 +207,9 @@ namespace HopDongMgr.Controllers
             return RedirectToAction("Index");
         }
 
+        #endregion
+
+        #region Dispose
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -160,6 +218,9 @@ namespace HopDongMgr.Controllers
             }
             base.Dispose(disposing);
         }
+        #endregion
+
+        #region DongBo
         [HttpPost]
         public ActionResult DongBo_DanhMucDonViThucHien()
         {
@@ -181,5 +242,6 @@ namespace HopDongMgr.Controllers
 
             return Json(err);
         }
+        #endregion
     }
 }
