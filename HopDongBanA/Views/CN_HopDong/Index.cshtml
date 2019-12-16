@@ -3,19 +3,14 @@
 @{
     ViewBag.Title = "DANH SÁCH HỢP ĐỒNG";
     ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa hợp đồng này không?";
-    List<GetList_HopDong_Result> list = (List<GetList_HopDong_Result>)ViewBag.list;
-    string NamGiaoA = ((string)ViewBag.NamGiaoA).Replace("-1", "");
-    string NamKyHD = ((string)ViewBag.NamKyHD).Replace("-1", "");
-    string MaCT = (string)ViewBag.MaCT;
-    string IsHoanThanh = ViewBag.IsHoanThanh == null ? "" : ViewBag.IsHoanThanh == false ? "":  "checked";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @*<link href="~/Content/dataTables.1.10.16/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
-<link href="~/Content/dataTables.1.10.16/dataTables.semanticui.min.css" rel="stylesheet" type="text/css">
-<link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" type="text/css">
-<link href="~/Content/dataTables.Ajax.semantic-ui/dataTables.semanticui.min.css" rel="stylesheet" type="text/css">
-<link href="~/Content/dataTables.1.10.16.Responsive.semanticui/responsive.semanticui.min.css" rel="stylesheet" type="text/css">
-@*<link href="https://cdn.datatables.net/1.10.16/css/dataTables.semanticui.min.css" rel="stylesheet" type="text/css">*@
+    <link href="~/Content/dataTables.1.10.16/dataTables.semanticui.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/dataTables.Ajax.semantic-ui/dataTables.semanticui.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/dataTables.1.10.16.Responsive.semanticui/responsive.semanticui.min.css" rel="stylesheet" type="text/css">
+    @*<link href="https://cdn.datatables.net/1.10.16/css/dataTables.semanticui.min.css" rel="stylesheet" type="text/css">*@
 @*<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css" rel="stylesheet" type="text/css">*@
 @*<link href="~/Content/dataTables.semantic-ui.2.3.0/semantic.min.css" rel="stylesheet" type="text/css">*@
 
@@ -45,268 +40,106 @@
     <div class="form-group">
         <label class="control-label col-md-2">Năm giao A</label>
         <div class="col-md-2">
-            <input class="form-control Number" id="NamGiaoA" type="text" value="@NamGiaoA">
+            <input class="form-control Number" id="NamGiaoA" type="text" value="">
         </div>
         <label class="control-label col-md-2">Năm ký HD</label>
         <div class="col-md-2">
-            <input class="form-control Number" id="NamKyHD" type="text" value="@NamKyHD">
+            <input class="form-control Number" id="NamKyHD" type="text" value="">
         </div>
         <label class="control-label col-md-2">Hoàn thành</label>
         <div class="col-md-2">
-            <input type="checkbox" class="cbootstrapSwitch" id="IsHoanThanh" @IsHoanThanh data-off-color="danger"/>
+            <input type="checkbox" class="cbootstrapSwitch" id="IsHoanThanh" data-off-color="danger" />
         </div>
     </div>
 
     <div class="form-group" style="display:none">
         <label class="control-label col-md-2">Mã công trình</label>
         <div class="col-md-6">
-            <input class="form-control" id="MaCT" type="text" value="@MaCT">
+            <input class="form-control" id="MaCT" type="text" value="">
         </div>
     </div>
-<div class="box-header">
-    <input type="button" value="Tìm kiếm" class="btn btn-default" id="btnTimKiem" />
-    <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
-    <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
-    <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
-    <input type="button" value="Thanh lý" class="btn btn-default" onclick="" id="btnThanhLy" />
-    <input type="button" value="Xử phạt" class="btn btn-navy" onclick="" id="btnXuPhat" />
-    <input type="button" value="Hết hạn điều chỉnh" class="btn btn-danger" onclick="" id="btnHetHan" />
-    <input type="button" value="Đồng Bộ" class="btn" id="btnDongBo" data-toggle="modal" data-target="#modal-danger-DongBo" style="display:none"/>
+    <div class="box-header">
+        <input type="button" value="Tìm kiếm" class="btn btn-default" id="btnTimKiem" />
+        <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+        <input type="button" value="Đồng Bộ" class="btn" id="btnDongBo" data-toggle="modal" data-target="#modal-danger-DongBo" style="display:none" />
+        <div class="btn-group">
+            <button type="button" class="btn btn-info">Action</button>
+            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="CapNhat" href="#">Cập nhật</a></li>
+                <li><a class="ThanhLy" href="#">Thanh lý</a></li>
+                <li><a class="XuPhat" href="#">Xử phạt</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a class="HDHetHan" href="#">DS Hợp đồng hết hạn</a></li>
+            </ul>
+        </div>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Button with data-target
+        </button>
+        <div class="collapse" id="collapseExample">
+            <div class="container-fluid">
+                @using (Ajax.BeginForm(
+                actionName: "SeachIndex",
+                controllerName: "CN_HopDong",
+                ajaxOptions: new AjaxOptions
+                {
+                    HttpMethod = "GET",
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "DataUpdate",
+                },
+                routeValues: null,
+                htmlAttributes: new { @class = "form-horizontal" }
+                ))
+                {
+                    <div class="form-group">
+                        <div class="col-md-3 col-md-offset-9">
+                            <input class="form-control" type="text" name="Seach" id="Seach" placeholder="Tìm kiếm: Mã CT, Tên CT" />
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                        </div>
+                    </div>
+                    <input id="submit" type="submit" hidden />
+                }
+            </div>
+        </div>
+    </div>
 </div>
+@using (Ajax.BeginForm(
+        "SeachIndex",
+        //"Controler",
+        ajaxOptions: new AjaxOptions
+        {
+            HttpMethod = "GET",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "DataUpdate"
+        }))
+{
+    <div class="container">
+        <div class="row col-md-12">
+            <DIV class="col-md-3 col-md-offset-9">
+                <input class="form-control" type="text" name="Seach" id="Seach" placeholder="Tìm kiếm: Mã CT, Tên CT" />
+            </DIV>
+
+            <input id="submit" type="submit" hidden />
+        </div>
+    </div>
+}
+<div id="DataUpdate" class="table-responsive">
+    @Html.Partial("_IndexPartial")
 </div>
+<input type="hidden" id="IdSelected"  />
 
-
-    @*<table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">*@
-    <table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
-        <thead>
-            <tr role="row">
-                <th>Loại HĐ</th>
-                <th>Số HĐ</th>
-                <th>Số ngày thực hiện</th>
-                <th>Số ngày thi công</th>
-                <th>Ngày hết hạn</th>
-                <th>Công trình</th>
-                <th>Ngày ký</th>
-                <th>Giá trị hợp đồng</th>
-                <th>Năm giao A</th>
-                <th>Đơn vị thực hiện</th>
-                <th>Giá trị gói thầu</th>
-                <th>Tên hình thức hợp đồng</th>
-                <th>Nội dung</th>
-                <th>Người theo dõi</th>
-                <th>Ngày cập nhật</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (GetList_HopDong_Result item in list)
-            {
-                <tr role="row" id="@item.DT_RowId">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TenLoai)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SoHopDong)
-                    </td>
-                    <td class="text-right">
-                        @Html.DisplayFor(modelItem => item.SoNgayThucHien)
-                    </td>
-                    <td class="text-right">
-                        @Html.DisplayFor(modelItem => item.SoNgayThiCong)
-                    </td>
-                    @{
-                        if (item.NgayHetHan.HasValue == false)
-                        {
-                            <td></td>
-                        }
-                        else
-                        {
-                            <td class="text-right">
-                                @item.NgayHetHan.Value.ToString("dd/MM/yyyy")
-                            </td>
-                        }
-                    }
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TenCT)
-                    </td>
-                    @{
-                        if (item.NgayKy.HasValue == false)
-                        {
-                            <td></td>
-                        }
-                        else
-                        {
-                            <td class="text-right">
-                                @item.NgayKy.Value.ToString("dd/MM/yyyy")
-                            </td>
-                        }
-                    }
-                    @{
-                        if (item.GiaTriHopDong.HasValue == false)
-                        {
-                            <td></td>
-                        }
-                        else
-                        {
-                            <td class="text-right">
-                                @string.Format("{0:0,0}", item.GiaTriHopDong.Value)
-                            </td>
-                        }
-                    }
-                    
-                    <td class="text-right">
-                        @Html.DisplayFor(modelItem => item.NamGiaoA)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TenDV)
-                    </td>
-                    @{
-                        if (item.GiaTriGoiThau.HasValue == false)
-                        {
-                            <td></td>
-                        }
-                        else
-                        {
-                            <td class="text-right">
-                                @string.Format("{0:0,0}", item.GiaTriGoiThau.Value)
-                            </td>
-                        }
-                    }
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TenHinhThuc)
-                    </td>
-                    <td>
-                        @*@Html.DisplayFor(modelItem => item.NoiDung)*@
-                        @Html.TextAreaFor(model => item.NoiDung, new { rows = "3", cols = "110" })
-                        @*<div class="col-md-7">
-                                @Html.TextAreaFor(model => item.NoiDung, new { @class = "form-control ", rows = "3" })
-                            </div>*@
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HoTen)
-                    </td>
-                    @{
-                        if (item.NgayCapNhat.HasValue == false)
-                        {
-                            <td></td>
-                        }
-                        else
-                        {
-                            <td class="text-right">
-                                @item.NgayCapNhat.Value.ToString("dd/MM/yyyy")
-                            </td>
-                        }
-                    }
-                </tr>
-                        }
-        </tbody>
-    </table>
-
-    @section scripts
-    {
-        @*<script src="~/Scripts/jquery-1.12.4.js"></script>
-            <script src="~/Scripts/DataTables/jquery.dataTables.1.10.16/jquery.dataTables.min.js"></script>
-            <script src="~/Scripts/DataTables/jquery.dataTables.1.10.16/dataTables.semanticui.min.js"></script>
-            <script src="~/Scripts/DataTables/responsive.2.2.1/dataTables.responsive.min.js"></script>
-            <script src="~/Scripts/DataTables/responsive.2.2.1/responsive.semanticui.min.js"></script>*@
-        <script type="text/javascript">
+@section scripts{
+    <script type="text/javascript">
             $(document).ready(function () {
-                //#region processing-side
-
-                @*function get_List1() {
-                $("#example").DataTable({
-                    responsive: true,
-                    "ajax": {
-                        "url": "@Url.Action("GetList", "CN_HopDong")",
-                        "type": "POST",
-                        "datatype": "json"
-                    },
-                    columns: [
-                        { "data": "TenCT", "name": "TenCT", },
-                        { "data": "SoHD", "name": "SoHD" },
-                        { "data": "NgayKy", "name": "NgayKy" },
-                        { "data": "GiaTriHopDong", "name": "GiaTriHopDong" },
-                        { "data": "GiaTriGoiThau", "name": "GiaTriGoiThau" }, // giá trị gói thầu
-                        { "data": "SoNgayThucHien", "name": "SoNgayThucHien" },
-                        { "data": "SoNgayThiCong", "name": "SoNgayThiCong" },
-                        { "data": "NamGiaoA", "name": "NamGiaoA" },
-                        { "data": "TenDVTH", "name": "TenDVTH" },
-                        { "data": "TenHTHD", "name": "TenHTHD" },
-                        { "data": "NoiDung", "name": "NoiDung" },
-                        { "data": "NguoiTheoDoi", "name": "NguoiTheoDoi" },
-                        { "data": "NgayCapNhat", "name": "NgayCapNhat" },
-                    ],
-                    "columnDefs": [
-                        {
-                            "targets": 2,
-                            "className": "dt-right",
-                        }
-                        , {
-                            "targets": 3,
-                            "className": "dt-right",
-                        }
-                        , {
-                            "targets": 4,
-                            "className": "dt-right",
-                        }
-                        , {
-                            "targets": 5,
-                            "className": "dt-right",
-                        }
-                        , {
-                            "targets": 6,
-                            "className": "dt-right",
-                        }
-
-                    ],
-                    "fnDrawCallback": function () {
-                        //$('#example tbody .khoa').bootstrapToggle({
-                        //});
-                    },
-                    responsive: {
-                        details: {
-                            renderer: function (api, rowIdx, columns) {
-                                var data = $.map(columns, function (col, i) {
-                                    var string;
-                                    if (col.title == "Nội dung") {
-                                        _string = '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-                                                    '<td>' + col.title + ':' + '</td> ' +
-                                                    '<td> <textarea rows="4" cols="50"> ' + col.data + '</textarea> </td>' +
-                                                    '</tr>'
-                                    }
-                                    else {
-                                        _string = '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-                                            '<td>' + col.title + ':' + '</td> ' +
-                                            '<td>' + col.data + '</td>' +
-                                            '</tr>'
-                                    }
-                                    return col.hidden ?
-                                        _string :
-                                        '';
-                                }).join('');
-
-                                return data ?
-                                    $('<table/>').append(data) :
-                                    false;
-                            }
-                        }
-                    },
-                    "serverSide": "true",
-                    "order": [0, "asc"],
-                    "processing": "true",
-                    "language": {
-                        "processing": "processing ..... please"
-                    }
-
-                });
-            }
-
-        $('#example tbody').on('click', 'tr', function () {
-
-            $('#example tbody tr').removeClass("selected");
-            $(this).toggleClass("selected");
-        });*@
-                //#endregion processing-side
-
                 $('#btnTimKiem').click(function () {
                     var NamGiaoA = $("#NamGiaoA").val();
                     var NamKyHD = $("#NamKyHD").val();
@@ -319,43 +152,6 @@
                     window.location.href = url;
                 });
 
-                $('#btnThanhLy').click(function () {
-                    var idSelected = $("#example .selected").attr("id");
-                    if (idSelected != undefined) {
-                        var url = '@Url.Action("Create", "CN_ThanhLy", new { idhd = "ID_replaCe" })';
-                        url = url.replace('ID_replaCe', idSelected);
-                        window.location.href = url;
-                    } else
-                        $.notify({
-                            // options
-                            message: 'Bạn chưa chọn dòng nào'
-                        }, {
-                            // settings
-                            type: 'danger'
-                        });
-
-                });
-                $('#btnXuPhat').click(function () {
-                    var idSelected = $("#example .selected").attr("id");
-                    if (idSelected != undefined) {
-                        var url = '@Url.Action("Edit_XuPhatTranhChap", "CN_HopDong", new { idhd = "ID_replaCe" })';
-                        url = url.replace('ID_replaCe', idSelected);
-                        window.location.href = url;
-                    } else {
-                        $.notify({
-                            // options
-                            message: 'Bạn chưa chọn dòng nào'
-                        }, {
-                            // settings
-                            type: 'danger'
-                        });
-                    }
-
-                });
-                $('#btnHetHan').click(function () {
-                    var url = '@Url.Action("Index_HetHanDieuChinh", "CN_HopDong")';
-                    window.location.href = url;
-                });
                 $('#btnDongYDB').click(function () {
                     Loading();
                     $.ajax({
@@ -394,13 +190,57 @@
                     });
 
                 });
+
+                $("#ListItem tbody").on("click", "tr", function () {
+                    alert($(this).attr("Id"));
+                    var value = $(this).attr("Id");
+                    $("#ListItem tbody tr").removeClass("info");
+                    $(this).addClass("info");
+                    $("#IdSelected").val(value);
+                });
+                $('.dropdown-menu').on('click', 'li', function () {
+                    alert($('a', this).attr('class'));
+                    var idSelected = $("#IdSelected").val();
+                    alert(idSelected);
+                    if (idSelected != undefined || idSelected != "") {
+                        var valueItem = ($('a', this).attr('class'));
+                        switch (valueItem) {
+                            case "CapNhat":
+                                var url = '/CN_HopDong/Edit/' + idSelected;
+                                window.location.href = url;
+                                break;
+                            case "ThanhLy":
+                                var url = '@Url.Action("Create", "CN_ThanhLy", new { idhd = "ID_replaCe" })';
+                                url = url.replace('ID_replaCe', idSelected);
+                                window.location.href = url;
+                                break;
+                            case "XuPhat":
+                                var url = '/CN_HopDong/Edit_XuPhatTranhChap/' + idSelected;
+                                window.location.href = url;
+                                break;
+                            case "HDHetHan":
+                                var url = '/CN_HopDong/Index_HetHanDieuChinh';
+                                window.location.href = url;
+                                break;
+                            default:
+                        }
+                    } else {
+                        $.notify({
+                            // options
+                            message: 'Bạn chưa chọn dòng nào'
+                        }, {
+                            // settings
+                            type: 'danger'
+                        });
+                    }
+                    });
+
             });
-            $('.Number').maskNumber(
-              {
+            $('.Number').maskNumber({
                   integer: true,
                   thousands: ''
-              }
-       );
-        </script>
-        <script src="~/Scripts/bootstrap-toggle.min.js"></script>
-    }
+              });
+
+    </script>
+    <script src="~/Scripts/bootstrap-toggle.min.js"></script>
+}

@@ -1991,6 +1991,7 @@
     <Content Include="Views\DM_LoaiHopDong\_IndexPartial.cshtml" />
     <Content Include="Views\DM_NguonVon\_IndexPartial.cshtml" />
     <Content Include="Views\DM_PHONG\_IndexPartial.cshtml" />
+    <Content Include="Views\CN_HopDong\_IndexPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

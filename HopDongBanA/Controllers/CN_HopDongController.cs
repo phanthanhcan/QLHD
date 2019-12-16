@@ -13,6 +13,7 @@ using HopDongMgr.DungChung;
 using System.Linq.Dynamic;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
+using X.PagedList;
 
 namespace HopDongMgr.Controllers
 {
@@ -25,7 +26,77 @@ namespace HopDongMgr.Controllers
         #region lấy danh sách 
         // GET: CN_HopDong
         [CustomAuthorization]
-        public ActionResult Index( int? NamGiaoA, int? NamKyHD, string MaCT, bool? IsHoanThanh)
+        public ActionResult Index(int? page = 1)
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+            int totalData = db.CN_HopDong.Count();
+            List<CN_HopDong> items = db.CN_HopDong
+                                    .Include(d => d.DM_CongTrinh)
+                                    .Include(d => d.DM_DonViThucHien)
+                                    .Include(d => d.DM_HinhThucHopDong)
+                                    .Include(d => d.DM_LoaiHopDong)
+                                    .OrderByDescending(p => p.NgayKy)
+                                    .Skip(n).Take(pageSize)
+                                    .ToList();
+            ViewBag.OnePageOfData = new StaticPagedList<CN_HopDong>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View();
+        }
+
+        // GET: DM_CongTrinh
+        public ActionResult SeachIndex(string Seach = "", int? page = 1)
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            int totalData;
+            List<CN_HopDong> items;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+            if (string.IsNullOrEmpty(Seach))
+            {
+                TempData["Search"] = null;
+                totalData = db.CN_HopDong.Count();
+                items = db.CN_HopDong
+                        .Include(d => d.DM_CongTrinh)
+                        .Include(d => d.DM_DonViThucHien)
+                        .Include(d => d.DM_HinhThucHopDong)
+                        .Include(d => d.DM_LoaiHopDong)
+                        .OrderByDescending(p => p.NgayKy)
+                        .Skip(n)
+                        .Take(pageSize)
+                        .ToList();
+            }
+            else
+            {
+                TempData["Search"] = Seach;
+                totalData = db.CN_HopDong
+                        .Where(o => o.SoHopDong.Contains(Seach)).Count();
+                items = db.CN_HopDong
+                        .Include(d => d.DM_CongTrinh)
+                        .Include(d => d.DM_DonViThucHien)
+                        .Include(d => d.DM_HinhThucHopDong)
+                        .Include(d => d.DM_LoaiHopDong)
+                        .Where(o => o.SoHopDong.Contains(Seach))
+                        .OrderByDescending(p => p.NgayKy)
+                        .Skip(n)
+                        .Take(pageSize)
+                        .ToList();
+
+            }
+            ViewBag.OnePageOfData = new StaticPagedList<CN_HopDong>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View("Index");
+        }
+        public ActionResult IndexBackup( int? NamGiaoA, int? NamKyHD, string MaCT, bool? IsHoanThanh)
         {
             Guid IDNguoiDung = (Guid)Session["userid"];
             List<GetList_HopDong_Result> list = new List<GetList_HopDong_Result>();
@@ -40,7 +111,6 @@ namespace HopDongMgr.Controllers
             ViewBag.IsHoanThanh = IsHoanThanh;
             return View();
         }
-
 
         public ActionResult Index_HetHanDieuChinh()
         {
@@ -431,14 +501,14 @@ namespace HopDongMgr.Controllers
         #endregion
         
         #region Xử phạt
-        public ActionResult Edit_XuPhatTranhChap(int? IDHD)
+        public ActionResult Edit_XuPhatTranhChap(int? Id)
         {
-            if (IDHD == null)
+            if (Id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             db.Configuration.LazyLoadingEnabled = false;
-            CN_HopDong cN_HopDong = db.CN_HopDong.Find(IDHD);
+            CN_HopDong cN_HopDong = db.CN_HopDong.Find(Id);
             if (cN_HopDong == null)
             {
                 return HttpNotFound();

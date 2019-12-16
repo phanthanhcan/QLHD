@@ -142,6 +142,10 @@ E:\1.Project\QLHDBanA\Sub_QLHD_5\HopDongBanA\obj\Debug\HopDongBanA.csproj.CopyCo
 E:\1.Project\QLHDBanA\Sub_QLHD_5\HopDongBanA\obj\Debug\HopDongBanA.dll
 E:\1.Project\QLHDBanA\Sub_QLHD_5\HopDongBanA\obj\Debug\HopDongBanA.pdb
 E:\1.Project\QLHDBanA\Sub_QLHD_5\HopDongBanA\obj\Debug\HopDongBanA.csprojAssemblyReference.cache
+C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\System.Reflection.Metadata.dll
+C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\VBCSCompiler.exe
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\ApplicationInsights.config
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\Reports\BM12_TheoDoiHopDong_TheoNamKy.rdlc
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\Reports\BM11_TheoDoiHopDong_TheoDiaDiem.rdlc
@@ -149,15 +153,11 @@ C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\Reports\BM01_Theo
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\Reports\BM01_TheoDoiHopDong_TheoLoaiHopDong.rdlc
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\csc.exe
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
-C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
-C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\Microsoft.CodeAnalysis.dll
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\Microsoft.CSharp.Core.targets
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\Microsoft.VisualBasic.Core.targets
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\System.Collections.Immutable.dll
-C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\System.Reflection.Metadata.dll
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\vbc.exe
-C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\VBCSCompiler.exe
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\roslyn\VBCSCompiler.exe.config
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\Reports\HDSD_HopDongBanA_20180531.docx
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\bin\Reports\BM01.rdlc
@@ -218,4 +218,3 @@ C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\obj\Debug\HopDongBanA
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\obj\Debug\HopDongBanA.csproj.CopyComplete
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\obj\Debug\HopDongBanA.dll
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\obj\Debug\HopDongBanA.pdb
-C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\obj\Debug\HopDongBanA.csprojAssemblyReference.cache
