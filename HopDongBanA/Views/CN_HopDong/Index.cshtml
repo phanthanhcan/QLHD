@@ -76,9 +76,7 @@
                 <li><a class="HDHetHan" href="#">DS Hợp đồng hết hạn</a></li>
             </ul>
         </div>
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            Button with data-target
-        </button>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Tìm kiếm </button>
         <div class="collapse" id="collapseExample">
             <div class="container-fluid">
                 @using (Ajax.BeginForm(
@@ -94,18 +92,25 @@
                 htmlAttributes: new { @class = "form-horizontal" }
                 ))
                 {
-                    <div class="form-group">
-                        <div class="col-md-3 col-md-offset-9">
-                            <input class="form-control" type="text" name="Seach" id="Seach" placeholder="Tìm kiếm: Mã CT, Tên CT" />
-                        </div>
-
+                <div class="form-group">
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="SoHopDong" name="SoHopDong" placeholder="Số hợp đồng">
                     </div>
-                    <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-                        <div class="col-sm-10">
-                            <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
-                        </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="TenCT" name="TenCT" placeholder="Tên Công trình">
                     </div>
+                    <div class="col-md-2">
+                        <input type="number" class="form-control" id="NamGiaoA" name="NamGiaoA" placeholder="Năm giao A">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="sel1">Loại:</label>
+                        <select class="form-control" id="IsHoanThanh" name="IsHoanThanh">
+                            <option value="-1" selected>Tất cả</option>
+                            <option value="1">Hoàn thành</option>
+                            <option value="0">Chưa hoàn thành</option>
+                        </select>
+                    </div>
+                </div>
                     <input id="submit" type="submit" hidden />
                 }
             </div>

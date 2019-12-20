@@ -50,45 +50,41 @@ namespace HopDongMgr.Controllers
         }
 
         // GET: DM_CongTrinh
-        public ActionResult SeachIndex(string Seach = "", int? page = 1)
+        public ActionResult SeachIndex(string SoHopDong = "", string TenCT = "", int? NamGiaoA = -1, int? IsHoanThanh = -1 ,int? page = 1)
         {
+            //SoHopDong TenCT NamGiaoA IsHoanThanh
             db.Configuration.LazyLoadingEnabled = false;
             int totalData;
+            IQueryable<CN_HopDong> items1 = db.CN_HopDong
+                        .Include(d => d.DM_CongTrinh)
+                        .Include(d => d.DM_DonViThucHien)
+                        .Include(d => d.DM_HinhThucHopDong)
+                        .Include(d => d.CN_ThanhLy)
+                        .Include(d => d.DM_LoaiHopDong).AsQueryable();
+
+            if (!string.IsNullOrEmpty(SoHopDong) && !string.IsNullOrWhiteSpace(SoHopDong)) items1 = items1.Where(o => o.SoHopDong.Contains(SoHopDong.Trim()) );
+            if (!string.IsNullOrEmpty(TenCT) && !string.IsNullOrWhiteSpace(TenCT)) items1 =  items1.Where(o => o.DM_CongTrinh.TenCT.Contains(TenCT.Trim()));
+            if (!string.IsNullOrEmpty(TenCT) && !string.IsNullOrWhiteSpace(TenCT)) items1 =  items1.Where(o => o.DM_CongTrinh.TenCT.Contains(TenCT.Trim()));
+            if (NamGiaoA > -1) items1.Where(o => o.NamGiaoA == NamGiaoA);
+            if (IsHoanThanh > -1) items1.Where(o => o.CN_ThanhLy.Where(oo => o.IDHD == oo.IDHD).FirstOrDefault().IsHoanThanh == Convert.ToBoolean(IsHoanThanh));
+
+
             List<CN_HopDong> items;
             int pageIndex = (page < 1 ? 1 : page.Value);
             var pageSize = 10;
             int n = (pageIndex - 1) * pageSize;
-            if (string.IsNullOrEmpty(Seach))
-            {
-                TempData["Search"] = null;
-                totalData = db.CN_HopDong.Count();
-                items = db.CN_HopDong
-                        .Include(d => d.DM_CongTrinh)
-                        .Include(d => d.DM_DonViThucHien)
-                        .Include(d => d.DM_HinhThucHopDong)
-                        .Include(d => d.DM_LoaiHopDong)
-                        .OrderByDescending(p => p.NgayKy)
-                        .Skip(n)
-                        .Take(pageSize)
-                        .ToList();
-            }
-            else
-            {
-                TempData["Search"] = Seach;
-                totalData = db.CN_HopDong
-                        .Where(o => o.SoHopDong.Contains(Seach)).Count();
-                items = db.CN_HopDong
-                        .Include(d => d.DM_CongTrinh)
-                        .Include(d => d.DM_DonViThucHien)
-                        .Include(d => d.DM_HinhThucHopDong)
-                        .Include(d => d.DM_LoaiHopDong)
-                        .Where(o => o.SoHopDong.Contains(Seach))
-                        .OrderByDescending(p => p.NgayKy)
-                        .Skip(n)
-                        .Take(pageSize)
-                        .ToList();
 
-            }
+            TempData["SoHopDong"] = SoHopDong;
+            TempData["TenCT"] = TenCT;
+            TempData["NamGiaoA"] = NamGiaoA;
+            TempData["IsHoanThanh"] = IsHoanThanh;
+            totalData = items1.Count();
+            items = items1
+                    .OrderByDescending(p => p.NgayKy)
+                    .Skip(n)
+                    .Take(pageSize)
+                    .ToList();
+
             ViewBag.OnePageOfData = new StaticPagedList<CN_HopDong>(items, pageIndex, pageSize, totalData);
             if (Request.IsAjaxRequest())
             {
