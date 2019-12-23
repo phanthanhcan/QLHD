@@ -1,5 +1,5 @@
 ﻿@model CN_HopDong
-<div class= "table-responsive" >
+<div class="table-responsive">
     <table id="ListItem" class="table table-striped" style="width:100%">
         <thead>
             <tr role="row">
@@ -15,7 +15,7 @@
                 <th nowrap>@Html.LabelFor(Model => Model.DM_DonViThucHien.TenDV)</th>
                 <th nowrap>@Html.LabelFor(Model => Model.GiaTriGoiThau)</th>
                 <th nowrap>@Html.LabelFor(Model => Model.DM_HinhThucHopDong.TenHinhThuc)</th>
-                <th nowrap>@Html.LabelFor(Model => Model.NoiDung)</th>
+                @*<th nowrap>@Html.LabelFor(Model => Model.NoiDung)</th>*@
                 <th nowrap>@Html.LabelFor(Model => Model.HT_NguoiDung.HoTen)</th>
                 <th nowrap>@Html.LabelFor(Model => Model.NgayCapNhat)</th>
                 <th nowrap>@Html.LabelFor(Model => Model.NgayHetHanThucTe)</th>
@@ -64,9 +64,9 @@
                     <td>
                         @Html.DisplayFor(Model => item.DM_HinhThucHopDong.TenHinhThuc)
                     </td>
-                    <td>
+                    @*<td>
                         @Html.TextAreaFor(model => item.NoiDung, new { rows = "3", cols = "110" })
-                    </td>
+                    </td>*@
                     <td>
                         @Html.DisplayFor(Model => item.HT_NguoiDung.HoTen)
                     </td>
@@ -88,35 +88,15 @@
         @str
     }
 </div>
-@if (TempData["Search"] == null) // gan them dieu kien khi sech bang rong
-{
+@{
+    var SoHopDong = TempData["SoHopDong"];
+    var TenCT = TempData["TenCT"];
+    var NamGiaoA = TempData["NamGiaoA"] ;
+    var IsHoanThanh = TempData["IsHoanThanh"];
     @Html.PagedListPager(
                             list: (IPagedList)ViewBag.OnePageOfData
-                            , generatePageUrl: Page => Url.Action("Index", new { Page = Page })
-                            , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
-                                (
-                                    options: new PagedListRenderOptions
-                                    {
-                                        ContainerDivClasses = new string[] { "dataTables_paginate ", "paging_simple_numbers", "text-right" },
-                                        LiElementClasses = new string[] { "page-item" },
-                                        PageClasses = new string[] { "page-link" },
-                                    }
-                                    , ajaxOptions: new AjaxOptions
-                                    {
-                                        UpdateTargetId = "DataUpdate",
-                                        InsertionMode = InsertionMode.Replace,
-                                        HttpMethod = "GET"
-                                    }
-                                )
-                        )
-
-}
-else
-{
-    var Seach = TempData["Search"];
-    @Html.PagedListPager(
-                            list: (IPagedList)ViewBag.OnePageOfData
-                            , generatePageUrl: Page => Url.Action("SeachIndex", new { Page = Page, Seach = Seach })
+                            //, generatePageUrl: Page => Url.Action("SeachIndex", new { Page = Page, Seach = Seach })
+                            , generatePageUrl: Page => Url.Action("Index", new { Page = Page, SoHopDong = SoHopDong, TenCT = TenCT, NamGiaoA = NamGiaoA, IsHoanThanh = IsHoanThanh })
                             , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
                                 (
                                     options: new PagedListRenderOptions

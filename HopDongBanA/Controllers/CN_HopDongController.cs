@@ -26,60 +26,101 @@ namespace HopDongMgr.Controllers
         #region lấy danh sách 
         // GET: CN_HopDong
         [CustomAuthorization]
-        public ActionResult Index(int? page = 1)
-        {
-            db.Configuration.LazyLoadingEnabled = false;
-            int pageIndex = (page < 1 ? 1 : page.Value);
-            var pageSize = 10;
-            int n = (pageIndex - 1) * pageSize;
-            int totalData = db.CN_HopDong.Count();
-            List<CN_HopDong> items = db.CN_HopDong
-                                    .Include(d => d.DM_CongTrinh)
-                                    .Include(d => d.DM_DonViThucHien)
-                                    .Include(d => d.DM_HinhThucHopDong)
-                                    .Include(d => d.DM_LoaiHopDong)
-                                    .OrderByDescending(p => p.NgayKy)
-                                    .Skip(n).Take(pageSize)
-                                    .ToList();
-            ViewBag.OnePageOfData = new StaticPagedList<CN_HopDong>(items, pageIndex, pageSize, totalData);
-            if (Request.IsAjaxRequest())
-            {
-                return PartialView("_IndexPartial");
-            }
-            return View();
-        }
-
-        // GET: DM_CongTrinh
-        public ActionResult SeachIndex(string SoHopDong = "", string TenCT = "", int? NamGiaoA = -1, int? IsHoanThanh = -1 ,int? page = 1)
+        public ActionResult Index(string SoHopDong = "", string TenCT = "", int? NamGiaoA = -1, int? IsHoanThanh = -1, int? page = 1)
         {
             //SoHopDong TenCT NamGiaoA IsHoanThanh
             db.Configuration.LazyLoadingEnabled = false;
             int totalData;
-            IQueryable<CN_HopDong> items1 = db.CN_HopDong
+            IQueryable<CN_HopDong> itemsQuery = db.CN_HopDong
                         .Include(d => d.DM_CongTrinh)
                         .Include(d => d.DM_DonViThucHien)
                         .Include(d => d.DM_HinhThucHopDong)
                         .Include(d => d.CN_ThanhLy)
                         .Include(d => d.DM_LoaiHopDong).AsQueryable();
 
-            if (!string.IsNullOrEmpty(SoHopDong) && !string.IsNullOrWhiteSpace(SoHopDong)) items1 = items1.Where(o => o.SoHopDong.Contains(SoHopDong.Trim()) );
-            if (!string.IsNullOrEmpty(TenCT) && !string.IsNullOrWhiteSpace(TenCT)) items1 =  items1.Where(o => o.DM_CongTrinh.TenCT.Contains(TenCT.Trim()));
-            if (!string.IsNullOrEmpty(TenCT) && !string.IsNullOrWhiteSpace(TenCT)) items1 =  items1.Where(o => o.DM_CongTrinh.TenCT.Contains(TenCT.Trim()));
-            if (NamGiaoA > -1) items1.Where(o => o.NamGiaoA == NamGiaoA);
-            if (IsHoanThanh > -1) items1.Where(o => o.CN_ThanhLy.Where(oo => o.IDHD == oo.IDHD).FirstOrDefault().IsHoanThanh == Convert.ToBoolean(IsHoanThanh));
-
+            if (!string.IsNullOrEmpty(SoHopDong) && !string.IsNullOrWhiteSpace(SoHopDong))
+            {
+                itemsQuery = itemsQuery.Where(o => o.SoHopDong.Contains(SoHopDong.Trim()));
+                TempData["SoHopDong"] = SoHopDong;
+            }
+            if (!string.IsNullOrEmpty(TenCT) && !string.IsNullOrWhiteSpace(TenCT))
+            {
+                itemsQuery = itemsQuery.Where(o => o.DM_CongTrinh.TenCT.Contains(TenCT.Trim()));
+                TempData["TenCT"] = TenCT;
+            }
+            if (NamGiaoA > -1)
+            {
+                itemsQuery = itemsQuery.Where(o => o.NamGiaoA == NamGiaoA);
+                TempData["NamGiaoA"] = NamGiaoA;
+            }
+            if (IsHoanThanh > -1)
+            {
+                bool check = Convert.ToBoolean(IsHoanThanh);
+                itemsQuery = itemsQuery.Where(o => o.CN_ThanhLy.Where(oo => o.IDHD == oo.IDHD).FirstOrDefault().IsHoanThanh == check);
+                TempData["IsHoanThanh"] = IsHoanThanh;
+            }
 
             List<CN_HopDong> items;
             int pageIndex = (page < 1 ? 1 : page.Value);
             var pageSize = 10;
             int n = (pageIndex - 1) * pageSize;
 
-            TempData["SoHopDong"] = SoHopDong;
-            TempData["TenCT"] = TenCT;
-            TempData["NamGiaoA"] = NamGiaoA;
-            TempData["IsHoanThanh"] = IsHoanThanh;
-            totalData = items1.Count();
-            items = items1
+            totalData = itemsQuery.Count();
+            items = itemsQuery
+                    .OrderByDescending(p => p.NgayKy)
+                    .Skip(n)
+                    .Take(pageSize)
+                    .ToList();
+
+            ViewBag.OnePageOfData = new StaticPagedList<CN_HopDong>(items, pageIndex, pageSize, totalData);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_IndexPartial");
+            }
+            return View("Index");
+        }
+
+        // GET: DM_CongTrinh
+        public ActionResult SeachIndex(string SoHopDong = "", string TenCT = "", int? NamGiaoA = -1,  int? IsHoanThanh = -1 ,int? page = 1)
+        {
+            //SoHopDong TenCT NamGiaoA IsHoanThanh
+            db.Configuration.LazyLoadingEnabled = false;
+            int totalData;
+            IQueryable<CN_HopDong> itemsQuery = db.CN_HopDong
+                        .Include(d => d.DM_CongTrinh)
+                        .Include(d => d.DM_DonViThucHien)
+                        .Include(d => d.DM_HinhThucHopDong)
+                        .Include(d => d.CN_ThanhLy)
+                        .Include(d => d.DM_LoaiHopDong).AsQueryable();
+
+            if (!string.IsNullOrEmpty(SoHopDong) && !string.IsNullOrWhiteSpace(SoHopDong))
+            {
+                itemsQuery = itemsQuery.Where(o => o.SoHopDong.Contains(SoHopDong.Trim()));
+                TempData["SoHopDong"] = SoHopDong;
+            }
+            if (!string.IsNullOrEmpty(TenCT) && !string.IsNullOrWhiteSpace(TenCT))
+            {
+                itemsQuery = itemsQuery.Where(o => o.DM_CongTrinh.TenCT.Contains(TenCT.Trim()));
+                TempData["TenCT"] = TenCT;
+            }
+            if (NamGiaoA > -1)
+            {
+                itemsQuery = itemsQuery.Where(o => o.NamGiaoA == NamGiaoA);
+                TempData["NamGiaoA"] = NamGiaoA;
+            }
+            if (IsHoanThanh > -1)
+            {
+                itemsQuery = itemsQuery.Where(o => o.CN_ThanhLy.Where(oo => o.IDHD == oo.IDHD).FirstOrDefault().IsHoanThanh == Convert.ToBoolean(IsHoanThanh));
+                TempData["IsHoanThanh"] = IsHoanThanh;
+            }
+
+            List<CN_HopDong> items;
+            int pageIndex = (page < 1 ? 1 : page.Value);
+            var pageSize = 10;
+            int n = (pageIndex - 1) * pageSize;
+
+            totalData = itemsQuery.Count();
+            items = itemsQuery
                     .OrderByDescending(p => p.NgayKy)
                     .Skip(n)
                     .Take(pageSize)
