@@ -41,18 +41,18 @@
         <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
         <input type="button" value="Đồng Bộ" class="btn" id="btnDongBo" data-toggle="modal" data-target="#modal-danger-DongBo" style="display:none" />
         <div class="btn-group">
-            <button type="button" class="btn btn-info">Action</button>
-            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button type="button" class="btn btn-info">Chức năng</button>
+            <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="caret"></span>
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
-            <ul class="dropdown-menu">
-                <li><a class="CapNhat" href="#">Cập nhật</a></li>
-                <li><a class="ThanhLy" href="#">Thanh lý</a></li>
-                <li><a class="XuPhat" href="#">Xử phạt</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a class="HDHetHan" href="#">DS Hợp đồng hết hạn</a></li>
-            </ul>
+            <div  class="dropdown-menu">
+                <a class="CapNhat dropdown-item" href="#">Cập nhật</a>
+                <a class="ThanhLy dropdown-item" href="#">Thanh lý</a>
+                <a class="XuPhat dropdown-item" href="#">Xử phạt</a>
+                <div class="dropdown-divider"></div>
+                <a class="HDHetHan dropdown-item" href="#">DS Hợp đồng hết hạn</a>
+            </div>
         </div>
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Tìm kiếm </button>
         <div class="collapse" id="collapseExample">
@@ -70,25 +70,22 @@
                 htmlAttributes: new { @class = "form-horizontal" }
                 ))
                 {
-                    <div class="form-group">
-                        <div class="col-md-2">
+                    <div class="form-group row ">
+                        <div class="col-md-2 pt-1">
                             <input type="text" class="form-control" id="SoHopDong" name="SoHopDong" placeholder="Số hợp đồng">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 pt-1">
                             <input type="text" class="form-control " id="TenCT" name="TenCT" placeholder="Tên Công trình">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 pt-1">
                             <input type="number" class="form-control" id="NamGiaoA" name="NamGiaoA" placeholder="Năm giao A">
                         </div>
-                        <div class=" form-group  col-md-4">
-                            <label class="control-label col-md-2" for="IsHoanThanh">Loại:</label>
-                            <div class="col-md-10">
-                                <select class="form-control" id="IsHoanThanh" name="IsHoanThanh">
-                                    <option value="-1" selected>Tất cả</option>
-                                    <option value="1">Hoàn thành</option>
-                                    <option value="0">Chưa hoàn thành</option>
-                                </select>
-                            </div>
+                        <div class="col-md-4 pt-1">
+                            <select class="form-control" id="IsHoanThanh" name="IsHoanThanh">
+                                <option value="-1" selected>Tất cả công trình</option>
+                                <option value="1">Công trình hoàn thành</option>
+                                <option value="0">Công trình chưa hoàn thành</option>
+                            </select>
                         </div>
                     </div>
                     <input id="submit" type="submit" hidden />
@@ -163,12 +160,12 @@
                     $(this).addClass("info");
                     $("#IdSelected").val(value);
                 });
-                $('.dropdown-menu').on('click', 'li', function () {
-                    alert($('a', this).attr('class'));
+                $('.dropdown-menu').on('click', 'a', function () {
+                    alert($(this).attr('class').replace(' dropdown-item', ''));
                     var idSelected = $("#IdSelected").val();
                     alert(idSelected);
                     if (idSelected != undefined || idSelected != "") {
-                        var valueItem = ($('a', this).attr('class'));
+                        var valueItem = ($(this).attr('class').replace(' dropdown-item', ''));
                         switch (valueItem) {
                             case "CapNhat":
                                 var url = '/CN_HopDong/Edit/' + idSelected;

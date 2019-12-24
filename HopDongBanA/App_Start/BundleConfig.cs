@@ -12,23 +12,18 @@ namespace HopDongMgr
             bundles.Add(new StyleBundle("~/Content/css").Include(
 
                         "~/Content/dist/css/AdminLTE.css",
-                        "~/Content/bootstrap.css",
+                        "~/Content/dist/css/skins/skin-blue.min.css",
+                        "~/Content/bootstrap.min.css",
                         "~/Content/font-awesome.css",
                         "~/Content/ionicons.min.css",
-                        //"~/Content/plugins/datepicker/datepicker3.css",
                         "~/Content/jstree/themes/default/style.min.css",
                         "~/Content/tabulator/themes/tabulator_custom.css",
-                        //"~/Content/DataTables/css/jquery.dataTables.css",
-                        //"~/Content/DataTables/css/responsive.dataTables.css",
-                        "~/Content/dist/css/skins/skin-blue.min.css",
                         "~/Content/ionicons.min.css",
                         "~/Content/plugins/select2/select2.css",
                         "~/Content/Site.css",
                         "~/Content/toggleable-button.css",
                         "~/Content/plugins/bootstrap-switch.css",
-                            //"~/Content/plugins/bootstrap-formhelpers.css"
-                        "~/Content/plugins/bootstrap-select-1.12.4/css/bootstrap-select.css"
-
+                        "~/Content/bootstrap-select.css"
                 ));
             //---
             bundles.Add(new StyleBundle("~/Content/DataTables/css/css").Include(
@@ -58,7 +53,9 @@ namespace HopDongMgr
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                        "~/Scripts/bootstrap.min.js"
+                        //"~/Scripts/popper.min.js",
+                        //"~/Scripts/bootstrap.min.js",
+                        "~/Scripts/bootstrap.bundle.min.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/AdminLTE").Include(
@@ -70,7 +67,6 @@ namespace HopDongMgr
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/javascript").Include(
-                        //"~/Content/plugins/datepicker/bootstrap-datepicker.js",
                         "~//Content/Datepicker/jquery-ui.js",
                         "~/Content/Datepicker/datepicker-vi.js",
                         "~/Scripts/bootstrap-notify.min.js",
@@ -79,9 +75,8 @@ namespace HopDongMgr
                         "~/Content/plugins/chartjs/Chart.min.js",
                         "~/Content/plugins/select2/select2.full.min.js",
                         "~/Scripts/Plugins/bootstrap-switch.js",
-                        //"~/Scripts/Plugins/bootstrap-formhelpers.js",
                         "~/Scripts/Plugins/jquery.masknumber.js",
-                        "~/Content/plugins/bootstrap-select-1.12.4/js/bootstrap-select.js"
+                        "~/Scripts/bootstrap-select.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/private").Include(
