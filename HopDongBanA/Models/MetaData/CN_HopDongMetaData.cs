@@ -27,7 +27,6 @@ namespace HopDongMgr.Models
 
             [Display(Name = "Năm giao A")]
             [Range(minimum: 1990, maximum: 2200, ErrorMessage = "{0} có giá tri từ {1} dến {2}")]
-            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,###}")]
             public Nullable<int> NamGiaoA { get; set; }
 
             [Display(Name = "ID ĐV thực hiện")]

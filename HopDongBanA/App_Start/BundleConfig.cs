@@ -25,10 +25,9 @@ namespace HopDongMgr
                         "~/Content/plugins/bootstrap-switch.css",
                         "~/Content/bootstrap-select.css"
                 ));
-            //---
             bundles.Add(new StyleBundle("~/Content/DataTables/css/css").Include(
-                     "~/Content/DataTables/css/jquery.dataTables.css",
-                    "~/Content/DataTables/css/responsive.dataTables.css"
+                     "~/Content/DataTables/media/css/jquery.dataTables.min.css"
+                    ,"~/Content/DataTables/media/css/dataTables.bootstrap4.min.css"
               ));
             bundles.Add(new StyleBundle("~/Content/Datepicker/css").Include(
                     "~/Content/Datepicker/jquery-ui.css",
@@ -53,8 +52,6 @@ namespace HopDongMgr
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                        //"~/Scripts/popper.min.js",
-                        //"~/Scripts/bootstrap.min.js",
                         "~/Scripts/bootstrap.bundle.min.js"
                 ));
 
@@ -84,10 +81,8 @@ namespace HopDongMgr
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/datatables").Include(
-                        "~/Scripts/DataTables/jquery.dataTables.min.js",
-                        "~/Scripts/DataTables/dataTables.bootstrap.min.js",
-                        "~/Scripts/DataTables/dataTables.select.min.js",
-                        "~/Scripts/DataTables/dataTables.responsive.min.js"
+                        "~/Scripts/DataTables/media/js/jquery.dataTables.js"
+                       ,"~/Scripts/DataTables/media/js/dataTables.bootstrap4.js"
                 ));
             bundles.Add(new ScriptBundle("~/bundles/bootstrap-select").Include(
                         //"~/Content/plugins/bootstrap-select-1.12.4/js/bootstrap-select.js"

@@ -79,99 +79,11 @@ namespace HopDongMgr.Controllers
             }
             return View("Index");
         }
-
-        // GET: DM_CongTrinh
-        public ActionResult SeachIndex(string SoHopDong = "", string TenCT = "", int? NamGiaoA = -1,  int? IsHoanThanh = -1 ,int? page = 1)
-        {
-            //SoHopDong TenCT NamGiaoA IsHoanThanh
-            db.Configuration.LazyLoadingEnabled = false;
-            int totalData;
-            IQueryable<CN_HopDong> itemsQuery = db.CN_HopDong
-                        .Include(d => d.DM_CongTrinh)
-                        .Include(d => d.DM_DonViThucHien)
-                        .Include(d => d.DM_HinhThucHopDong)
-                        .Include(d => d.CN_ThanhLy)
-                        .Include(d => d.DM_LoaiHopDong).AsQueryable();
-
-            if (!string.IsNullOrEmpty(SoHopDong) && !string.IsNullOrWhiteSpace(SoHopDong))
-            {
-                itemsQuery = itemsQuery.Where(o => o.SoHopDong.Contains(SoHopDong.Trim()));
-                TempData["SoHopDong"] = SoHopDong;
-            }
-            if (!string.IsNullOrEmpty(TenCT) && !string.IsNullOrWhiteSpace(TenCT))
-            {
-                itemsQuery = itemsQuery.Where(o => o.DM_CongTrinh.TenCT.Contains(TenCT.Trim()));
-                TempData["TenCT"] = TenCT;
-            }
-            if (NamGiaoA > -1)
-            {
-                itemsQuery = itemsQuery.Where(o => o.NamGiaoA == NamGiaoA);
-                TempData["NamGiaoA"] = NamGiaoA;
-            }
-            if (IsHoanThanh > -1)
-            {
-                itemsQuery = itemsQuery.Where(o => o.CN_ThanhLy.Where(oo => o.IDHD == oo.IDHD).FirstOrDefault().IsHoanThanh == Convert.ToBoolean(IsHoanThanh));
-                TempData["IsHoanThanh"] = IsHoanThanh;
-            }
-
-            List<CN_HopDong> items;
-            int pageIndex = (page < 1 ? 1 : page.Value);
-            var pageSize = 10;
-            int n = (pageIndex - 1) * pageSize;
-
-            totalData = itemsQuery.Count();
-            items = itemsQuery
-                    .OrderByDescending(p => p.NgayKy)
-                    .Skip(n)
-                    .Take(pageSize)
-                    .ToList();
-
-            ViewBag.OnePageOfData = new StaticPagedList<CN_HopDong>(items, pageIndex, pageSize, totalData);
-            if (Request.IsAjaxRequest())
-            {
-                return PartialView("_IndexPartial");
-            }
-            return View("Index");
-        }
-        public ActionResult IndexBackup( int? NamGiaoA, int? NamKyHD, string MaCT, bool? IsHoanThanh)
-        {
-            Guid IDNguoiDung = (Guid)Session["userid"];
-            List<GetList_HopDong_Result> list = new List<GetList_HopDong_Result>();
-            if (Session["userid"] != null)
-            {
-               list = db.GetList_HopDong(NamGiaoA,IsHoanThanh, MaCT, IDNguoiDung, NamKyHD).ToList();
-            }
-            ViewBag.list = list;
-            ViewBag.NamGiaoA = NamGiaoA.ToString();
-            ViewBag.NamKyHD = NamKyHD.ToString();
-            ViewBag.MaCT = MaCT;
-            ViewBag.IsHoanThanh = IsHoanThanh;
-            return View();
-        }
-
+        
         public ActionResult Index_HetHanDieuChinh()
         {
             if (Session["userid"] != null)
             {
-                #region ajax
-                //int RowPerPage =  TempData["RowPerPage"] == null ? 10 : (int)TempData["RowPerPage"];
-                //int Page =   Request["page"] == null ? 1 : Int32.Parse( Request["page"].ToString());
-
-                //Guid IDNguoiDung = (Guid)Session["userid"];
-                ////IEnumerable<GetList_HopDongHetHan_Result> query = db.GetList_HopDongHetHan(IDNguoiDung, DateTime.Now.Date, -1).AsEnumerable();
-                ////List<GetList_HopDongHetHan_Result> query1 = db.GetList_HopDongHetHan(IDNguoiDung, DateTime.Now.Date, -1).Skip((Page-1)*RowPerPage).Take(RowPerPage).ToList();
-                //List<GetList_HopDongHetHan_Result> query = db.GetList_HopDongHetHan(IDNguoiDung, DateTime.Now.Date, -1).ToList();
-
-                //List<GetList_HopDongHetHan_Result> lis1 = db.GetList_HopDongHetHan(IDNguoiDung, DateTime.Now.Date, -1).ToList();
-                //List<GetList_HopDongHetHan_Result> lis = db.GetList_HopDongHetHan(IDNguoiDung, DateTime.Now.Date, -1).Skip(2).Take(2).ToList();
-                ////IQueryable<CN_HopDong> query = db.CN_HopDong.AsQueryable();
-                //if (Request.IsAjaxRequest()) //  nếu truy vấn ajac thì chỉ load patial
-                //{
-                //    return PartialView("_Index_HetHanDieuChinhPartial", query);
-                //}
-
-                //return View(model: query); //lần dầu tiên star thì load cả view,
-                #endregion
                 Guid IDNguoiDung = (Guid)Session["userid"];
                 return View(db.GetList_HopDongHetHan(IDNguoiDung, DateTime.Now.Date, -1).ToList());
             }
@@ -393,7 +305,7 @@ namespace HopDongMgr.Controllers
                 // giá trị hợp đông nhỏ hơn giá trị gói thầu
                 if(cN_HopDong.GiaTriHopDong.GetValueOrDefault(-1) > cN_HopDong.GiaTriGoiThau.GetValueOrDefault(-1)) ModelState.AddModelError("GiaTriHopDong", "Giá trị hợp đồng < Giá trị gói thầu.");
                 //số ngày thi công nhỏ hơn số ngày thực hiện
-                if (cN_HopDong.SoNgayThiCong.GetValueOrDefault(-1) > cN_HopDong.SoNgayThucHien.GetValueOrDefault(-1)) ModelState.AddModelError("GiaTriHopDong", "Số ngày thi công < Số ngày thực hiện.");
+                if (cN_HopDong.SoNgayThiCong.GetValueOrDefault(-1) > cN_HopDong.SoNgayThucHien.GetValueOrDefault(-1)) ModelState.AddModelError("SoNgayThiCong", "Số ngày thi công < Số ngày thực hiện.");
                 if (cN_HopDong.IDDV == -1) cN_HopDong.IDDV = null;
                 if (cN_HopDong.NgayHetHan < cN_HopDong.NgayKy) ModelState.AddModelError("NgayHetHan", "Ngày hết hạn HĐ phải lớn hơn ngày ký HĐ");
                 DateTime cNgayHetHan = cN_HopDong.NgayKy.Value;

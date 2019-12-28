@@ -3073,14 +3073,9 @@ a {
         border-top-color: #d2d6de;
     }
 /* PAGINATION */
-.pagination > li > a {
-    background: #fafafa;
-    color: #666;
-}
 
-.pagination.pagination-flat > li > a {
-    border-radius: 0 !important;
-}
+
+
 /*
  * Component: Products List
  * ------------------------

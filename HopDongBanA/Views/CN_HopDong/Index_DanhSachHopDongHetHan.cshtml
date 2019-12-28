@@ -5,40 +5,40 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="container-fluid">
-    <ul class="nav nav-tabs nav-justified  " style="padding-bottom:1em; font-size:14px; font-weight:bold">
-        <li class="active"><a data-toggle="tab" href="#HHDC">HĐ hết hạn điều chỉnh</a></li>
-        <li><a data-toggle="tab" href="#HHTC">HĐ hết hạn thi công</a></li>
-        <li><a data-toggle="tab" href="#HHTH">HĐ hết hạn thực hiện</a></li>
+    <ul class="nav nav-tabs nav-justified" style=" font-size:14px; font-weight:bold">
+        <li class="nav-item "> <a class="nav-link active te" data-toggle="tab" href="#HHDC">HĐ hết hạn điều chỉnh</a></li>
+        <li class="nav-item "><a class="nav-link" data-toggle="tab" href="#HHTC">HĐ hết hạn thi công</a></li>
+        <li class="nav-item "><a class="nav-link" data-toggle="tab" href="#HHTH">HĐ hết hạn thực hiện</a></li>
     </ul>
     <div class="tab-content">
         <!--hết hạn điều chỉnh-->
-        <div id="HHDC" class="tab-pane fade in active">
-            <table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;" data-parameter="NoResponsive">
-                <thead>
-                    <tr role="row">
-                        <th>Số hợp đồng</th>
-                        <th>Công trình</th>
-                        <th>Loại hợp đồng</th>
-                        <th>Ngày ký</th>
-                        <th>Giá trị hợp đồng</th>
-                        <th>Ngày hết hạn thi công</th>
-                        <th>Ngày hết hạn thực tế</th>
-                        <th>Người theo dõi</th>
+        <div id="HHDC" class="tab-pane active table-scroll60">
+            <table id="Table1" class="table table-striped">
+                <thead >
+                    <tr class="fixedHeader" role="row"   >
+                        <th class="bg-secondary" nowrap  >Số hợp đồng</th>
+                        <th class="bg-secondary" nowrap>Công trình</th>
+                        <th class="bg-secondary" nowrap>Loại hợp đồng</th>
+                        <th class="bg-secondary" nowrap>Ngày ký</th>
+                        <th class="bg-secondary" nowrap>Giá trị hợp đồng</th>
+                        <th class="bg-secondary" nowrap>Ngày hết hạn thi công</th>
+                        <th class="bg-secondary" nowrap>Ngày hết hạn thực tế</th>
+                        <th class="bg-secondary" nowrap>Người theo dõi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody >
                     @if (Model != null)
                     {
                         foreach (var item in Model[0])
                         {
-                            <tr role="row" id="@item.IDHD">
+                            <tr role="row" id="@item.IDHD" nowrap>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.SoHopDong)
                                 </td>
-                                <td>
+                                <td nowrap>
                                     @Html.DisplayFor(modelItem => item.TenCT)
                                 </td>
-                                <td class="text-left" title="@item.TenLoai">
+                                <td class="text-left" title="@item.TenLoai" nowrap>
                                     @item.TenLoai.Substring(0, item.TenLoai.IndexOf(',') > -1 ? item.TenLoai.IndexOf(',') : item.TenLoai.Length)
                                 </td>
                                 <td class="text-center">
@@ -77,7 +77,7 @@
                                         }
                                     }
                                 </td>
-                                <td>
+                                <td nowrap>
                                     @Html.DisplayFor(modelItem => item.HoTen)
                                 </td>
                             </tr>
@@ -87,33 +87,33 @@
             </table>
         </div>
         <!-- 2. hết hạn thi công-->
-        <div id="HHTC" class="tab-pane fade">
-            <table id="example1" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;" data-parameter="NoResponsive">
+        <div id="HHTC" class="tab-pane table-scroll60">
+            <table id="Table1" class="table table-striped">
                 <thead>
-                    <tr role="row">
-                        <th>Số hợp đồng</th>
-                        <th>Công trình</th>
-                        <th>Loại hợp đồng</th>
-                        <th>Ngày ký</th>
-                        <th>Giá trị hợp đồng</th>
-                        <th>Ngày hết hạn thi công</th>
-                        <th>Ngày hết hạn thực tế</th>
-                        <th>Người theo dõi</th>
+                    <tr class="fixedHeader" role="row">
+                        <th class="bg-secondary" nowrap>Số hợp đồng</th>
+                        <th class="bg-secondary" nowrap>Công trình</th>
+                        <th class="bg-secondary" nowrap>Loại hợp đồng</th>
+                        <th class="bg-secondary" nowrap>Ngày ký</th>
+                        <th class="bg-secondary" nowrap>Giá trị hợp đồng</th>
+                        <th class="bg-secondary" nowrap>Ngày hết hạn thi công</th>
+                        <th class="bg-secondary" nowrap>Ngày hết hạn thực tế</th>
+                        <th class="bg-secondary" nowrap>Người theo dõi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model != null )
+                    @if (Model != null)
                     {
                         foreach (var item in Model[1])
                         {
-                            <tr role="row" id="@item.IDHD">
+                            <tr role="row" id="@item.IDHD" nowrap>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.SoHopDong)
                                 </td>
-                                <td>
+                                <td nowrap>
                                     @Html.DisplayFor(modelItem => item.TenCT)
                                 </td>
-                                <td class="text-left" title="@item.TenLoai">
+                                <td class="text-left" title="@item.TenLoai" nowrap>
                                     @item.TenLoai.Substring(0, item.TenLoai.IndexOf(',') > -1 ? item.TenLoai.IndexOf(',') : item.TenLoai.Length)
                                 </td>
                                 <td class="text-center">
@@ -163,18 +163,18 @@
             </table>
         </div>
         <!-- 3. hết hạn thực hiện-->
-        <div id="HHTH" class="tab-pane fade">
-            <table id="example2" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;" data-parameter="NoResponsive">
+        <div id="HHTH" class="tab-pane table-scroll60">
+            <table id="Table1" class="table table-striped">
                 <thead>
-                    <tr role="row">
-                        <th>Số hợp đồng</th>
-                        <th>Công trình</th>
-                        <th>Loại hợp đồng</th>
-                        <th>Ngày ký</th>
-                        <th>Giá trị hợp đồng</th>
-                        <th>Ngày hết hạn thi công</th>
-                        <th>Ngày hết hạn thực tế</th>
-                        <th>Người theo dõi</th>
+                    <tr class="fixedHeader" role="row">
+                        <th class="bg-secondary" nowrap>Số hợp đồng</th>
+                        <th class="bg-secondary" nowrap>Công trình</th>
+                        <th class="bg-secondary" nowrap>Loại hợp đồng</th>
+                        <th class="bg-secondary" nowrap>Ngày ký</th>
+                        <th class="bg-secondary" nowrap>Giá trị hợp đồng</th>
+                        <th class="bg-secondary" nowrap>Ngày hết hạn thi công</th>
+                        <th class="bg-secondary" nowrap>Ngày hết hạn thực tế</th>
+                        <th class="bg-secondary" nowrap>Người theo dõi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -182,14 +182,14 @@
                     {
                         foreach (var item in Model[2])
                         {
-                            <tr role="row" id="@item.IDHD">
+                            <tr role="row" id="@item.IDHD" nowrap>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.SoHopDong)
                                 </td>
-                                <td>
+                                <td nowrap>
                                     @Html.DisplayFor(modelItem => item.TenCT)
                                 </td>
-                                <td class="text-left" title="@item.TenLoai">
+                                <td class="text-left" title="@item.TenLoai" nowrap>
                                     @item.TenLoai.Substring(0, item.TenLoai.IndexOf(',') > -1 ? item.TenLoai.IndexOf(',') : item.TenLoai.Length);
                                 </td>
                                 <td class="text-center">
@@ -278,6 +278,8 @@
             }
         });
 
-
+        $('#example11').on('scroll', function () {
+            $(this).width($(this).width() + $(this).scrollLeft());
+        });
     </script>
 }

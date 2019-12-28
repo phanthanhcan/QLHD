@@ -94,35 +94,27 @@
         </div>
 
         <div class="form-group row">
-            @*@Html.LabelFor(model => model.GiaTriGoiThau, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Giá trị gói thầu <span style="color:red">(*)</span></label>
             <div class="col-md-4">
-                <input class="form-control CheckNumber Number-Get-GTGT"/>
-                @Html.EditorFor(model => model.GiaTriGoiThau, new { htmlAttributes = new { @class = "form-control Number-Set-GTGT", @type = "Hidden" } })
+                @Html.EditorFor(model => model.GiaTriGoiThau, new { htmlAttributes = new { @class = "form-control CheckNumber", @type = "Text" } })
                 @Html.ValidationMessageFor(model => model.GiaTriGoiThau, "", new { @class = "text-danger" })
             </div>
-            @*@Html.LabelFor(model => model.GiaTriHopDong, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Giá trị hợp đồng <span style="color:red">(*)</span></label>
             <div class="col-md-4">
-                <input class="form-control CheckNumber Number-Get-GTHD" />
-                @Html.EditorFor(model => model.GiaTriHopDong, new { htmlAttributes = new { @class = "form-control Number-Set-GTHD", @type = "Hidden" } })
+                @Html.EditorFor(model => model.GiaTriHopDong, new { htmlAttributes = new { @class = "form-control CheckNumber", @type = "Text" } })
                 @Html.ValidationMessageFor(model => model.GiaTriHopDong, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group row">
-            @*@Html.LabelFor(model => model.SoNgayThucHien, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Số ngày thực hiện <span style="color:red">(*)</span></label>
             <div class="col-md-4">
-                <input class="form-control CheckNumber Number-Get-SNTH" />
-                @Html.EditorFor(model => model.SoNgayThucHien, new { htmlAttributes = new { @class = "form-control Number-Set-SNTH", @type ="Hidden" } })
+                @Html.EditorFor(model => model.SoNgayThucHien, new { htmlAttributes = new { @class = "form-control CheckNumber", @Type = "Text" } })
                 @Html.ValidationMessageFor(model => model.SoNgayThucHien, "", new { @class = "text-danger" })
             </div>
-            @*@Html.LabelFor(model => model.SoNgayThiCong, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Số ngày thi công <span style="color:red">(*)</span></label>
             <div class="col-md-4">
-                <input class="form-control CheckNumber Number-Get-SNTC" />
-                @Html.EditorFor(model => model.SoNgayThiCong, new { htmlAttributes = new { @class = "form-control Number-Set-SNTC" ,@type ="Hidden" } })
+                @Html.EditorFor(model => model.SoNgayThiCong, new { htmlAttributes = new { @class = "form-control CheckNumber", @Type = "Text" } })
                 @Html.ValidationMessageFor(model => model.SoNgayThiCong, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -200,7 +192,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Lưu" class="btn btn-primary" />
+                <input type="submit" id="submit" value="Lưu" class="btn btn-primary" />
                 <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
             </div>
         </div>
@@ -211,42 +203,32 @@
     {
     <script>
         $(document).ready(function () {
+
             $('.selectpicker').selectpicker();
-            $(".Number-Get-GTHD").val($(".Number-Set-GTHD").val());
-            $(".Number-Get-GTGT").val($(".Number-Set-GTGT").val());
-            $(".Number-Get-SNTC").val($(".Number-Set-SNTC").val());
-            $(".Number-Get-SNTH").val($(".Number-Set-SNTH").val());
-
-            $(".Number-Get-GTHD").focusout(function () {
+            $("#SoNgayThucHien").focusout(function () {
                 var val = $(this).val().replace(/,/g, "");
-                $(".Number-Set-GTHD").val(val);
-            });
-            $(".Number-Get-GTGT").focusout(function () {
-                var val = $(this).val().replace(/,/g, "");
-                $(".Number-Set-GTGT").val(val);
-            });
-            $(".Number-Get-SNTC").focusout(function () {
-                var val = $(this).val().replace(/,/g, "");
-                $(".Number-Set-SNTC").val(val);
-            });
-            $(".Number-Get-SNTH").focusout(function () {
-                var val = $(this).val().replace(/,/g, "");
-                $(".Number-Set-SNTH").val(val);
-
                 var NgayHetHan = $("#NgayKy").datepicker("getDate");
-                var Date1 = new Date();
                 NgayHetHan.setDate(NgayHetHan.getDate() + Number(val));
-                $("#NgayHetHan").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker("setDate", $.datepicker.formatDate('dd/mm/yy', NgayHetHan    ).toString());
+                $("#NgayHetHan").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker("setDate", $.datepicker.formatDate('dd/mm/yy', NgayHetHan).toString());
             });
+
+
+
             $("#NgayHetHan").val("@dNgayHetHan");
             $("#NgayKy").val("@dNgaycapNhat");
 
             $(".setNamGiaoA").val("@NamGiaoA");
 
-            $('#liDMCT').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
-                // alert(e.target.value);
-                $('#IDCT').val(e.target.value);
+            //$('#liDMCT').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+            //    // alert(e.target.value);
+            //    $('#IDCT').val(e.target.value);
 
+            //});
+            $('#submit').click(function () {
+                $("#GiaTriHopDong").val($("#GiaTriHopDong").val().replace(/,/g, ""));
+                $("#GiaTriGoiThau").val($("#GiaTriGoiThau").val().replace(/,/g, ""));
+                $("#SoNgayThiCong").val($("#SoNgayThiCong").val().replace(/,/g, ""));
+                $("#SoNgayThucHien").val($("#SoNgayThucHien").val().replace(/,/g, ""));
             });
         });
     </script>

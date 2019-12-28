@@ -22,3 +22,17 @@
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
+tr.fixedHeader th{
+    position: sticky;
+    top: -1px;
+}
+.table-scroll60 {
+    height: 60vh;
+    overflow-x: scroll;
+    overflow-y: scroll;
+
+}
+.table-scroll {
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
