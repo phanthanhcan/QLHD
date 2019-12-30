@@ -13,27 +13,29 @@
 </style>
 <div class="row">
     <div class="col-sm-5">
-        <table id="datatable_PB" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
-            <thead>
-                <tr role="row">
-                    <th style="display: none">Id</th>
-                    <th>Chọn Phòng ban</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr id="@item.Id">
-                        <td style="display: none">
-                            @Html.DisplayFor(modelItem => item.Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Ten)
-                        </td>
+        <div class="table-scroll">
+            <table id="ListNhom" class="table table-striped">
+                <thead>
+                    <tr role="row">
+                        <th style="display: none">Id</th>
+                        <th>Chọn Phòng ban</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr id="@item.Id">
+                            <td style="display: none">
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Ten)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="col-sm-7">
         <div id="listPQ"></div>
@@ -91,5 +93,23 @@
             }
         });
 
+    });
+    $(document).on("click", "#ListNhom tbody tr", function () {
+        //console.log($(this).attr("Id"));
+        $("#ListNhom tbody tr").removeClass("selectItem");
+        $(this).addClass("selectItem");
+        var id = $("#ListNhom tbody .selectItem ").attr("id");
+        $.ajax({
+            url: "/HT_PhongBan_LoaiHopDong/GetPhanQuyen/" + id,
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                $('#listPQ').html(data);
+            },
+            error: function (data, status, er) {
+                console.log("error: " + data + " status: " + status + " er:" + er);
+            }
+        });
+        //$("#IdSelected").val(value);
     });
 </script>

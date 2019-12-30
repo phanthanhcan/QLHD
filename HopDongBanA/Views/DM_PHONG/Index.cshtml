@@ -4,37 +4,36 @@
     ViewBag.Title = "DANH SÁCH PHÒNG BAN";
     ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa phòng ban này không?";
 }
-
-<div class="box-header">
-    <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
-    <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
-    <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
-</div>
-@using (Ajax.BeginForm(
-        "SeachIndex",
-        //"Controler",
-        ajaxOptions: new AjaxOptions
-        {
-            HttpMethod = "GET",
-            InsertionMode = InsertionMode.Replace,
-            UpdateTargetId = "DataUpdate"
-        }))
-{
-    <div class="container">
-        <div class="row col-md-12">
-            <DIV class="col-md-3 col-md-offset-9">
-                <input class="form-control" type="text" name="Seach" id="Seach" placeholder="Tìm kiếm: Mã CT, Tên CT" />
-            </DIV>
-
-            <input id="submit" type="submit" hidden />
+<div class="container px-0">
+    <div class="row no-gutters">
+        <div class="box-header col">
+            <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+            <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
+            <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
         </div>
     </div>
-}
-<div id="DataUpdate" class="table-responsive">
-    @Html.Partial("_IndexPartial")
+    @using (Ajax.BeginForm(
+            "SeachIndex",
+            //"Controler",
+            ajaxOptions: new AjaxOptions
+            {
+                HttpMethod = "GET",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "DataUpdate"
+            }))
+    {
+        <div class="row no-gutters">
+            <div class="col-md-3 offset-md-9">
+                <input class="form-control" type="text" name="Seach" id="Seach" placeholder="Tìm kiếm: Tên phòng" />
+            </div>
+            <input id="submit" type="submit" hidden />
+        </div>
+    }
+    <div id="DataUpdate" class=" container px-0 pt-1 form-horizontal">
+        @Html.Partial("_IndexPartial")
+    </div>
+
 </div>
-
-
 @section scripts {
     <script>
 

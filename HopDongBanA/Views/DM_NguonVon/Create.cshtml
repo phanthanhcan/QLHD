@@ -4,13 +4,13 @@
     ViewBag.Title = "THÊM MỚI NGUỒN VỐN";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
+        <div class="form-group row">
             @*@Html.LabelFor(model => model.MaNV, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Mã Nguồn Vốn</label>
             <div class="col-md-10">
@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             @*@Html.LabelFor(model => model.TenNV, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Tên Nguồn Vốn</label>
             <div class="col-md-10">
@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             @*@Html.LabelFor(model => model.Khoa, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Khóa</label>
             <div class="col-md-10">
@@ -42,8 +42,8 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+        <div class="form-group row">
+            <div class="offset-md-2 col-md-10 no-gutters">
                 <input type="submit" value="Lưu" class="btn btn-primary" />
                 <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
             </div>

@@ -550,7 +550,8 @@ desired effect
         });
 
         $('#btnCapNhat').click(function () {
-            var idSelected = $("#example .selected").attr("id");
+            //var idSelected = $("#example .selected").attr("id");
+            var idSelected = $("#ListItem tbody .selectItem ").attr("id");
             if (idSelected != undefined) {
                 var url = '@Url.Action("Edit", new { id = "_TOREPLACE_" })';
                 url = url.replace('_TOREPLACE_', idSelected);
@@ -597,7 +598,12 @@ desired effect
         $("#btnThoatMatKhau").click(function () {
             $("#ModalDoimatKhau").modal('hide');
         });
-
+        $(document).on("click", "#ListItem tbody tr", function () {
+            //console.log($(this).attr("Id"));
+            $("#ListItem tbody tr").removeClass("selectItem");
+            $(this).addClass("selectItem");
+            //$("#IdSelected").val(value);
+        });
     </script>
     @RenderSection("scripts", required: false)
 </body>

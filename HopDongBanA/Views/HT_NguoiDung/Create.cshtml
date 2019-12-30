@@ -13,7 +13,7 @@
 
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
+        <div class="form-group row">
             @*@Html.LabelFor(model => model.MaNguoiDung, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Mã người dùng</label>
             <div class="col-md-4">
@@ -26,7 +26,7 @@
                 @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group  row">
             @*@Html.LabelFor(model => model.HoTen, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Họ tên</label>
             <div class="col-md-4">
@@ -39,7 +39,7 @@
                 @Html.ValidationMessageFor(model => model.BiDanh, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group  row">
             @*@Html.LabelFor(model => model.MaDV, "MaDV", htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Đơn vị quản lý</label>
             <div class="col-md-4">
@@ -52,7 +52,7 @@
                 @Html.ValidationMessageFor(model => model.IdPhong, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group  row">
             <label class="control-label col-md-2">Chức vụ</label>
             <div class="col-md-4">
                 @Html.DropDownList("ChucVu", null, "-- Không chọn --", htmlAttributes: new { @class = "form-control" })
@@ -64,7 +64,7 @@
                 @Html.ValidationMessageFor(model => model.IdNhom, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group  row">
             @*@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Email</label>
             <div class="col-md-4">
@@ -78,7 +78,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group  row">
             <label class="control-label col-md-2">Ảnh đại diện</label>
             <div class="col-md-10">
                 @if (File.Exists(Server.MapPath("/Content/images/avatars/avatar.png")))
@@ -97,7 +97,7 @@
                 }
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group  row">
             <label class="control-label col-md-2">Có hiệu lực</label>
             @*<div class="col-md-10 switch">
                 @Html.CheckBoxFor(model => model.Active, htmlAttributes: new { @class = "form-control", @name = "Active", @checked = "checked" })
@@ -115,8 +115,8 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+        <div class="form-group  row">
+            <div class="offset-md-2 col-md-10">
                 <input type="submit" value="Lưu" class="btn btn-primary" />
                 <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
             </div>

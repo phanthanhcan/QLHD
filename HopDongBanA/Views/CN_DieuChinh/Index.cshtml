@@ -32,60 +32,61 @@
     <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhatDC" />
     <input type="button" value="Đồng Bộ" class="btn" id="btnDongBo" data-toggle="modal" data-target="#modal-danger-DongBo" style="display:none" />
 </div>
-<input type="hidden" id="IDHD_TL" name="IDHD_TL" value=""/>
 <input type="hidden" id="IDHD_TL" name="IDHD_TL" value="" />
-<table id="example" class="display nowrap dataTable dtr-inline luoi" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
-    <thead>
-        <tr role="row">
-            <th>Số hợp đồng</th>
-            <th>Tổng đợt điều chỉnh</th>
-            <th>Ngày điều chỉnh</th>
-            <th>TổngGiá trị sau điều chỉnh</th>
-            <th>Tổng ngày gia hạn tiến độ</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in listHopDong)
-        {
-            <tr role="row" id="@item.IDHD">
-                <td>
-                    @Html.DisplayFor(modelItem => item.SoHopDong)
-                </td>
-                <td class="text-center">
-                    @Html.DisplayFor(modelItem => item.TongDotDC)
-                </td>
-                <td class="text-right">
-                    @if (item.NgayDieuChinh.HasValue == true)
-                    {
-                        @String.Format("{0:dd-MM-yyyy}", item.NgayDieuChinh.Value);
-                    }
-                </td>
-                <td class="text-right">
-                    @if (item.SumGiatriSauDieuChinh.HasValue == true)
-                    {
-                        @String.Format("{0:0,0}", item.SumGiatriSauDieuChinh.Value);
-                    }
-                </td>
-
-                <td class="text-right">
-                    @Html.DisplayFor(modelItem => item.SumSoNgayGiaHanTienDo)
-                </td>
+<input type="hidden" id="IDHD_TL" name="IDHD_TL" value="" />
+<div  class=" table-scroll60">
+    <table id="ListItem" class="table table-striped">
+        <thead>
+            <tr class="fixedHeader" role="row">
+                <th>Số hợp đồng</th>
+                <th>Tổng đợt điều chỉnh</th>
+                <th>Ngày điều chỉnh</th>
+                <th>TổngGiá trị sau điều chỉnh</th>
+                <th>Tổng ngày gia hạn tiến độ</th>
             </tr>
-        }
-    </tbody>
+        </thead>
+        <tbody>
+            @foreach (var item in listHopDong)
+            {
+                <tr role="row" id="@item.IDHD">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SoHopDong)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.TongDotDC)
+                    </td>
+                    <td class="text-right">
+                        @if (item.NgayDieuChinh.HasValue == true)
+                        {
+                            @String.Format("{0:dd-MM-yyyy}", item.NgayDieuChinh.Value);
+                        }
+                    </td>
+                    <td class="text-right">
+                        @if (item.SumGiatriSauDieuChinh.HasValue == true)
+                        {
+                            @String.Format("{0:0,0}", item.SumGiatriSauDieuChinh.Value);
+                        }
+                    </td>
 
-</table>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.SumSoNgayGiaHanTienDo)
+                    </td>
+                </tr>
+            }
+        </tbody>
 
+    </table>
+</div>
 
 @section scripts
 {
     <script type="text/javascript">
         $(document).ready(function () {
             //#region processing-side
-            
+
 
              $('#btnCapNhatDC').click(function () {
-                 var idSelected = $("#example .selected").attr("id");
+                 var idSelected = $("#ListItem tbody .selectItem ").attr("id");
                     if (idSelected != undefined) {
                         var url = '@Url.Action("Edit", "CN_DieuChinh", new { id = "ID_replaCe" })';
                         url = url.replace('ID_replaCe', idSelected);

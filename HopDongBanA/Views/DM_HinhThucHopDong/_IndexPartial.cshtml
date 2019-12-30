@@ -1,78 +1,84 @@
 ﻿@model DM_HinhThucHopDong
-<table id="ListItem" class="table table-striped">
-    <thead>
-        <tr role="row">
-            <th>@Html.LabelFor(modelItem => Model.IDHT)</th>
-            <th>@Html.LabelFor(modelItem => modelItem.TenHinhThuc)</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (DM_HinhThucHopDong item in ViewBag.OnePageOfData)
-        {
-            <tr role="row" id="@item.IDHT">
-                <td>
-                    @Html.DisplayFor(modelItem => item.IDHT)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TenHinhThuc)
-                </td>
+<div class="table-responsive row no-gutters">
+    <table id="ListItem" class="table table-striped ">
+        <thead>
+            <tr role="row">
+                <th>@Html.LabelFor(modelItem => Model.IDHT)</th>
+                <th>@Html.LabelFor(modelItem => modelItem.TenHinhThuc)</th>
             </tr>
-        }
-    </tbody>
+        </thead>
+        <tbody>
+            @foreach (DM_HinhThucHopDong item in ViewBag.OnePageOfData)
+            {
+                <tr role="row" id="@item.IDHT">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IDHT)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TenHinhThuc)
+                    </td>
+                </tr>
+            }
+        </tbody>
 
-</table>
-<div>
+    </table>
+</div>
+<div class="row container">
     @if (ViewBag.OnePageOfData != null)
     {
         string str = $"Trang {ViewBag.OnePageOfData.PageNumber} trên tổng số {ViewBag.OnePageOfData.PageCount} trang, {ViewBag.OnePageOfData.TotalItemCount} dòng";
-        @str
+        <div>@str</div>
     }
 </div>
-@if (TempData["Search"] == null) // gan them dieu kien khi sech bang rong
-{
-    @Html.PagedListPager(
-                            list: (IPagedList)ViewBag.OnePageOfData
-                            , generatePageUrl: Page => Url.Action("Index", new { Page = Page })
-                            , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
-                                (
-                                    options: new PagedListRenderOptions
-                                    {
-                                        ContainerDivClasses = new string[] { "dataTables_paginate ", "paging_simple_numbers", "text-right" },
-                                        LiElementClasses = new string[] { "page-item" },
-                                        PageClasses = new string[] { "page-link" },
-                                    }
-                                    , ajaxOptions: new AjaxOptions
-                                    {
-                                        UpdateTargetId = "DataUpdate",
-                                        InsertionMode = InsertionMode.Replace,
-                                        HttpMethod = "GET"
-                                    }
-                                )
-                        )
+<div class="row">
+    @if (TempData["Search"] == null) // gan them dieu kien khi sech bang rong
+    {
+        @Html.PagedListPager(
+                                list: (IPagedList)ViewBag.OnePageOfData
+                                , generatePageUrl: Page => Url.Action("Index", new { Page = Page })
+                                , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
+                                    (
+                                        options: new PagedListRenderOptions
+                                        {
+                                            ContainerDivClasses = new string[] { "col", "dataTables_paginate ", "paging_simple_numbers" },
+                                            UlElementClasses = new string[] { "pagination", "justify-content-end" },
+                                            LiElementClasses = new string[] { "page-item" },
+                                            PageClasses = new string[] { "page-link" },
+                                        }
+                                        , ajaxOptions: new AjaxOptions
+                                        {
+                                            UpdateTargetId = "DataUpdate",
+                                            InsertionMode = InsertionMode.Replace,
+                                            HttpMethod = "GET"
+                                        }
+                                    )
+                            )
 
-}
-else
-{
-    var Seach = TempData["Search"];
-    @Html.PagedListPager(
-                            list: (IPagedList)ViewBag.OnePageOfData
-                            , generatePageUrl: Page => Url.Action("SeachIndex", new { Page = Page, Seach = Seach })
-                            , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
-                                (
-                                    options: new PagedListRenderOptions
-                                    {
-                                        ContainerDivClasses = new string[] { "dataTables_paginate ", "paging_simple_numbers", "text-right" },
-                                        LiElementClasses = new string[] { "page-item" },
-                                        PageClasses = new string[] { "page-link" },
-                                    }
-                                    , ajaxOptions: new AjaxOptions
-                                    {
-                                        UpdateTargetId = "DataUpdate",
-                                        InsertionMode = InsertionMode.Replace,
-                                        HttpMethod = "GET"
-                                    }
-                                )
-                        )
+    }
+    else
+    {
+        var Seach = TempData["Search"];
+        @Html.PagedListPager(
+                                list: (IPagedList)ViewBag.OnePageOfData
+                                , generatePageUrl: Page => Url.Action("SeachIndex", new { Page = Page, Seach = Seach })
+                                , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
+                                    (
+                                        options: new PagedListRenderOptions
+                                        {
+                                            ContainerDivClasses = new string[] { "col", "dataTables_paginate ", "paging_simple_numbers" },
+                                            UlElementClasses = new string[] { "pagination", "justify-content-end" },
+                                            LiElementClasses = new string[] { "page-item" },
+                                            PageClasses = new string[] { "page-link" },
+                                        }
+                                        , ajaxOptions: new AjaxOptions
+                                        {
+                                            UpdateTargetId = "DataUpdate",
+                                            InsertionMode = InsertionMode.Replace,
+                                            HttpMethod = "GET"
+                                        }
+                                    )
+                            )
 
-}
+    }
 
+</div>

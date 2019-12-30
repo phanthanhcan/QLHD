@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     $(document).on("click", "#btnPhanQuyen", function () {
-        var idNhom = $("#datatable_Nhom .selected").attr("id");
+        var idNhom = $("#ListNhom tbody .selectItem ").attr("id");
         var ckbox = $('.checkBoxPQ');
         var arr = [];
 
@@ -52,7 +52,7 @@
     });
 
     $(document).on("click", "#btnPhanQuyenMenu", function () {
-        var idNhom = $("#datatable_Nhom .selected").attr("id");
+        var idNhom = $("#ListNhom tbody .selectItem ").attr("id");
         var ckbox = $('.checkBoxPQMenu');
         var arr = [];
 
@@ -106,7 +106,7 @@
     //CanPT them cap nhat phan quyền hop phòng ban theo loai HD HT_PhongBan_LoaiHopDong
     //PhucPH sua
     $(document).on("click", "#btnPhanQuyenPhongBan", function () {
-        var IDPB = $("#datatable_PB .selected").attr("id");  // lay thong tin phongban
+        var IDPB = $("#ListNhom tbody .selectItem ").attr("id");  // lay thong tin phongban
         var ckbox = $('.checkBoxLoaiHD'); // lay loai check bob theo class
         var arr = [];
 

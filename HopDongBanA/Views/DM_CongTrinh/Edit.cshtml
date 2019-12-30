@@ -15,7 +15,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.IDCT)
         @*@Html.HiddenFor(model => model.MaCT_DA)*@
-        <div class="form-group">
+        <div class="form-group row">
             @*@Html.LabelFor(model => model.TenCT, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Mã công trình <span style="color:red">(*)</span></label>
             <div class="col-md-10">
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             @*@Html.LabelFor(model => model.TenCT, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Tên công trình <span style="color:red">(*)</span></label>
             <div class="col-md-10">
@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             @*@Html.LabelFor(model => model.MaNV, "MaNV", htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Nguồn vốn <span style="color:red">(*)</span></label>
             <div class="col-md-4">
@@ -48,7 +48,7 @@
                 @Html.ValidationMessageFor(model => model.MaDD, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group row">
             @*@Html.LabelFor(model => model.Khoa, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Khóa</label>
             <div class="col-md-10">
@@ -63,8 +63,8 @@
         </div>
 
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+        <div class="form-group row">
+            <div class="offset-md-2 col-md-10">
                 <input type="submit" value="Lưu" class="btn btn-primary" />
                 <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
             </div>
