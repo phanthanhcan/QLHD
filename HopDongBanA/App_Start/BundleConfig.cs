@@ -40,7 +40,8 @@ namespace HopDongMgr
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"
+                        "~/Scripts/jquery.validate*",
+                        "~/Scripts/jquery.validateCanpt.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
