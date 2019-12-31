@@ -17,7 +17,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.IDHD)
 
-        <div class="form-group">
+        <div class="form-group row">
             @*@Html.LabelFor(model => model.SoHopDong, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Số hợp đồng</label>
             <div class="col-md-4">
@@ -27,13 +27,12 @@
             @*@Html.LabelFor(model => model.SoHopDong, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Giá trị phạt <span style="color:red">(*)</span></label>
             <div class="col-md-4">
-                <input class="form-control CheckNumber Number-Get-GTP" value="@sGTP" />
-                @Html.EditorFor(model => model.GiaTriPhat, new { htmlAttributes = new { @class = "form-control Number-Set-GTP", @type = "Hidden" } })
+                @Html.EditorFor(model => model.GiaTriPhat, new { htmlAttributes = new { @class = "form-control CheckNumber"} })
                 @Html.ValidationMessageFor(model => model.GiaTriPhat, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             @*@Html.LabelFor(model => model.NoiDung, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Xử lý vi phạm</label>
             <div class="col-md-10">
@@ -41,7 +40,7 @@
                 @Html.ValidationMessageFor(model => model.XuLyViPham, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group row">
             @*@Html.LabelFor(model => model.NoiDung, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Xử lý tranh chấp</label>
             <div class="col-md-10">
@@ -51,7 +50,7 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <div class="offset-md-2 col-md-10">
                 <input type="submit" value="Lưu" class="btn btn-primary" />
                 <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
             </div>

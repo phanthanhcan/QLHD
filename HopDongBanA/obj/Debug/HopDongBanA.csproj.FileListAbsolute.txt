@@ -219,6 +219,11 @@ C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\obj\Debug\HopDongBanA
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\obj\Debug\HopDongBanA.csproj.CopyComplete
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\obj\Debug\HopDongBanA.dll
 C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\obj\Debug\HopDongBanA.pdb
+D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\System.Collections.Immutable.dll
+D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\System.Reflection.Metadata.dll
+D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\VBCSCompiler.exe
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\ApplicationInsights.config
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\Reports\BM12_TheoDoiHopDong_TheoNamKy.rdlc
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\Reports\BM11_TheoDoiHopDong_TheoDiaDiem.rdlc
@@ -226,15 +231,10 @@ D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\Reports\BM01_TheoDoiHopDong_TheoCo
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\Reports\BM01_TheoDoiHopDong_TheoLoaiHopDong.rdlc
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\csc.exe
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
-D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
-D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\Microsoft.CodeAnalysis.dll
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\Microsoft.CSharp.Core.targets
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\Microsoft.VisualBasic.Core.targets
-D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\System.Collections.Immutable.dll
-D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\System.Reflection.Metadata.dll
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\vbc.exe
-D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\VBCSCompiler.exe
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\roslyn\VBCSCompiler.exe.config
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\Reports\HDSD_HopDongBanA_20180531.docx
 D:\1.Project\QLHD\Github\QLHD\HopDongBanA\bin\Reports\BM01.rdlc

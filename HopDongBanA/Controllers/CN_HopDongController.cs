@@ -473,6 +473,7 @@ namespace HopDongMgr.Controllers
         {
             try
             {
+                ModelState.Clear();
                 if (cN_HopDong.GiaTriPhat.GetValueOrDefault(0) < 1000) ModelState.AddModelError("GiaTriPhat", "Số tiền phải lớn hơn 1,000VND");
                 if (string.IsNullOrWhiteSpace(cN_HopDong.XuLyTranhChap)) ModelState.AddModelError("GiaTriPhat", "Nhập nội dung xử lý tranh chấp");
                 if (string.IsNullOrWhiteSpace(cN_HopDong.XuLyViPham)) ModelState.AddModelError("XuLyViPham", "Nhập nội dung xử lý vi phạm");
