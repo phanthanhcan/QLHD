@@ -6,12 +6,12 @@
 @{
     ViewBag.Title = "CẬP NHẬT THÔNG TIN HỢP ĐỒNG";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    string sGiatriHD = Model.GiaTriHopDong.HasValue == false ? "0" : string.Format("{0:0,0}", Model.GiaTriHopDong.Value);
-    string sGiatriGT = Model.GiaTriGoiThau.HasValue == false ? "0" : string.Format("{0:0,0}", Model.GiaTriGoiThau.Value);
-    string sSNTC = Model.SoNgayThiCong.HasValue == false ? "0" : string.Format("{0:0,0}", Model.SoNgayThiCong.Value);
-    string sSNTH = Model.SoNgayThucHien.HasValue == false ? "0" : string.Format("{0:0,0}", Model.SoNgayThucHien.Value);
-    SelectList slCT = (SelectList)ViewBag.MaCT;
-    SelectList slIDDV = (SelectList)ViewBag.IDDV;
+    //string sGiatriHD = Model.GiaTriHopDong.HasValue == false ? "0" : string.Format("{0:0,0}", Model.GiaTriHopDong.Value);
+    //string sGiatriGT = Model.GiaTriGoiThau.HasValue == false ? "0" : string.Format("{0:0,0}", Model.GiaTriGoiThau.Value);
+    //string sSNTC = Model.SoNgayThiCong.HasValue == false ? "0" : string.Format("{0:0,0}", Model.SoNgayThiCong.Value);
+    //string sSNTH = Model.SoNgayThucHien.HasValue == false ? "0" : string.Format("{0:0,0}", Model.SoNgayThucHien.Value);
+    //SelectList slCT = (SelectList)ViewBag.MaCT;
+   // SelectList slIDDV = (SelectList)ViewBag.IDDV;
 }
 
 <div>
@@ -127,7 +127,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    @Html.TextBoxFor(model => model.NgayHetHan, "{0:dd/MM/yyyy}", new { @class = "form-control pull-right cDataPicker setDate", @placeholder = "DD/MM/YYYYY" })
+                    @Html.TextBoxFor(model => model.NgayHetHan, "{0:dd/MM/yyyy}", new { @class = "form-control pull-right cDataPicker", @placeholder = "DD/MM/YYYYY" })
                     @Html.ValidationMessageFor(model => model.NgayKy, "", new { @class = "text-danger" })
                 </div>
                 @Html.ValidationMessageFor(model => model.NgayHetHan, "", new { @class = "text-danger" })
@@ -196,11 +196,9 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input  id="test" type="button" value="Quay lại" class="btn btn-default"  />
-
-                <input id="submit" type="submit" value="Lưu" class="btn btn-primary"/>
+        <div class="form-group row">
+            <div class="offset-md-2 col-md-10">
+                <input id="submit" type="submit" value="Lưu" class="btn btn-primary" />
                 <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
             </div>
         </div>
@@ -209,19 +207,24 @@
     @section scripts
         {
         <script src="~/Content/plugins/bootstrap-select-1.12.4/js/bootstrap-select.js"></script>
+        @*@Scripts.Render("~/bundles/jqueryval")*@
         <script>
             $(document).ready(function () {
-                $("#SoNgayThucHien").focusout(function () {
-                    var val = $(this).val().replace(/,/g, "");
+                $("#NgayKy").change(function () {
+                    var val = $("#SoNgayThucHien").val().replace(/,/g, "");
                     var NgayHetHan = $("#NgayKy").datepicker("getDate");
+
                     NgayHetHan.setDate(NgayHetHan.getDate() + Number(val));
                     $("#NgayHetHan").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker("setDate", $.datepicker.formatDate('dd/mm/yy', NgayHetHan).toString());
-                });
-                $('#submit').click(function () {
-                    $("#GiaTriHopDong").val($("#GiaTriHopDong").val().replace(/,/g, ""));
-                    $("#GiaTriGoiThau").val($("#GiaTriGoiThau").val().replace(/,/g, ""));
-                    $("#SoNgayThiCong").val($("#SoNgayThiCong").val().replace(/,/g, ""));
-                    $("#SoNgayThucHien").val($("#SoNgayThucHien").val().replace(/,/g, ""));
+                    console.log(val + "" + $("#NgayHetHan").datepicker().val())
+                });;
+                $("#SoNgayThucHien").change(function () {
+                    var val = $(this).val().replace(/,/g, "");
+                    var NgayHetHan = $("#NgayKy").datepicker("getDate");
+
+                    NgayHetHan.setDate(NgayHetHan.getDate() + Number(val));
+                    $("#NgayHetHan").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker("setDate", $.datepicker.formatDate('dd/mm/yy', NgayHetHan).toString());
+                    console.log(val + "" + $("#NgayHetHan").datepicker().val())
                 });
                 //$('#liDMCT').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
                 //    alert(e.target.value);

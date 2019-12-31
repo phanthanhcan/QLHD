@@ -88,7 +88,7 @@
             @*@Html.LabelFor(model => model.NamGiaoA, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Năm giao A <span style="color:red">(*)</span></label>
             <div class="col-md-4">
-                @Html.EditorFor(model => model.NamGiaoA, new { htmlAttributes = new { @class = "form-control setNamGiaoA" } })
+                @Html.EditorFor(model => model.NamGiaoA, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.NamGiaoA, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -125,7 +125,7 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    @Html.TextBoxFor(model => model.NgayHetHan, "{0:dd/MM/yyyy}", new { @class = "form-control pull-right cDataPicker setDate", @placeholder = "DD/MM/YYYYY" })
+                    @Html.TextBoxFor(model => model.NgayHetHan, new { @class = "form-control pull-right cDataPicker setDate", @placeholder = "DD/MM/YYYYY" })
                     @Html.ValidationMessageFor(model => model.NgayHetHan, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-sm-9" id="errNgayKiemSoat"></div>
@@ -191,7 +191,7 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <div class="offset-md-2 col-md-10">
                 <input type="submit" id="submit" value="Lưu" class="btn btn-primary" />
                 <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
             </div>
@@ -205,31 +205,32 @@
         $(document).ready(function () {
 
             $('.selectpicker').selectpicker();
-            $("#SoNgayThucHien").focusout(function () {
-                var val = $(this).val().replace(/,/g, "");
+            $("#NgayKy").change(function () {
+                var val = $("#SoNgayThucHien").val().replace(/,/g, "");
                 var NgayHetHan = $("#NgayKy").datepicker("getDate");
+
                 NgayHetHan.setDate(NgayHetHan.getDate() + Number(val));
                 $("#NgayHetHan").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker("setDate", $.datepicker.formatDate('dd/mm/yy', NgayHetHan).toString());
+                console.log(val + "" + $("#NgayHetHan").datepicker().val())
+            });;
+            $("#SoNgayThucHien").change(function () {
+                var val = $(this).val().replace(/,/g, "");
+                var NgayHetHan = $("#NgayKy").datepicker("getDate");
+
+                NgayHetHan.setDate(NgayHetHan.getDate() + Number(val));
+                $("#NgayHetHan").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker("setDate", $.datepicker.formatDate('dd/mm/yy', NgayHetHan).toString());
+                console.log(val + "" + $("#NgayHetHan").datepicker().val())
             });
-
-
-
+            // gia tri mac dinh
             $("#NgayHetHan").val("@dNgayHetHan");
             $("#NgayKy").val("@dNgaycapNhat");
-
-            $(".setNamGiaoA").val("@NamGiaoA");
+            $("#NamGiaoA").val("@NamGiaoA");
 
             //$('#liDMCT').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
             //    // alert(e.target.value);
             //    $('#IDCT').val(e.target.value);
 
             //});
-            $('#submit').click(function () {
-                $("#GiaTriHopDong").val($("#GiaTriHopDong").val().replace(/,/g, ""));
-                $("#GiaTriGoiThau").val($("#GiaTriGoiThau").val().replace(/,/g, ""));
-                $("#SoNgayThiCong").val($("#SoNgayThiCong").val().replace(/,/g, ""));
-                $("#SoNgayThucHien").val($("#SoNgayThucHien").val().replace(/,/g, ""));
-            });
         });
     </script>
     }

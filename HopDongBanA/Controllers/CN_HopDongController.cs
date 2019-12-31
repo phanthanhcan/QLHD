@@ -26,8 +26,9 @@ namespace HopDongMgr.Controllers
         #region lấy danh sách 
         // GET: CN_HopDong
         [CustomAuthorization]
-        public ActionResult Index(string SoHopDong = "", string TenCT = "", int? NamGiaoA = -1, int? IsHoanThanh = -1, int? page = 1)
+        public ActionResult Index(string SoHopDong = "", string TenCT = "", decimal? NamGiaoAtest = -1,  int? NamGiaoA = -1, int? IsHoanThanh = -1, int? page = 1)
         {
+            decimal rrrrr = -1;
             //SoHopDong TenCT NamGiaoA IsHoanThanh
             db.Configuration.LazyLoadingEnabled = false;
             int totalData;

@@ -36,60 +36,62 @@
 </div>
 @*---------*@
 
-<div class="form-horizontal">
-    <div class="box-header">
-        <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
-        <input type="button" value="Đồng Bộ" class="btn" id="btnDongBo" data-toggle="modal" data-target="#modal-danger-DongBo" style="display:none" />
-        <div class="btn-group">
-            <button type="button" class="btn btn-info">Chức năng</button>
-            <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="caret"></span>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <div  class="dropdown-menu">
-                <a class="CapNhat dropdown-item" href="#">Cập nhật</a>
-                <a class="ThanhLy dropdown-item" href="#">Thanh lý</a>
-                <a class="XuPhat dropdown-item" href="#">Xử phạt</a>
-                <div class="dropdown-divider"></div>
-                <a class="HDHetHan dropdown-item" href="#">DS Hợp đồng hết hạn</a>
+<div class="container px-0">
+    <div class="row no-gutters">
+        <div class="box-header col">
+            <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+            <input type="button" value="Đồng Bộ" class="btn" id="btnDongBo" data-toggle="modal" data-target="#modal-danger-DongBo" style="display:none" />
+            <div class="btn-group">
+                <button type="button" class="btn btn-info">Chức năng</button>
+                <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu">
+                    <a class="CapNhat dropdown-item" href="#">Cập nhật</a>
+                    <a class="ThanhLy dropdown-item" href="#">Thanh lý</a>
+                    <a class="XuPhat dropdown-item" href="#">Xử phạt</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="HDHetHan dropdown-item" href="#">DS Hợp đồng hết hạn</a>
+                </div>
             </div>
-        </div>
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Tìm kiếm </button>
-        <div class="collapse" id="collapseExample">
-            <div class="box-body">
-                @using (Ajax.BeginForm(
-                actionName: "Index",
-                controllerName: "CN_HopDong",
-                ajaxOptions: new AjaxOptions
-                {
-                    HttpMethod = "GET",
-                    InsertionMode = InsertionMode.Replace,
-                    UpdateTargetId = "DataUpdate",
-                },
-                routeValues: null,
-                htmlAttributes: new { @class = "form-horizontal" }
-                ))
-                {
-                    <div class="form-group row ">
-                        <div class="col-md-2 pt-1">
-                            <input type="text" class="form-control" id="SoHopDong" name="SoHopDong" placeholder="Số hợp đồng">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Tìm kiếm </button>
+            <div class="collapse" id="collapseExample">
+                <div class="box-body">
+                    @using (Ajax.BeginForm(
+                    actionName: "Index",
+                    controllerName: "CN_HopDong",
+                    ajaxOptions: new AjaxOptions
+                    {
+                        HttpMethod = "GET",
+                        InsertionMode = InsertionMode.Replace,
+                        UpdateTargetId = "DataUpdate",
+                    },
+                    routeValues: null,
+                    htmlAttributes: new { @class = "form-horizontal" }
+                    ))
+                    {
+                        <div class="form-group row ">
+                            <div class="col-md-2 pt-1">
+                                <input type="text" class="form-control" id="SoHopDong" name="SoHopDong" placeholder="Số hợp đồng">
+                            </div>
+                            <div class="col-md-2 pt-1">
+                                <input type="text" class="form-control " id="TenCT" name="TenCT" placeholder="Tên Công trình">
+                            </div>
+                            <div class="col-md-2 pt-1">
+                                <input type="number" class="form-control" id="NamGiaoA" name="NamGiaoA" placeholder="Năm giao A">
+                            </div>
+                            <div class="col-md-4 pt-1">
+                                <select class="form-control" id="IsHoanThanh" name="IsHoanThanh">
+                                    <option value="-1" selected>Tất cả công trình</option>
+                                    <option value="1">Công trình hoàn thành</option>
+                                    <option value="0">Công trình chưa hoàn thành</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-2 pt-1">
-                            <input type="text" class="form-control " id="TenCT" name="TenCT" placeholder="Tên Công trình">
-                        </div>
-                        <div class="col-md-2 pt-1">
-                            <input type="number" class="form-control" id="NamGiaoA" name="NamGiaoA" placeholder="Năm giao A">
-                        </div>
-                        <div class="col-md-4 pt-1">
-                            <select class="form-control" id="IsHoanThanh" name="IsHoanThanh">
-                                <option value="-1" selected>Tất cả công trình</option>
-                                <option value="1">Công trình hoàn thành</option>
-                                <option value="0">Công trình chưa hoàn thành</option>
-                            </select>
-                        </div>
-                    </div>
-                    <input id="submit" type="submit" hidden />
-                }
+                        <input id="submit" type="submit" hidden />
+                    }
+                </div>
             </div>
         </div>
     </div>
@@ -152,19 +154,11 @@
                     });
 
                 });
-
-                $("#ListItem tbody").on("click", "tr", function () {
-                    alert($(this).attr("Id"));
-                    var value = $(this).attr("Id");
-                    $("#ListItem tbody tr").removeClass("info");
-                    $(this).addClass("info");
-                    $("#IdSelected").val(value);
-                });
                 $('.dropdown-menu').on('click', 'a', function () {
-                    alert($(this).attr('class').replace(' dropdown-item', ''));
+                    //alert($(this).attr('class').replace(' dropdown-item', ''));
                     var idSelected = $("#IdSelected").val();
-                    alert(idSelected);
-                    if (idSelected != undefined || idSelected != "") {
+                    console.log(idSelected);
+                    if (idSelected != undefined && idSelected != "") {
                         var valueItem = ($(this).attr('class').replace(' dropdown-item', ''));
                         switch (valueItem) {
                             case "CapNhat":

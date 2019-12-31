@@ -18,6 +18,8 @@ namespace HopDongMgr
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinder());
+            ModelBinders.Binders.Add(typeof(int?), new IntModelBinder());
         }
 
         public void Session_Start()

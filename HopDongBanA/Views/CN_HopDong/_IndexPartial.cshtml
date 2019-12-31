@@ -81,37 +81,40 @@
         </tbody>
     </table>
 </div>
-<div>
+<div class="row container">
     @if (ViewBag.OnePageOfData != null)
     {
         string str = $"Trang {ViewBag.OnePageOfData.PageNumber} trên tổng số {ViewBag.OnePageOfData.PageCount} trang, {ViewBag.OnePageOfData.TotalItemCount} dòng";
-        @str
+        <div>@str</div>
     }
 </div>
-@{
-    var SoHopDong = TempData["SoHopDong"];
-    var TenCT = TempData["TenCT"];
-    var NamGiaoA = TempData["NamGiaoA"] ;
-    var IsHoanThanh = TempData["IsHoanThanh"];
-    @Html.PagedListPager(
-                            list: (IPagedList)ViewBag.OnePageOfData
-                            //, generatePageUrl: Page => Url.Action("SeachIndex", new { Page = Page, Seach = Seach })
-                            , generatePageUrl: Page => Url.Action("Index", new { Page = Page, SoHopDong = SoHopDong, TenCT = TenCT, NamGiaoA = NamGiaoA, IsHoanThanh = IsHoanThanh })
-                            , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
-                                (
-                                    options: new PagedListRenderOptions
-                                    {
-                                        ContainerDivClasses = new string[] { "dataTables_paginate ", "paging_simple_numbers", "text-right" },
-                                        LiElementClasses = new string[] { "page-item" },
-                                        PageClasses = new string[] { "page-link" },
-                                    }
-                                    , ajaxOptions: new AjaxOptions
-                                    {
-                                        UpdateTargetId = "DataUpdate",
-                                        InsertionMode = InsertionMode.Replace,
-                                        HttpMethod = "GET"
-                                    }
-                                )
-                        )
+<div>
+    @{
+        var SoHopDong = TempData["SoHopDong"];
+        var TenCT = TempData["TenCT"];
+        var NamGiaoA = TempData["NamGiaoA"];
+        var IsHoanThanh = TempData["IsHoanThanh"];
+        @Html.PagedListPager(
+                                list: (IPagedList)ViewBag.OnePageOfData
+                                //, generatePageUrl: Page => Url.Action("SeachIndex", new { Page = Page, Seach = Seach })
+                                , generatePageUrl: Page => Url.Action("Index", new { Page = Page, SoHopDong = SoHopDong, TenCT = TenCT, NamGiaoA = NamGiaoA, IsHoanThanh = IsHoanThanh })
+                                , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
+                                    (
+                                        options: new PagedListRenderOptions
+                                        {
+                                            ContainerDivClasses = new string[] { "col", "dataTables_paginate ", "paging_simple_numbers" },
+                                            UlElementClasses = new string[] { "pagination", "justify-content-end" },
+                                            LiElementClasses = new string[] { "page-item" },
+                                            PageClasses = new string[] { "page-link" },
+                                        }
+                                        , ajaxOptions: new AjaxOptions
+                                        {
+                                            UpdateTargetId = "DataUpdate",
+                                            InsertionMode = InsertionMode.Replace,
+                                            HttpMethod = "GET"
+                                        }
+                                    )
+                            )
 
-}
+    }
+</div>

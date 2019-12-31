@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace HopDongMgr.Models
 {
@@ -52,6 +53,7 @@ namespace HopDongMgr.Models
             [DisplayFormat(ApplyFormatInEditMode =true, DataFormatString =  "{0:dd/MM/yyyy}")]
             public Nullable<System.DateTime> NgayKy { get; set; }
 
+            [DataType(DataType.Currency)]
             [Display(Name = "Giá trị hợp đồng")]
             [Range(type: typeof(decimal), minimum: "99999", maximum: "999999999999999", ErrorMessage = "{0} có giá trị từ {1} đến {2}")]
             [Required(ErrorMessage = "Nhập {0}")]

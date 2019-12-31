@@ -600,10 +600,12 @@ desired effect
             $("#ModalDoimatKhau").modal('hide');
         });
         $(document).on("click", "#ListItem tbody tr", function () {
-            //console.log($(this).attr("Id"));
+
+            var value = $(this).attr("Id")
+            console.log("click lưới " + value);
             $("#ListItem tbody tr").removeClass("selectItem");
             $(this).addClass("selectItem");
-            //$("#IdSelected").val(value);
+            $("#IdSelected").val(value);
         });
     </script>
     @RenderSection("scripts", required: false)
