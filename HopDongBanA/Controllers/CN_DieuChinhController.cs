@@ -85,7 +85,9 @@ namespace HopDongMgr.Controllers
                   }).ToList();
                 ViewBag.IDHD = new SelectList(o_CN_HopDong, "Value", "Text");
                 ViewBag.NgayKyHD = new SelectList(NgayKyHD, "Value", "Text");
-                ViewBag.IDLoaiDieuChinh = new SelectList(db.DM_LoaiDieuChinh.Where(x => x.Khoa != false).Select(x => new SelectListItem {Value= x.IDLoaiDieuChinh.ToString(), Text = x.TenLoaiDieuChinh }), "Value", "Text");
+
+                ViewBag.IDLoaiDieuChinh = DanhSachLoaiDieuChinh();
+
             }
 
             return View();
@@ -579,6 +581,34 @@ namespace HopDongMgr.Controllers
             }
 
             return Json(err);
+        }
+
+        [HttpPost]
+        public JsonResult LayHDDieuChinh(int IDHD)
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            var ThongTinHopDong = db.CN_HopDong.Where(p => p.IDHD == IDHD)
+                .Select( p => new {
+                    IDHD=  p.IDHD,
+                    SoNgayThiCong = p.SoNgayThiCong,
+                    SoNgayThucHien = p.SoNgayThucHien,
+                    NgayKy = p.NgayKy,
+                    NgayHetHan=p.NgayHetHan,
+                    NgayHetHanThucTe = p.NgayHetHanThucTe,
+                    GiaTriGoiThau = p.GiaTriGoiThau,
+                    GiaTriHopDong = p.GiaTriHopDong,
+                    GiaTriThucTe = p.GiaTriThucTe })
+                .FirstOrDefault();
+            var result = Newtonsoft.Json.JsonConvert.SerializeObject(ThongTinHopDong);
+            return Json(data: result);
+        }
+        private SelectList DanhSachLoaiDieuChinh(Decimal? selectedValue = -1)
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            var items = db.DM_LoaiDieuChinh.Where(x => x.Khoa != false)
+                    .Select( x => new { x.IDLoaiDieuChinh, ThongTin = x.TenLoaiDieuChinh });
+            var result = new SelectList(items, "IDLoaiDieuChinh", "ThongTin", selectedValue: selectedValue);
+            return result;
         }
     }
 

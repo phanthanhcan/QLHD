@@ -8,6 +8,8 @@
     List<HopDongDC> HD = (List<HopDongDC>)ViewBag.DSHD;
     Array HD1 = (Array)ViewBag.HD;
 }
+
+
 <div>
     @Html.Raw(TempData["err"])
 </div>
@@ -20,7 +22,27 @@
             @*@Html.LabelFor(model => model.IDHD, "IDHD", htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2"> Số hợp đồng</label>
             <div class="col-md-4">
-                @Html.DropDownList("IDHD", null, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true" })
+                @*@using (Ajax.BeginForm(
+                            actionName: "LayHDDieuChinh",
+                            controllerName: "CN_DieuChinh",
+                            htmlAttributes: new { @id = "laythongtin" },
+                            routeValues: null,
+                            ajaxOptions: new AjaxOptions
+                            {
+                                HttpMethod = "Get",
+                                OnSuccess = "OnSuccess",
+                                OnFailure = "OnFailure",
+                                InsertionMode = InsertionMode.Replace
+
+                }
+                    ))
+                {
+                    <div>
+                        @Html.DropDownList("IDHD", null, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true", @onchange = "dsubmit()" })
+                        <input id="LayHDDieuChinh" type="submit" value="sumit">
+                    </div>
+                }*@
+                @Html.DropDownList("IDHD", null, htmlAttributes: new { @class = "selectpicker form-control ", @data_live_search = "true" })
                 @Html.ValidationMessageFor(model => model.IDHD, "", new { @class = "text-danger" })
             </div>
             <label class="control-label col-md-2">Ngày điều chỉnh <span style="color:red">(*)</span></label>
@@ -39,7 +61,7 @@
             @*@Html.LabelFor(model => model.GiaTriSauDieuChinh, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2 small">Số ngày gia hạn tiến độ <span style="color:red">(*)</span></label>
             <div class="col-md-4">
-                @Html.EditorFor(model => model.SoNgayGiaHanTienDo, new { htmlAttributes = new { @class = "form-control CheckNumber" } })
+                @Html.EditorFor(model => model.SoNgayGiaHanTienDo, new { htmlAttributes = new { @class = "form-control CheckNumber", @type = "Text" } })
                 @Html.ValidationMessageFor(model => model.SoNgayGiaHanTienDo, "", new { @class = "text-danger" })
             </div>
             <label class="control-label col-md-2">Ngày hết hạn <span style="color:red">(*)</span></label>
@@ -71,7 +93,7 @@
         <div class="form-group row">
             <label class="control-label col-md-2">Chênh lệch</label>
             <div class="col-md-4">
-                @Html.EditorFor(model => model.ChenhLech, new { htmlAttributes = new { @class = "form-control CheckNumber"} })
+                @Html.EditorFor(model => model.ChenhLech, new { htmlAttributes = new { @class = "form-control CheckNumber" } })
                 @Html.ValidationMessageFor(model => model.ChenhLech, "", new { @class = "text-danger" })
             </div>
             <label class="control-label col-md-2">Giá trị trước điều chỉnh</label>
@@ -94,11 +116,14 @@
             </div>
         </div>
     </div>
-    @section scripts
-    {
-        <script src="~/Content/plugins/bootstrap-select-1.12.4/js/bootstrap-select.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
+}
+@section scripts
+{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.selectpicker').selectpicker();
+                var HDDieuChinh;
                 @*var array = @Html.Raw(Json.Encode(
                NgayKyHD.Select(x => new SelectListItem {
                    Value = x.Value,
@@ -159,9 +184,48 @@
                     Date1.setDate(Date1.getDate() + Number(val));
                     $("#NgayHetHanDC").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker("setDate", $.datepicker.formatDate('dd/mm/yy', Date1).toString());
                 });
+            $("#SoNgayGiaHanTienDo").change(function () {
+
+                    var val = $(this).val().replace(/,/g, "");
+                var NgayHetHan = new date(HDDieuChinh.NgayHetHan);
+                console.log(NgayHetHan);
+                    NgayHetHan.setDate(NgayHetHan.getDate() + Number(val));
+                    $("#NgayHetHanDC").datepicker("setDate", NgayHetHan);
 
             });
+            $("#IDHD").change(function () {
+                console.log($(this).val());
+                var IDHD = $(this).val();
+                $.ajax({
+                    method: 'POST',
+                    url: '@Url.Action("LayHDDieuChinh", "CN_DieuChinh")',
+                    data: { IDHD: IDHD  },
+                    success: function (data) {
+                        HDDieuChinh = JSON.parse( data);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    },
+                });
+            });
 
-        </script>
-    }
+        });
+        function OnSuccess(ValueReturn) {
+            console.log(ValueReturn + "OnSuccess");
+        };
+        function OnFailure(ValueReturn) {
+            console.log(ValueReturn + "OnFailure");
+        };
+        //$('#form0').
+        function dsubmit() {
+            $("#laythongtin").submit();
+            console.log($("#laythongtin").attr("action"));
+            $(this).parents('#laythongtin').submit();
+            return true;
+        };
+
+    </script>
+    @*<script src="~/Content/plugins/bootstrap-select-1.12.4/js/bootstrap-select.js"></script>*@
+    @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
 }
+
