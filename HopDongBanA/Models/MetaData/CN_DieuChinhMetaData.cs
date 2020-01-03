@@ -20,6 +20,7 @@ namespace HopDongMgr.Models
             [Display(Name = "Ngày điều chỉnh")]
             [Range(type: typeof(DateTime), minimum: "1990/01/01", maximum: "2200/12/31", ErrorMessage = "{0} có giá trị từ {1} đến {2}")]
             [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:dd/MM/yyyy")]
+            [Required(ErrorMessage = "Nhập {0}")]
             public Nullable<System.DateTime> NgayDieuChinh { get; set; }
 
 

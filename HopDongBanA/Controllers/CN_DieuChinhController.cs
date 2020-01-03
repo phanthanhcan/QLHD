@@ -98,163 +98,155 @@ namespace HopDongMgr.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IDDC,IDHD,NgayDieuChinh,GiaTriDieuChinh,SoNgayGiaHanTienDo,LyDoDieuChinh,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat,NgayHetHanDC,IDLoaiDieuChinh,ChenhLech")] CN_DieuChinh cN_DieuChinh)
+        //public ActionResult Create([Bind(Include = "IDDC,IDHD,NgayDieuChinh,GiaTriDieuChinh,SoNgayGiaHanTienDo,LyDoDieuChinh,NguoiTao,NgayTao,NguoiCapNhat,NgayCapNhat,NgayHetHanDC,IDLoaiDieuChinh,ChenhLech")] CN_DieuChinh cN_DieuChinh)
+        public ActionResult Create( CN_DieuChinh cN_DieuChinh)
         {
-            ViewBag.IDHD = new SelectList(db.CN_HopDong, "IDHD", "SoHopDong", cN_DieuChinh.IDHD);
-            var itemIds = db.CN_DieuChinh.Select(x => x.IDHD).ToArray();
-            ViewBag.DotDieuChinhNew = cN_DieuChinh.DotDieuChinh + 1;
-            ViewBag.IDHD = new SelectList(db.CN_HopDong.Where(o => o.IDHD == cN_DieuChinh.IDHD), "IDHD", "SoHopDong", cN_DieuChinh.IDHD);
-            ViewBag.DotDieuChinh = cN_DieuChinh.DotDieuChinh;
-            ViewBag.ListDotDieuChinh = db.CN_DieuChinh.Where(o => o.IDHD == cN_DieuChinh.IDHD).OrderByDescending(o => o.IDDC).ToList();
-            ViewBag.HopDongDC = db.CN_HopDong.Where(o => o.IDHD == cN_DieuChinh.IDHD).FirstOrDefault();
-            ViewBag.IDLoaiDieuChinh = new SelectList(db.DM_LoaiDieuChinh.Where(x => x.Khoa != false).Select(x => new SelectListItem { Value = x.IDLoaiDieuChinh.ToString(), Text = x.TenLoaiDieuChinh }), "Value", "Text");
-            ViewBag.NgayKyHD = new SelectList(db.CN_HopDong.Where(x => !itemIds.Contains(x.IDHD)).Select(s => new SelectListItem { Value = s.IDHD.ToString(), Text = s.NgayHetHan.ToString() }));
-            ViewBag.DSHD = db.CN_HopDong.Where(x => !itemIds.Contains(x.IDHD)).Select(s => new HopDongDC{
-                                                                      IDHD = s.IDHD.ToString(),
-                                                                      GiaTriThucTe = s.GiaTriThucTe.HasValue == true ? s.GiaTriThucTe.ToString() : s.GiaTriHopDong.ToString(),
-                                                                      ngayKy = s.NgayKy.ToString()
-                                                                  }).ToList();
-            CN_HopDong hopDong = db.CN_HopDong.Find(cN_DieuChinh.IDHD);
-            if (ModelState.IsValid)
+            //ViewBag.IDHD = new SelectList(db.CN_HopDong, "IDHD", "SoHopDong", cN_DieuChinh.IDHD);
+            //var itemIds = db.CN_DieuChinh.Select(x => x.IDHD).ToArray();
+            //ViewBag.DotDieuChinhNew = cN_DieuChinh.DotDieuChinh + 1;
+            //ViewBag.IDHD = new SelectList(db.CN_HopDong.Where(o => o.IDHD == cN_DieuChinh.IDHD), "IDHD", "SoHopDong", cN_DieuChinh.IDHD);
+            //ViewBag.DotDieuChinh = cN_DieuChinh.DotDieuChinh;
+            //ViewBag.ListDotDieuChinh = db.CN_DieuChinh.Where(o => o.IDHD == cN_DieuChinh.IDHD).OrderByDescending(o => o.IDDC).ToList();
+            //ViewBag.HopDongDC = db.CN_HopDong.Where(o => o.IDHD == cN_DieuChinh.IDHD).FirstOrDefault();
+            //ViewBag.IDLoaiDieuChinh = new SelectList(db.DM_LoaiDieuChinh.Where(x => x.Khoa != false).Select(x => new SelectListItem { Value = x.IDLoaiDieuChinh.ToString(), Text = x.TenLoaiDieuChinh }), "Value", "Text");
+            //ViewBag.NgayKyHD = new SelectList(db.CN_HopDong.Where(x => !itemIds.Contains(x.IDHD)).Select(s => new SelectListItem { Value = s.IDHD.ToString(), Text = s.NgayHetHan.ToString() }));
+            //ViewBag.DSHD = db.CN_HopDong.Where(x => !itemIds.Contains(x.IDHD)).Select(s => new HopDongDC{
+            //                                                          IDHD = s.IDHD.ToString(),
+            //                                                          GiaTriThucTe = s.GiaTriThucTe.HasValue == true ? s.GiaTriThucTe.ToString() : s.GiaTriHopDong.ToString(),
+            //                                                          ngayKy = s.NgayKy.ToString()
+            //                                                      }).ToList();
+            try
             {
-                //Check data
-                string err = "" ;
-                if (cN_DieuChinh.NgayDieuChinh.HasValue == false)
-                {
-                    err = err+ "Vui lòng chọn ngày điều chỉnh<br> ";
-                }
+                CN_HopDong hopDong = db.CN_HopDong.Find(cN_DieuChinh.IDHD);
                 var iTienDoSauDC = db.GetTienDo_SauDieuChinh(cN_DieuChinh.IDHD, cN_DieuChinh.DotDieuChinh, cN_DieuChinh.SoNgayGiaHanTienDo).SingleOrDefault();
-                if (iTienDoSauDC.SoNgayThiCong > iTienDoSauDC.SoNgayThucHien)
-                {
-                    err += "Tiến độ thi công” không được lớn hơn “Thời gian thực hiện hợp đồng”<BR> ";
-                                  }
-                if (err.Length > 1)
-                {
-                    TempData["err"] = "<div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>"+err+"</div> ";
-                    return View(cN_DieuChinh);
-                }
-                //
-                List<SelectListItem> lThongTin = _common.getThongTinBang();
-                //cN_DieuChinh.NguoiTao = list.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text;
-                //cN_DieuChinh.NgayTao = DateTime.Parse(list.Where(o => o.Value == "NgayTao").SingleOrDefault().Text);
-                //cN_DieuChinh.DotDieuChinh = 1;
-                //db.CN_DieuChinh.Add(cN_DieuChinh);
-                //db.SaveChanges();
+                if (iTienDoSauDC.SoNgayThiCong > iTienDoSauDC.SoNgayThucHien) ModelState.AddModelError("SoNgayThiCong", $"Tiến độ thi công” không được lớn hơn “Thời gian thực hiện hợp đồng { iTienDoSauDC.SoNgayThucHien?.ToString("0:##0")}");
 
-                #region tham số
-                SqlParameter[] AParameter = {
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@IDDC",
-                                         Value = cN_DieuChinh.IDDC,
-                                         DbType = DbType.Int32
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@IDHD",
-                                         Value = cN_DieuChinh.IDHD,
-                                         DbType = DbType.Int32
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@NgayDieuChinh",
-                                         Value = cN_DieuChinh.NgayDieuChinh,
-                                         DbType = DbType.Date
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@GiaTriDieuChinh",
-                                         Value = cN_DieuChinh.GiaTriDieuChinh,
-                                         DbType = DbType.Decimal,
-                                         Precision = 18,
-                                         Scale = 3
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@ChenhLech",
-                                         Value = cN_DieuChinh.ChenhLech,
-                                         DbType = DbType.Decimal,
-                                         Precision = 18,
-                                         Scale = 3
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@SoNgayGiaHanTienDo",
-                                         Value = cN_DieuChinh.SoNgayGiaHanTienDo,
-                                         DbType = DbType.Int32,
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@LyDoDieuChinh",
-                                         Value = cN_DieuChinh.LyDoDieuChinh,
-                                         DbType = DbType.String
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@NguoiTao",
-                                         Value = lThongTin.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text,
-                                         DbType = DbType.String
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@NgayTao",
-                                         Value = DateTime.Parse(lThongTin.Where(o => o.Value == "NgayTao").SingleOrDefault().Text),
+
+                if (ModelState.IsValid)
+                {
+                    List<SelectListItem> lThongTin = _common.getThongTinBang();
+                    #region tham số
+                    SqlParameter[] AParameter = {
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@IDDC",
+                                        Value = cN_DieuChinh.IDDC,
+                                        DbType = DbType.Int32
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@IDHD",
+                                        Value = cN_DieuChinh.IDHD,
+                                        DbType = DbType.Int32
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@NgayDieuChinh",
+                                        Value = cN_DieuChinh.NgayDieuChinh,
                                         DbType = DbType.Date
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@NguoiCapNhat",
-                                         Value = lThongTin.Where(o => o.Value == "NguoiCapNhat").SingleOrDefault().Text,
-                                         DbType = DbType.String
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@NgayCapNhat",
-                                         Value = DateTime.Parse(lThongTin.Where(o => o.Value == "NgayCapNhat").SingleOrDefault().Text),
-                                         DbType = DbType.Date
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@DotDieuChinh",
-                                         Value = 1,
-                                         DbType = DbType.Int32
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@NgayHetHanDC",
-                                         Value = cN_DieuChinh.NgayHetHanDC,
-                                         DbType = DbType.Date
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@IDLoaiDieuChinh",
-                                         Value = cN_DieuChinh.IDLoaiDieuChinh,
-                                         DbType = DbType.Int32
-                                        },
-                                        new SqlParameter
-                                        {
-                                         ParameterName = "@FlagCreate",
-                                         Value = "1",
-                                         DbType = DbType.String
-                                        }
-                };
-                #endregion
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@GiaTriDieuChinh",
+                                        Value = cN_DieuChinh.GiaTriDieuChinh,
+                                        DbType = DbType.Decimal,
+                                        Precision = 18,
+                                        Scale = 3
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@ChenhLech",
+                                        Value = cN_DieuChinh.ChenhLech,
+                                        DbType = DbType.Decimal,
+                                        Precision = 18,
+                                        Scale = 3
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@SoNgayGiaHanTienDo",
+                                        Value = cN_DieuChinh.SoNgayGiaHanTienDo,
+                                        DbType = DbType.Int32,
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@LyDoDieuChinh",
+                                        Value = cN_DieuChinh.LyDoDieuChinh,
+                                        DbType = DbType.String
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@NguoiTao",
+                                        Value = lThongTin.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text,
+                                        DbType = DbType.String
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@NgayTao",
+                                        Value = DateTime.Parse(lThongTin.Where(o => o.Value == "NgayTao").SingleOrDefault().Text),
+                                    DbType = DbType.Date
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@NguoiCapNhat",
+                                        Value = lThongTin.Where(o => o.Value == "NguoiCapNhat").SingleOrDefault().Text,
+                                        DbType = DbType.String
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@NgayCapNhat",
+                                        Value = DateTime.Parse(lThongTin.Where(o => o.Value == "NgayCapNhat").SingleOrDefault().Text),
+                                        DbType = DbType.Date
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@DotDieuChinh",
+                                        Value = 1,
+                                        DbType = DbType.Int32
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@NgayHetHanDC",
+                                        Value = cN_DieuChinh.NgayHetHanDC,
+                                        DbType = DbType.Date
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@IDLoaiDieuChinh",
+                                        Value = cN_DieuChinh.IDLoaiDieuChinh,
+                                        DbType = DbType.Int32
+                                    },
+                                    new SqlParameter
+                                    {
+                                        ParameterName = "@FlagCreate",
+                                        Value = "1",
+                                        DbType = DbType.String
+                                    }
+            };
+                    #endregion
 
-                db.Database.ExecuteSqlCommand("Insert_CN_DieuChinh_HopDong  @IDDC, @IDHD, @NgayDieuChinh, @GiaTriDieuChinh, @ChenhLech, @SoNgayGiaHanTienDo, @LyDoDieuChinh, @NguoiTao,@NgayTao, @NguoiCapNhat, @NgayCapNhat, @DotDieuChinh, @NgayHetHanDC, @IDLoaiDieuChinh, @FlagCreate", AParameter);
-                #region luu lich su
-                // luu lich su
-                HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
-                    ChucNang
-                    , "CREATE"
-                    , DateTime.Now, Session["username"]?.ToString()
-                    , $" Thêm mới điều chỉnh - Số HD {hopDong.SoHopDong} - lần điều chỉnh {cN_DieuChinh.DotDieuChinh}");
-                db.HT_LichSuHoatDong.Add(ls);
-                db.SaveChanges();
-                #endregion
-                return RedirectToAction("Index");
+                    db.Database.ExecuteSqlCommand("Insert_CN_DieuChinh_HopDong  @IDDC, @IDHD, @NgayDieuChinh, @GiaTriDieuChinh, @ChenhLech, @SoNgayGiaHanTienDo, @LyDoDieuChinh, @NguoiTao,@NgayTao, @NguoiCapNhat, @NgayCapNhat, @DotDieuChinh, @NgayHetHanDC, @IDLoaiDieuChinh, @FlagCreate", AParameter);
+                    #region luu lich su
+                    // luu lich su
+                    HT_LichSuHoatDong ls = new HT_LichSuHoatDong(
+                        ChucNang
+                        , "CREATE"
+                        , DateTime.Now, Session["username"]?.ToString()
+                        , $" Thêm mới điều chỉnh - Số HD {hopDong.SoHopDong} - lần điều chỉnh {cN_DieuChinh.DotDieuChinh}");
+                    db.HT_LichSuHoatDong.Add(ls);
+                    db.SaveChanges();
+                    #endregion
+                    return RedirectToAction("Index");
+                }
+                ViewBag.IDLoaiDieuChinh = DanhSachLoaiDieuChinh(cN_DieuChinh.IDLoaiDieuChinh);
+                ViewBag.IDHD = DanhSachHopDongDieuChinh(cN_DieuChinh.IDHD);
+                return View(cN_DieuChinh);
+
             }
-            TempData["err"] = "< div class='alert alert-danger' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span>Có lỗi xãy ra</div> ";
-            return View(cN_DieuChinh);
+            catch (Exception ex)
+            {
+                string cauBaoLoi = "Không ghi được dữ liệu.<br/>Lý do: " + ex.Message;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, cauBaoLoi);
+            }
         }
 
         // GET: CN_DieuChinh/Edit/5
@@ -606,13 +598,43 @@ namespace HopDongMgr.Controllers
         {
             db.Configuration.LazyLoadingEnabled = false;
             var items = db.DM_LoaiDieuChinh.Where(x => x.Khoa != false)
-                    .Select( x => new { x.IDLoaiDieuChinh, ThongTin = x.TenLoaiDieuChinh });
+                    .Select( x => new { x.IDLoaiDieuChinh, ThongTin = x.TenLoaiDieuChinh }).ToList();
             var result = new SelectList(items, "IDLoaiDieuChinh", "ThongTin", selectedValue: selectedValue);
             return result;
         }
+        private SelectList DanhSachHopDongDieuChinh(int? selectedValue = -1)
+        {
+            db.Configuration.LazyLoadingEnabled = false;
+            var DSHopdongDieuChinh = db.CN_DieuChinh.Select(x => x.IDHD).ToArray();
+            var items = db.CN_HopDong.Where(x => !DSHopdongDieuChinh.Contains(x.IDHD))
+              .Select(s => new 
+                  {
+                      s.IDHD,
+                      ThongTin = s.SoHopDong
+                  }).ToList();
+            items.Insert(0, new { IDHD = -1, ThongTin = "------ Chọn hợp đồng ------ " });
+            var result = new SelectList(items, "IDHD", "ThongTin", selectedValue: selectedValue);
+            return result;
+        }
     }
-
-    public partial class oGetInfoDieuChinh
+    //dddd
+//    ViewBag.IDHD = new SelectList(db.CN_HopDong, "IDHD", "SoHopDong", cN_DieuChinh.IDHD);
+//    var itemIds = db.CN_DieuChinh.Select(x => x.IDHD).ToArray();
+//    ViewBag.DotDieuChinhNew = cN_DieuChinh.DotDieuChinh + 1;
+//            ViewBag.IDHD = new SelectList(db.CN_HopDong.Where(o => o.IDHD == cN_DieuChinh.IDHD), "IDHD", "SoHopDong", cN_DieuChinh.IDHD);
+//            ViewBag.DotDieuChinh = cN_DieuChinh.DotDieuChinh;
+//            ViewBag.ListDotDieuChinh = db.CN_DieuChinh.Where(o => o.IDHD == cN_DieuChinh.IDHD).OrderByDescending(o => o.IDDC).ToList();
+//      ViewBag.HopDongDC = db.CN_HopDong.Where(o => o.IDHD == cN_DieuChinh.IDHD).FirstOrDefault();
+//    ViewBag.IDLoaiDieuChinh = new SelectList(db.DM_LoaiDieuChinh.Where(x => x.Khoa != false).Select(x => new SelectListItem { Value = x.IDLoaiDieuChinh.ToString(), Text = x.TenLoaiDieuChinh
+//}), "Value", "Text");
+//            ViewBag.NgayKyHD = new SelectList(db.CN_HopDong.Where(x => !itemIds.Contains(x.IDHD)).Select(s => new SelectListItem { Value = s.IDHD.ToString(), Text = s.NgayHetHan.ToString() }));
+//            ViewBag.DSHD = db.CN_HopDong.Where(x => !itemIds.Contains(x.IDHD)).Select(s => new HopDongDC{
+//                                                                      IDHD = s.IDHD.ToString(),
+//                                                                      GiaTriThucTe = s.GiaTriThucTe.HasValue == true ? s.GiaTriThucTe.ToString() : s.GiaTriHopDong.ToString(),
+//                                                                      ngayKy = s.NgayKy.ToString()
+//                                                                  }).ToList();
+//    ddd
+public partial class oGetInfoDieuChinh
     {
         private string _NgayDieuChinh;
         private string _GiatriSauDieuChinh;

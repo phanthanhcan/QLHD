@@ -123,85 +123,44 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('.selectpicker').selectpicker();
-                var HDDieuChinh;
-                @*var array = @Html.Raw(Json.Encode(
-               NgayKyHD.Select(x => new SelectListItem {
-                   Value = x.Value,
-                   Text = x.Text
-               })))*@
-                @*var array = @Html.Raw(Json.Encode(NgayKyHD.AsEnumerable<SelectListItem>()))*@
-                var myArray = [];
-                var o;
-                @*@foreach (SelectListItem d in NgayKyHD.AsEnumerable<SelectListItem>())
-                {
-                    var Value = d.Value;
-                    var Text = d.Text;
-                    @:o = { "Value": "@Value", "Text": "@Text" };
-                    @:myArray.push(o);
-                }*@
+            var HDDieuChinh;
 
-                @foreach (HopDongDC d in HD)
-                {
-                    @:o = { "Value": "@d.IDHD", "NgayKy": "@d.ngayKy", "GiaTriThucTe": "@d.GiaTriThucTe", "NgayHetHan":"@d.NgayHetHan" };
-                                    @:myArray.push(o);
-                                }
-                $(".Number-Get-GTSDC").focusout(function () {
-                    var val = $(this).val().replace(/,/g, "");
-                    $(".Number-Set-GTSDC").val(val);
-                    var IDHD = $("#IDHD").val();
-                    var ChenhLech;
-                    var GTTDC;
-                    for (var o in myArray) {
-                        if (myArray[o].Value == IDHD) {
-                            var ChenhLech = parseInt(val) - parseInt(myArray[o].GiaTriThucTe);
-                            GTTDC = parseInt(myArray[o].GiaTriThucTe);
-                            break;
-                        }
-                    }
-                    $("#GTTDC").val(GTTDC)
-                    $(".Number-Get-GTCL").val(ChenhLech);
-                    $(".Number-Set-GTCL").val(ChenhLech);
-                });
-                $(".Number-Get-SNGHTD").focusout(function () {
-                    var val = $(this).val().replace(/,/g, "");
-                    $(".Number-Set-SNGHTD").val(val);
-                    var IDHD = $("#IDHD").val();
-                    var Date1;
-                    //for (var o in myArray) {
-                    //    if (myArray[o].Value == IDHD) {
-                    //        var sdate = myArray[o].Text;
-                    //        Date1 = new Date(sdate);
-                    //        break;
-                    //    }
-                    //}
-                    for (var o in myArray) {
-                        if (myArray[o].Value == IDHD) {
-                            var sdate = myArray[o].NgayHetHan;
-                            Date1 = new Date(sdate);
-                            break;
-                        }
-                    }
-                    Date1.setDate(Date1.getDate() + Number(val));
-                    $("#NgayHetHanDC").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker("setDate", $.datepicker.formatDate('dd/mm/yy', Date1).toString());
-                });
             $("#SoNgayGiaHanTienDo").change(function () {
 
                     var val = $(this).val().replace(/,/g, "");
-                var NgayHetHan = new date(HDDieuChinh.NgayHetHan);
-                console.log(NgayHetHan);
+                    var NgayHetHan = new Date(HDDieuChinh.NgayHetHan);
+                    console.log(NgayHetHan);
                     NgayHetHan.setDate(NgayHetHan.getDate() + Number(val));
                     $("#NgayHetHanDC").datepicker("setDate", NgayHetHan);
 
             });
+            $("#GiaTriDieuChinh").change(function () {
+
+                var GiatriDieuChinh = $(this).val().replace(/,/g, "");
+                var GiatriTruocDieuChinh = $("#GTTDC").val().replace(/,/g, "");
+                $("#ChenhLech").val(GiatriDieuChinh - GiatriTruocDieuChinh)
+            });
             $("#IDHD").change(function () {
                 console.log($(this).val());
+                if ($("#NgayDieuChinh").val() == undefined);
+                {
+                    $("#NgayDieuChinh").datepicker("setDate", new Date());
+                }
                 var IDHD = $(this).val();
                 $.ajax({
                     method: 'POST',
                     url: '@Url.Action("LayHDDieuChinh", "CN_DieuChinh")',
                     data: { IDHD: IDHD  },
                     success: function (data) {
-                        HDDieuChinh = JSON.parse( data);
+                        HDDieuChinh = JSON.parse(data);
+                        console.log(HDDieuChinh);
+                        if (!isNaN(HDDieuChinh.GiaTriThucTe) && HDDieuChinh.GiaTriThucTe > 0) {
+                            $("#GTTDC").val(HDDieuChinh.GiaTriThucTe)
+                        }
+                        else { $("#GTTDC").val(HDDieuChinh.GiaTriHopDong); }
+                        
+                        $("#GiaTriDieuChinh").val(0);
+                        $("#SoNgayGiaHanTienDo").val(0);
                     },
                     error: function (data) {
                         console.log(data);
@@ -210,22 +169,7 @@
             });
 
         });
-        function OnSuccess(ValueReturn) {
-            console.log(ValueReturn + "OnSuccess");
-        };
-        function OnFailure(ValueReturn) {
-            console.log(ValueReturn + "OnFailure");
-        };
-        //$('#form0').
-        function dsubmit() {
-            $("#laythongtin").submit();
-            console.log($("#laythongtin").attr("action"));
-            $(this).parents('#laythongtin').submit();
-            return true;
-        };
 
     </script>
-    @*<script src="~/Content/plugins/bootstrap-select-1.12.4/js/bootstrap-select.js"></script>*@
-    @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
 }
 
