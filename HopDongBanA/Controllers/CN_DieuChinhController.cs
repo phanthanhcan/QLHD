@@ -117,11 +117,10 @@ namespace HopDongMgr.Controllers
             //                                                      }).ToList();
             try
             {
+                db.Configuration.LazyLoadingEnabled = false;
                 CN_HopDong hopDong = db.CN_HopDong.Find(cN_DieuChinh.IDHD);
                 var iTienDoSauDC = db.GetTienDo_SauDieuChinh(cN_DieuChinh.IDHD, cN_DieuChinh.DotDieuChinh, cN_DieuChinh.SoNgayGiaHanTienDo).SingleOrDefault();
                 if (iTienDoSauDC.SoNgayThiCong > iTienDoSauDC.SoNgayThucHien) ModelState.AddModelError("SoNgayThiCong", $"Tiến độ thi công” không được lớn hơn “Thời gian thực hiện hợp đồng { iTienDoSauDC.SoNgayThucHien?.ToString("0:##0")}");
-
-
                 if (ModelState.IsValid)
                 {
                     List<SelectListItem> lThongTin = _common.getThongTinBang();
@@ -282,12 +281,16 @@ namespace HopDongMgr.Controllers
             ViewBag.ListDotDieuChinh = db.CN_DieuChinh.Where(o => o.IDHD == id).OrderByDescending(o => o.IDDC).ToList();
             ViewBag.HopDongDC = db.CN_HopDong.Where(o => o.IDHD == id).FirstOrDefault();
             ViewBag.IDLoaiDieuChinh = new SelectList(db.DM_LoaiDieuChinh.Where(x => x.Khoa != false).Select(x => new SelectListItem { Value = x.IDLoaiDieuChinh.ToString(), Text = x.TenLoaiDieuChinh }), "Value", "Text");
-            ViewBag.DSHD = db.CN_HopDong.Where(o => o.IDHD == id).Select(s => new HopDongDC
+            var HopDongDieuChinh = db.CN_HopDong.Where(o => o.IDHD == id).Select(s => new
             {
-                IDHD = s.IDHD.ToString(),
-                GiaTriThucTe = s.GiaTriThucTe.HasValue == true ? s.GiaTriThucTe.ToString() : s.GiaTriHopDong.ToString(),
-                ngayKy = s.NgayKy.ToString()
-            }).FirstOrDefault();
+                s.IDHD,
+                s.DM_CongTrinh.MaCT,
+                s.DM_CongTrinh.TenCT,
+                GiaTriThucTe = s.GiaTriThucTe ?? s.GiaTriHopDong,
+                s.NgayKy,
+                s.NgayHetHan
+            }).FirstOrDefault() ;
+            ViewBag.HopDongDieuChinh =  Newtonsoft.Json.JsonConvert.SerializeObject(HopDongDieuChinh);
             return View();//o_cN_DieuChinh
         }
 

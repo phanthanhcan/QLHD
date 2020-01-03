@@ -1,33 +1,14 @@
-﻿@model HopDongMgr.Models.CN_DieuChinh
-@using HopDongMgr.Models;
-@using HopDongMgr.DungChung;
-@using System;
+﻿
+@model HopDongMgr.Models.CN_DieuChinh
 @{
     ViewBag.Title = "CẬP NHẬT ĐIỀU CHÌNH HƠP DỒNG";
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa điều chỉnh này không?";
-    List<CN_DieuChinh> ListDotDieuChinh = new List<CN_DieuChinh>();
-    ListDotDieuChinh = (List<CN_DieuChinh>)ViewBag.ListDotDieuChinh;
-    CN_HopDong oHopDong = (CN_HopDong)ViewBag.HopDongDC;
-    HopDongDC HD = (HopDongDC)ViewBag.DSHD;
-    string MaCT = "";
-    string TenCT = "";
-    if (oHopDong.DM_CongTrinh != null)
-    {
-        MaCT = oHopDong.DM_CongTrinh.MaCT;
-        TenCT = oHopDong.DM_CongTrinh.TenCT;
-    }
-    string DateHD ="";
     int DotDieuChinhNew = (int)ViewBag.DotDieuChinhNew;
-    int IDDC = -1;
-    if (ListDotDieuChinh != null)
-    {
-        IDDC = ListDotDieuChinh.FirstOrDefault().IDDC;
-    }
-    if(oHopDong != null)
-    {
-        DateHD = oHopDong.NgayHetHan.Value.ToString("yyyy/MM/dd");
-    }
+    List<CN_DieuChinh> ListDotDieuChinh = (List<CN_DieuChinh>)ViewBag.ListDotDieuChinh;
+    CN_HopDong oHopDong = (CN_HopDong)ViewBag.HopDongDC;
+    Dictionary<string, string> HopDongDieuChinh = new Dictionary<string, string>();
+    HopDongDieuChinh = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>((string)ViewBag.HopDongDieuChinh);
 
 }
 <div id="err">
@@ -36,12 +17,13 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <input type="hidden" id="IDDC" value="@IDDC" name="IDDC"/> 
+        @<input type="hidden" id="IDDC" value="" name="IDDC" />
+        <input type="hidden" id="IDHD" value="@HopDongDieuChinh["IDHD"]" name="IDHD" />
         <input type="hidden" id="FlagCreate" value="0" name="FlagCreate" /> @*0: cap nhat 1: them moi*@
         <div class="form-group row">
-            @*@Html.LabelFor(model => model.IDHD, "IDHD", htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2"> Đợt điều chỉnh</label>
             <div class="col-md-4">
                 @Html.EditorFor(model => model.DotDieuChinh, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
@@ -49,23 +31,16 @@
             </div>
         </div>
         <div class="form-group row">
-            @*@Html.LabelFor(model => model.IDHD, "IDHD", htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2">Mã công trình</label>
             <div class="col-md-4">
-                <input class="form-control" value="@MaCT" readonly />
+                <input class="form-control" alt="@HopDongDieuChinh["TenCT"]" value="@HopDongDieuChinh["MaCT"]" readonly />
             </div>
-            <label class="control-label col-md-2">Tên công trình </label>
+            <label class="control-label col-md-2"> Số hợp đồng</label>
             <div class="col-md-4">
-                <input class="form-control" value="@TenCT" readonly />
+                <input class="form-control" value="@HopDongDieuChinh["SoHopDong"]" readonly />
             </div>
         </div>
         <div class="form-group row">
-            @*@Html.LabelFor(model => model.IDHD, "IDHD", htmlAttributes: new { @class = "control-label col-md-2" })*@
-            <label class="control-label col-md-2"> Số hợp đồng</label>
-            <div class="col-md-4">
-                @Html.DropDownList("IDHD", null, htmlAttributes: new { @class = "form-control", @readonly= "readonly"})
-                @Html.ValidationMessageFor(model => model.IDHD, "", new { @class = "text-danger" })
-            </div>
             <label class="control-label col-md-2">Ngày điều chỉnh <span style="color:red">(*)</span></label>
             <div class="col-md-4">
                 <div class="input-group date">
@@ -78,11 +53,9 @@
             </div>
         </div>
         <div class="form-group row">
-            @*@Html.LabelFor(model => model.GiaTriSauDieuChinh, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label col-md-2 small">Số ngày gia hạn tiến độ</label>
             <div class="col-md-4">
-                <input class="form-control CheckNumber Number-Get-SNGHTD" />
-                @Html.EditorFor(model => model.SoNgayGiaHanTienDo, new { htmlAttributes = new { @class = "form-control Number-Set-SNGHTD", @type = "Hidden" } })
+                @Html.EditorFor(model => model.SoNgayGiaHanTienDo, new { htmlAttributes = new { @class = "form-control CheckNumber Number-Set-SNGHTD" } })
                 @Html.ValidationMessageFor(model => model.SoNgayGiaHanTienDo, "", new { @class = "text-danger" })
             </div>
             <label class="control-label col-md-2">Ngày hết hạn <span style="color:red">(*)</span></label>
@@ -100,8 +73,7 @@
         <div class="form-group row">
             <label class="control-label col-md-2">Giá trị điều chỉnh</label>
             <div class="col-md-4">
-                <input class="form-control CheckNumber Number-Get-GTSDC" />
-                @Html.EditorFor(model => model.GiaTriDieuChinh, new { htmlAttributes = new { @class = "form-control Number-Set-GTSDC", @type = "Hidden" } })
+                @Html.EditorFor(model => model.GiaTriDieuChinh, new { htmlAttributes = new { @class = "form-control CheckNumber Number-Set-GTSDC" } })
                 @Html.ValidationMessageFor(model => model.GiaTriDieuChinh, "", new { @class = "text-danger" })
             </div>
             <label class="control-label col-md-2">Loại điều chỉnh</label>
@@ -113,8 +85,7 @@
         <div class="form-group row">
             <label class="control-label col-md-2">Chênh lệch</label>
             <div class="col-md-4">
-                <input class="form-control CheckNumber Number-Get-GTCL" />
-                @Html.EditorFor(model => model.ChenhLech, new { htmlAttributes = new { @class = "form-control Number-Set-GTCL", @type = "Hidden" } })
+                @Html.EditorFor(model => model.ChenhLech, new { htmlAttributes = new { @class = "form-control CheckNumber Number-Set-GTCL" } })
                 @Html.ValidationMessageFor(model => model.ChenhLech, "", new { @class = "text-danger" })
             </div>
             <label class="control-label col-md-2">Giá trị trước điều chỉnh</label>
@@ -132,72 +103,56 @@
         </div>
         <div class="form-group row">
             <div class="offset-md-2 col-md-10 ">
-                <input type="button" id="ThemMoiDot" value="Thêm mới" class="btn btn-info col-md-2" style="margin-left:4px ;margin-right:2px"/>
-                <input type="submit" value="Lưu" class="btn btn-primary col-md-2" style="margin-left:2px ;margin-right:2px"/>
-                <input type="button" id="btnXoaDC"value="Xóa" class="btn btn-danger col-md-2" style="margin-left:2px ;margin-right:2px" data-toggle="" data-target="" />
-                <input type="button" value="Quay lại" class="btn btn-default col-md-2" style="margin-left:2px ;margin-right:4px"  onclick="location.href='@Url.Action("Index")'" />
+                <input type="button" id="ThemMoiDot" value="Thêm mới" class="btn btn-info col-md-2" style="margin-left:4px ;margin-right:2px" />
+                <input type="submit" value="Lưu" class="btn btn-primary col-md-2" style="margin-left:2px ;margin-right:2px" />
+                <input type="button" id="btnXoaDC" value="Xóa" class="btn btn-danger col-md-2" style="margin-left:2px ;margin-right:2px" data-toggle="" data-target="" />
+                <input type="button" value="Quay lại" class="btn btn-default col-md-2" style="margin-left:2px ;margin-right:4px" onclick="location.href='@Url.Action("Index")'" />
             </div>
         </div>
     </div>
-            @*lưới thông tin dot dieu chinh*@
-            <table id="example" class="table table-condensed  nowrap dataTable dtr-inline ListDotDieuChinh" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;" data-parameter="notCreate">
+
+    <div>
+        <div class="table-scroll60">
+            <table id="ListItem" class="table table-striped">
                 <thead>
-                    <tr role="row">
-                        <th style="display:block">Số hợp đồng</th>
-                        <th>Đợt điều chỉnh</th>
-                        <th>Ngày điều chỉnh</th>
-                        <th>Giá trị điều chỉnh</th>
-                        <th>Chênh lệch</th>
-                        <th>Số ngày gia hạn tiến độ</th>
-                        <th>Ngày hết hạn điều chỉnh</th>
-                        <th>Loại điều chỉnh</th>
-                        <th>Lý do điều chỉnh</th>
-                        <th style="display:none">IDDC</th>
-                        <th style="display:none">IDLoaiDieuChinh</th>
+                    <tr class="fixedHeader" role="row">
+                        <th class="bg-secondary" nowrap style="display:none" data-override="SoHopDong">Số hợp đồng</th>
+                        <th class="bg-secondary" nowrap data-override="DotDieuChinh">Đợt điều chỉnh</th>
+                        <th class="bg-secondary" nowrap data-override="NgayDieuChinh">Ngày điều chỉnh</th>
+                        <th class="bg-secondary" nowrap data-override="GiaTriDieuChinh">Giá trị điều chỉnh</th>
+                        <th class="bg-secondary" nowrap data-override="ChenhLech">Chênh lệch</th>
+                        <th class="bg-secondary" nowrap data-override="SoNgayGiaHanTienDo">Số ngày gia hạn tiến độ</th>
+                        <th class="bg-secondary" nowrap data-override="NgayHetHanDC">Ngày hết hạn điều chỉnh</th>
+                        <th class="bg-secondary" nowrap data-override="TenLoaiDieuChinh">Loại điều chỉnh</th>
+                        <th class="bg-secondary" nowrap data-override="LyDoDieuChinh">Lý do điều chỉnh</th>
+                        <th class="bg-secondary" nowrap style="display:none" data-override="IDDC">IDDC</th>
+                        <th class="bg-secondary" nowrap style="display:none" data-override="IDLoaiDieuChinh">IDLoaiDieuChinh</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in ListDotDieuChinh)
-                {
+                    @foreach (CN_DieuChinh item in ListDotDieuChinh)
+                    {
                         <tr role="row" id="@item.IDDC">
                             <td style="display:none">
                                 @Html.DisplayFor(modelItem => item.CN_HopDong.SoHopDong)
                             </td>
-                            <td>
+                            <td name="item.DotDieuChinh">
                                 @Html.DisplayFor(modelItem => item.DotDieuChinh)
                             </td>
                             <td class="text-right">
-
-                                @if (item.NgayDieuChinh.HasValue == true)
-                                { @item.NgayDieuChinh.Value.ToString("dd/MM/yyyy");
-                                }
+                                @Html.DisplayFor(modelItem => item.NgayDieuChinh)
                             </td>
                             <td class="text-right">
-                                @if (item.GiaTriDieuChinh.HasValue == true)
-                                {
-                                    @String.Format("{0:0,0}", item.GiaTriDieuChinh.Value);
-                                }
+                                @Html.DisplayFor(modelItem => item.GiaTriDieuChinh)
                             </td>
                             <td class="text-right">
-                                @if (item.GiaTriDieuChinh.GetValueOrDefault(0) == 0)
-                                {
-                                    @String.Format("{0:0,0}", 0);
-                                } else if (item.ChenhLech.HasValue == true)
-                                {
-                                    @String.Format("{0:0,0}", item.ChenhLech.Value);
-                                }
+                                @Html.DisplayFor(modelItem => item.GiaTriDieuChinh)
                             </td>
                             <td class="text-right">
-                                @if (item.SoNgayGiaHanTienDo.HasValue == true)
-                                {
-                                    @String.Format("{0:0,0}", item.SoNgayGiaHanTienDo.Value);
-                                }
+                                @Html.DisplayFor(modelItem => item.SoNgayGiaHanTienDo)
                             </td>
                             <td class="text-right">
-
-                                @if (item.NgayHetHanDC.HasValue == true)
-                                { @item.NgayHetHanDC.Value.ToString("dd/MM/yyyy");
-                                }
+                                @Html.DisplayFor(modelItem => item.NgayHetHanDC)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.DM_LoaiDieuChinh.TenLoaiDieuChinh)
@@ -214,151 +169,50 @@
                         </tr>
                     }
                 </tbody>
-
             </table>
+        </div>
+    </div>
 
-    @section scripts
-    { 
-        <script type="text/javascript">
-            $(document).ready(function () {
-                var rowSelect;
-                var rowIndex;
-                //var ListDotDieuChinh = $('#example').DataTable({
-                //    destroy: true,
-                //    select: true,
-                //    searching: false,
-                //    lengthChange: false,
-                //    pageLength: 5
-                //})
-                //ListDotDieuChinh.on('select', function(e, dt, type, indexes){
-                //    var rowdata = ListDotDieuChinh.rows(indexes).data().toArray();
-                //    rowSelect = ListDotDieuChinh.rows(indexes).data().toArray();
-                //    rowIndex = indexes;
-                //    var id = rowdata[0][0];
-                //    $("#DotDieuChinh").val(rowdata[0][1]);
-                //    $("#SoHopDong").val(rowdata[0][0]);
-                //    $("#NgayDieuChinh").val(rowdata[0][2]);
-
-                //    $("#GiaTriSauDieuChinh").val(rowdata[0][3].replace(/,/g, ""));
-                //    $(".Number-Get-GTSDC").val(rowdata[0][3]);
-
-                //    $("#ChenhLech").val(rowdata[0][4].replace(/,/g, ""));
-                //    $(".Number-Get-GTCL").val(rowdata[0][4]);
-
-
-                //    $("#SoNgayGiaHanTienDo").val(rowdata[0][5].replace(/,/g,""));
-                //    $(".Number-Get-SNGHTD").val(rowdata[0][5]);
-
-                //    $("#NgayHetHanDC").val(rowdata[0][6]);
-
-
-                //    $("#LyDoDieuChinh").val(rowdata[0][8]);
-                //    $("#IDDC").val(rowdata[0][9]);
-                //    $("#IDLoaiDieuChinh").val(rowdata[0][10]);
-                //    $("#FlagCreate").val("0");
-                //});
-                var table = $('#example').DataTable({
-                    responsive: true,
-                    language: {
-                        url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Vietnamese.json"
-                    },
-                    select: true,
-                    scrollY: "400px",
-                    scrollX: true,
-                    aaSorting: false,
-                    "columnDefs": [
-                                    {
-                                        "targets": [0],
-                                        "visible": false,
-                                    },
-                                    {
-                                        "targets": [9],
-                                        "visible": false,
-                                    },
-                                    {
-                                        "targets": [10],
-                                        "visible": false,
-                                    }
-                                ]
-                });
-                $('#example tbody').on('click', 'tr', function () {
-                    var data = table.row( this ).data();
-                    var rowIndex = table.row( this ).index();
-                    //alert( 'You clicked on '+data[0]+'\'s row' + rowIndex );
-                    var id = data[0];
-                    $("#DotDieuChinh").val(data[1]);
-                    $("#SoHopDong").val(data[0]);
-                    $("#NgayDieuChinh").val(data[2]);
-
-                    $("#GiaTriSauDieuChinh").val(data[3].replace(/,/g, ""));
-                    $(".Number-Get-GTSDC").val(data[3]);
-
-                    $("#ChenhLech").val(data[4].replace(/,/g, ""));
-                    $(".Number-Get-GTCL").val(data[4]);
-
-
-                    $("#SoNgayGiaHanTienDo").val(data[5].replace(/,/g,""));
-                    $(".Number-Get-SNGHTD").val(data[5]);
-
-                    $("#NgayHetHanDC").val(data[6]);
-
-
-                    $("#LyDoDieuChinh").val(data[8]);
-                    $("#IDDC").val(data[9]);
-                    $("#IDLoaiDieuChinh").val(data[10]);
-                    $("#FlagCreate").val("0");
-                } );
-
-                $('#ThemMoiDot').click( function(){
-                    $("#DotDieuChinh").val("@DotDieuChinhNew");
-
-                    $("#NgayDieuChinh").val($.datepicker.formatDate("dd/mm/yy",new Date()));
-
-                    $("#GiaTriSauDieuChinh").val("0");
-                    $(".Number-Get-GTSDC").val("0")
-
-                    $("#SoNgayGiaHanTienDo").val("0");
-                    $(".Number-Get-SNGHTD").val("0");
-
-                    $("#LyDoDieuChinh").val("");
-                    $("#FlagCreate").val("1");
-                });
-
-                $(".Number-Get-GTSDC").focusout(function () {
-                    var val = $(this).val().replace(/,/g, "");
-                    $(".Number-Set-GTSDC").val(val);
-                    var ChenhLech = parseInt(val) - parseInt(@HD.GiaTriThucTe)
-                    $(".Number-Get-GTCL").val(ChenhLech)
-                    $("#ChenhLech").val(ChenhLech)
-                    $("#GTTDC").val(@HD.GiaTriThucTe)
-
-
-                });
-                $(".Number-Get-SNGHTD").focusout(function () {
-                    var Tongngay = parseInt("0");
-                    var val = $(this).val().replace(/,/g, "");
-                    $(".Number-Set-SNGHTD").val(val);
-                    table.column(5).data().each(function (value, index) {
-                        if ($("#FlagCreate").val() == "0") {
-                            if (index > rowIndex) {
-                                var val1 = parseInt(value.replace(/,/g, ""));
-                                if (isNaN(val1)) val1 = 0;
-                                Tongngay = Tongngay + val1;
-                            }
-                        }
-                        else if ($("#FlagCreate").val() == "1"){
-                            var val1 = parseInt(value.replace(/,/g, ""));
-                            if (isNaN(val1)) val1 = 0;
-                            Tongngay = Tongngay + val1;
-                        }
-                        else{}
-                    });
-                    var Date1 = new Date ("@DateHD");
-                    Date1.setDate(Date1.getDate() + Tongngay + parseInt(val));
-                    $("#NgayHetHanDC").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker("setDate", $.datepicker.formatDate('dd/mm/yy', Date1).toString());
-
-                });
+@section scripts
+{
+    <script src="~/Scripts/jquery.tabletojson.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var rowSelect;
+            var rowIndex;
+            var ListItemJson = $("#ListItem").tableToJSON({
+                includeRowId: true
             });
+
+            $('#ThemMoiDot').click( function(){
+                $("#DotDieuChinh").val("@DotDieuChinhNew");
+                $("#NgayDieuChinh").val($.datepicker.formatDate("dd/mm/yy",new Date()));
+                $("#GiaTriSauDieuChinh").val("0");
+                $("#SoNgayGiaHanTienDo").val("0");
+                $("#LyDoDieuChinh").val("");
+                $("#FlagCreate").val("1");
+            });
+
+            $(document).on("click", "#ListItem tbody tr", function () {
+                var value = $(this).attr("Id");
+                var itemSelect;
+                for (var i = 0; i < ListItemJson.length; i++) {
+                    if (ListItemJson[i].IDDC == value) {
+                        $("#DotDieuChinh").val(ListItemJson[i].DotDieuChinh);
+                        $("#NgayDieuChinh").val(ListItemJson[i].NgayDieuChinh);
+                        $("#GiaTriDieuChinh").val(ListItemJson[i].GiaTriDieuChinh);
+                        $("#ChenhLech").val(ListItemJson[i].ChenhLech);
+                        $("#SoNgayGiaHanTienDo").val(ListItemJson[i].SoNgayGiaHanTienDo);
+                        $("#NgayHetHanDC").val(ListItemJson[i].NgayHetHanDC);
+                        $("#LyDoDieuChinh").val(ListItemJson[i].LyDoDieuChinh);
+                        $("#IDDC").val(ListItemJson[i].IDDC);
+                        $("#IDLoaiDieuChinh").val(ListItemJson[i].IDLoaiDieuChinh); ///
+                        $("#GTTDC").val(ListItemJson[i].IDLoaiDieuChinh); /// GTTDC
+                    }
+                }
+
+            });
+
             $('#btnXoaDC').click(function () {
                 var idSelected = $("#example .selected").attr("id");
                 var index = $('.ListDotDieuChinh').DataTable().row('.selected').index();
@@ -403,24 +257,16 @@
                     });
                 }
             });
+
+
             $("form").submit(function (e) {
                 var serr = "";
-                //if (isNaN($(".Number-Set-GTSDC").val()) == true || $(".Number-Set-GTSDC").val() <=0)
-                //{
-                //    serr =serr +  "Vui lòng nhập giá trị sau điều chỉnh <BR>";
-                //}
-                //if (isNaN($(".Number-Set-SNGHTD").val()) == true || $(".Number-Set-SNGHTD").val() <=0) {
-                //    serr = serr + "Vui lòng nhập số ngày gia hạn tiến dộ <BR>";
-                //}
-                //if ($("#NgayDieuChinh").val() == "") {
-                //    serr = serr + "Vui lòng nhập số ngày gia hạn tiến dộ <BR>";
-                //}
                 var rr = $("#GiaTriDieuChinh").val();
                 var rr = isNaN($("#GiaTriDieuChinh").val());
-                if ($("#GiaTriDieuChinh").val() != "" && $("#GiaTriDieuChinh").val() != 0 && ( $("#GiaTriDieuChinh").val() <= @HD.GiaTriThucTe) ) 
+                @*if ($("#GiaTriDieuChinh").val() != "" && $("#GiaTriDieuChinh").val() != 0 && ( $("#GiaTriDieuChinh").val() <= @HD.GiaTriThucTe) )
                 {
                     //serr = serr + "Giá trị điều chỉnh không hơp lệ <BR>";
-                }
+                }*@
                 if (serr.length > 3)
                 {
                     e.preventDefault();
@@ -433,8 +279,7 @@
                     });
                 }
             });
-
-
-        </script>
-    }
+        });
+    </script>
+}
 }

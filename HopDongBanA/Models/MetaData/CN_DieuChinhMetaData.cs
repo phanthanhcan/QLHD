@@ -19,16 +19,18 @@ namespace HopDongMgr.Models
 
             [Display(Name = "Ngày điều chỉnh")]
             [Range(type: typeof(DateTime), minimum: "1990/01/01", maximum: "2200/12/31", ErrorMessage = "{0} có giá trị từ {1} đến {2}")]
-            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:dd/MM/yyyy")]
+            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
             [Required(ErrorMessage = "Nhập {0}")]
             public Nullable<System.DateTime> NgayDieuChinh { get; set; }
 
 
             [Display(Name = "Giá trị điều chỉnh")]
             [Range(type: typeof(decimal), minimum: "99999", maximum: "999999999999999", ErrorMessage = "{0} có giá trị từ {1} đến {2}")]
+            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0}")]
             public Nullable<decimal> GiaTriDieuChinh { get; set; }
 
             [Display(Name = "Chênh lệch")]
+            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0}")]
             public Nullable<decimal> ChenhLech { get; set; }
 
             [Display(Name = "Số ngày gia hạn tiến độ")]
@@ -43,14 +45,14 @@ namespace HopDongMgr.Models
             public string NguoiTao { get; set; }
 
             [Display(Name = "Ngày tạo")]
-            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:dd/MM/yyyy")]
+            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
             public Nullable<System.DateTime> NgayTao { get; set; }
 
             [Display(Name = "Người Cập nhật")]
             public string NguoiCapNhat { get; set; }
 
             [Display(Name = "Ngày cập nhạt")]
-            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:dd/MM/yyyy")]
+            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
             public Nullable<System.DateTime> NgayCapNhat { get; set; }
 
             [Display(Name = "Đợt điều chỉnh")]
@@ -60,7 +62,7 @@ namespace HopDongMgr.Models
 
             [Display(Name = "Ngày hết hạn điều chỉnh")]
             [Range(type: typeof(DateTime), minimum: "1990/01/01", maximum: "2200/12/31", ErrorMessage = "{0} có giá trị từ {1} đến {2}")]
-            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:dd/MM/yyyy")]
+            [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
             public Nullable<System.DateTime> NgayHetHanDC { get; set; }
 
             [Display(Name = "ID loại điều chỉnh")]
