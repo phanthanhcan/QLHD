@@ -1,0 +1,164 @@
+﻿@model HopDongMgr.Models.HT_NguoiDung
+
+@{
+    ViewBag.Title = "THÊM MỚI NGƯỜI DÙNG";
+}
+
+<div>
+    @Html.Raw(TempData["err"])
+</div>
+@using (Html.BeginForm("Create", "HT_NguoiDung", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.MaNguoiDung, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Mã người dùng</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.MaNguoiDung, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MaNguoiDung, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Mật khẩu</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.MatKhau, new { htmlAttributes = new { @class = "form-control", placeholder = "Mật khẩu", @type = "password" } })
+                @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group  row">
+            @*@Html.LabelFor(model => model.HoTen, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Họ tên</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.HoTen, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HoTen, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Bí danh</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.BiDanh, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BiDanh, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group  row">
+            @*@Html.LabelFor(model => model.MaDV, "MaDV", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Đơn vị quản lý</label>
+            <div class="col-md-4">
+                @Html.DropDownList("MaDV", null, htmlAttributes: new { @class = "form-control", @id = "cbDonVi", @onchange = "DonViOnChange()" })
+                @Html.ValidationMessageFor(model => model.MaDV, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Phòng ban</label>
+            <div class="col-md-4">
+                @Html.DropDownList("IdPhong", null, htmlAttributes: new { @class = "form-control", @id = "cbPhong" })
+                @Html.ValidationMessageFor(model => model.IdPhong, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group  row">
+            <label class="control-label col-md-2">Chức vụ</label>
+            <div class="col-md-4">
+                @Html.DropDownList("ChucVu", null, "-- Không chọn --", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ChucVu, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Nhóm người dùng</label>
+            <div class="col-md-4">
+                @Html.DropDownList("IdNhom", null, "-- Không chọn --", htmlAttributes: new { @class = "form-control", @id = "cbNhom" })
+                @Html.ValidationMessageFor(model => model.IdNhom, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group  row">
+            @*@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Email</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Giới tính</label>
+            <div class="col-md-4">
+                @Html.DropDownList("GioiTinh", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GioiTinh, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group  row">
+            <label class="control-label col-md-2">Ảnh đại diện</label>
+            <div class="col-md-10">
+                @if (File.Exists(Server.MapPath("/Content/images/avatars/avatar.png")))
+                {
+                    <img class="img-lg" title="avatar.png" alt="avatar.png" src="/Content/images/avatars/avatar.png" />
+                    @Html.EditorFor(model => model.AnhDaiDien, new { htmlAttributes = new { @class = "form-control", @style = "display: none;" } })
+                    <label for="photo">Chọn ảnh khác</label>
+                    <input id="photo" type="file" name="photo" accept="image/x-png,image/jpeg,image/jpg" class="btn btn-warning" />
+                    <input type="hidden" name="AnhDaiDien" value="avatar.png" />
+                }
+                else
+                {
+                    <label for="photo" class="control-label col-md-2">Đường dẫn</label>
+                    <input id="photo" type="file" name="photo" accept="image/x-png,image/jpeg,image/jpg" class="btn btn-warning" />
+                    <input type="hidden" name="AnhDaiDien" value="avatar.png" />
+                }
+            </div>
+        </div>
+        <div class="form-group  row">
+            <label class="control-label col-md-2">Có hiệu lực</label>
+            @*<div class="col-md-10 switch">
+                @Html.CheckBoxFor(model => model.Active, htmlAttributes: new { @class = "form-control", @name = "Active", @checked = "checked" })
+                <label for="Active"><i></i></label>
+                @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+            </div>*@
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @{
+                        bool Active = true;
+                    }
+                    @Html.CheckBoxFor(Model => Active, new Dictionary<string, object>() { { "checked", "true" }, { "data-off-color", "danger" }, { "class", "cbootstrapSwitch" } })
+                    @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group  row">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+                <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function DonViOnChange() {
+        var maDV = $("#cbDonVi").val();
+        $.ajax({
+            url: '@Url.Action("DonViOnChange")',
+            type: "GET",
+            dataType: "JSON",
+            data: { maDonVi: maDV },
+            success: function (data) {
+                $("#cbNhom").html(""); // clear before appending new list
+                $.each(data, function (i, nhom) {
+                    $("#cbNhom").append(
+                        $('<option></option>').val(nhom.Id).html(nhom.Ten));
+                })
+            },
+            error: function (xhr) {
+                console.log("error: " + " status: " + status + " er:");
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("DonViOnChangePhong")',
+            type: "GET",
+            dataType: "JSON",
+            data: { maDonVi: maDV },
+            success: function (data) {
+                $("#cbPhong").html(""); // clear before appending new list
+                $.each(data, function (i, nhom) {
+                    $("#cbPhong").append(
+                        $('<option></option>').val(nhom.Id).html(nhom.Ten));
+                })
+            },
+            error: function (xhr) {
+                console.log("error: " + " status: " + status + " er:");
+            }
+        });
+    }
+</script>

@@ -1,0 +1,91 @@
+﻿@model DM_CongTrinh
+<div class="table-responsive row no-gutters">
+    <table id="ListItem" class="table table-striped ">
+        <thead>
+            <tr role="row">
+                <th nowrap >@Html.LabelFor(modelItem => Model.MaCT)</th>
+                <th nowrap>@Html.LabelFor(modelItem => modelItem.TenCT)</th>
+                <th nowrap>@Html.LabelFor(modelItem => modelItem.DM_NguonVon.TenNV)</th>
+                <th nowrap>@Html.LabelFor(modelItem => modelItem.DM_DiaDiem.TenDD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DM_CongTrinh item in ViewBag.OnePageOfData)
+            {
+                <tr role="row" id="@item.IDCT">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MaCT)
+                    </td>
+                    <td nowrap>
+                        @Html.DisplayFor(modelItem => item.TenCT)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DM_NguonVon.TenNV)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DM_DiaDiem.TenDD)
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+<div class="row container">
+    @if (ViewBag.OnePageOfData != null)
+    {
+        string str = $"Trang {ViewBag.OnePageOfData.PageNumber} trên tổng số {ViewBag.OnePageOfData.PageCount} trang, {ViewBag.OnePageOfData.TotalItemCount} dòng";
+        <div>@str</div>
+    }
+</div>
+<div class="row">
+    @if (TempData["Search"] == null) // gan them dieu kien khi sech bang rong
+    {
+        @Html.PagedListPager(
+                                list: (IPagedList)ViewBag.OnePageOfData
+                                , generatePageUrl: Page => Url.Action("Index", new { Page = Page })
+                                , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
+                                    (
+                                        options: new PagedListRenderOptions
+                                        {
+                                            ContainerDivClasses = new string[] {"col", "dataTables_paginate ", "paging_simple_numbers"},
+                                            UlElementClasses = new string[] { "pagination", "justify-content-end" },
+                                            LiElementClasses = new string[] { "page-item" },
+                                            PageClasses = new string[] { "page-link" },
+                                        }
+                                        , ajaxOptions: new AjaxOptions
+                                        {
+                                            UpdateTargetId = "DataUpdate",
+                                            InsertionMode = InsertionMode.Replace,
+                                            HttpMethod = "GET"
+                                        }
+                                    )
+                            )
+
+    }
+    else
+    {
+        var Seach = TempData["Search"];
+        @Html.PagedListPager(
+                                list: (IPagedList)ViewBag.OnePageOfData
+                                , generatePageUrl: Page => Url.Action("SeachIndex", new { Page = Page, Seach = Seach })
+                                , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
+                                    (
+                                        options: new PagedListRenderOptions
+                                        {
+                                            ContainerDivClasses = new string[] { "col", "dataTables_paginate ", "paging_simple_numbers"},
+                                            UlElementClasses =  new string[] { "pagination", "justify-content-end" },
+                                            LiElementClasses = new string[] { "page-item" },
+                                            PageClasses = new string[] { "page-link" },
+                                        }
+                                        , ajaxOptions: new AjaxOptions
+                                        {
+                                            UpdateTargetId = "DataUpdate",
+                                            InsertionMode = InsertionMode.Replace,
+                                            HttpMethod = "GET"
+                                        }
+                                    )
+                            )
+
+    }
+</div>

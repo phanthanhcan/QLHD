@@ -1,0 +1,59 @@
+﻿@model HopDongMgr.Models.HT_LichSuHoatDong
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>HT_LichSuHoatDong</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ChucNang)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ChucNang)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LoaiHoatDong)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LoaiHoatDong)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NgayThucHien)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NgayThucHien)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NguoiThucHien)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NguoiThucHien)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ChiTietHoatDong)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ChiTietHoatDong)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IDLichSuHoatDong }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

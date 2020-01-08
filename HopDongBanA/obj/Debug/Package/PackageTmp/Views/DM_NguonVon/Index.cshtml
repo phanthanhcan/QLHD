@@ -1,0 +1,120 @@
+﻿@model IEnumerable<HopDongMgr.Models.DM_NguonVon>
+
+@{
+    ViewBag.Title = "DANH MỤC NGUỒN VỐN";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa Nguồn vốn này không ?";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*toggel Đồng ý*@
+<div class="modal modal-danger fade in" id="modal-danger-DongBo" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog modal-MD">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Đồng bộ danh mục Nguồn vốn từ chương trình ĐTXD</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-outline" data-dismiss="modal" id="btnDongYDB">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*---------*@
+<div class="container px-0">
+    <div class="row no-gutters">
+        <div class="box-header col">
+            <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+            <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
+            <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
+            <input type="button" value="Đồng Bộ" class="btn" id="btnDongBo" data-toggle="modal" data-target="#modal-danger-DongBo" style="display:none" />
+        </div>
+    </div>
+    @using (Ajax.BeginForm(
+            "SeachIndex",
+            //"Controler",
+            ajaxOptions: new AjaxOptions
+            {
+                HttpMethod = "GET",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "DataUpdate"
+            }))
+    {
+
+        <div class="row no-gutters">
+            <div class="col-md-3 offset-md-9">
+                <input class="form-control" type="text" name="Seach" id="Seach" placeholder="Tìm kiếm: Mã NV, Tên NV" />
+            </div>
+
+            <input id="submit" type="submit" hidden />
+        </div>
+
+    }
+    <div id="DataUpdate" class=" container px-0 pt-1 form-horizontal">
+        @Html.Partial("_IndexPartial")
+    </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('#btnDongYDB').click(function () {
+            Loading();
+            $.ajax({
+                url: "/DM_NguonVon/DongBo_DanhMucNguonVon",
+                dataType: "json",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    if (data == "1") {
+                        LoadingHide();
+                        $.notify({
+                            title: '<strong>Thông báo</strong>:',
+                            message: 'Đồng bộ thành công'
+                        }, {
+                            type: 'info'
+                        });
+                        var url = '@Url.Action("Index", "DM_NguonVon")';
+                        window.location.href = url;
+                    }
+                    else {
+                        $.notify({
+                            title: '<strong>Thông báo</strong>:',
+                            message: data + 'Có lỗi xảy ra khi đồng bộ'
+                        }, {
+                            type: 'danger'
+                        });
+
+                        console.log(data);
+                        LoadingHide();
+                    }
+                },
+                error: function (xhr) {
+                    console.log("error: " + data + " status: " + status + " er:" + er);
+                }
+            });
+
+        });
+        $('#Seach').keydown(function (event) {
+            //alert(event.keyCode );
+            if (event.keyCode == 27) {
+                $('#Seach').val("");
+                $('#submit').submit();
+                return true;
+            }
+        })
+    });
+    </script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+}
+

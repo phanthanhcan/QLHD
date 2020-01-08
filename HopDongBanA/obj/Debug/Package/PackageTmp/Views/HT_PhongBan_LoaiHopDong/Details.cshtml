@@ -1,0 +1,35 @@
+﻿@model HopDongMgr.Models.HT_PhongBan_LoaiHopDong
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>HT_PhongBan_LoaiHopDong</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DM_LoaiHopDong.TenLoai)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DM_LoaiHopDong.TenLoai)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DM_PHONG.Ten)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DM_PHONG.Ten)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IDPQPB }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

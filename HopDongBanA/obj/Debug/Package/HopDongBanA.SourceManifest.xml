@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\obj\Debug\Package\PackageTmp" />
+  <setAcl path="C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\obj\Debug\Package\PackageTmp" setAclResourceType="Directory" />
+  <setAcl path="C:\CanPT\1.To_FMIS\1.QLHD_Github\QLHD_dev\QLHD\HopDongBanA\obj\Debug\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
+</sitemanifest>

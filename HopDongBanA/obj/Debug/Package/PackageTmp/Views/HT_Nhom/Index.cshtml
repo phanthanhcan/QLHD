@@ -1,0 +1,39 @@
+﻿@model IEnumerable<HopDongMgr.Models.HT_Nhom>
+
+@{
+    ViewBag.Title = "DANH SÁCH NHÓM NGƯỜI DÙNG";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa nhóm người dùng này không?";
+}
+
+<div class="box-header">
+    <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+    <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
+    <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
+</div>
+<div id="HHDC" class="table-scroll60">
+    <table id="ListItem" class="table table-striped">
+        <thead>
+            <tr role="row">
+                <th>Tên nhóm</th>
+                @*<th>Quyền</th>*@
+                <th>Đơn vị quản lý</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr role="row" id="@item.Id">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ten)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Quyen)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DM_DONVI.TEN_DVIQLY)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

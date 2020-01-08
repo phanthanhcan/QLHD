@@ -1,0 +1,46 @@
+﻿@using HopDongMgr.Class.ViewModel;
+@using HopDongMgr.Models;
+@model HopDongMgr.Class.ViewModel.ListPhanQuyenPhongBanViewModel
+
+<div class="row">
+    <input type="hidden" id="IDPB" value="@ViewBag.IDPB" />
+
+        <div class="tab-content">
+            <!-- Canpt Them panal danh muc loai HD-->
+            <button type="submit" id="btnPhanQuyenPhongBan" class="btn btn-primary">Lưu</button>
+
+            <table class="display dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+                <thead>
+                    <tr role="row">
+                        <th>Chọn loại hợp đồng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var list = Model.listPQ.ToList();
+                        for (var i = 0; i < list.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @if (list[i].boolUsed)
+                                    {
+                                        <input type="checkbox" class="checkBoxLoaiHD" data-id="@list[i].IDLoai" checked /> @list[i].TenLoai
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="checkBoxLoaiHD" data-id="@list[i].IDLoai" /> @list[i].TenLoai
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+
+
+            </table>
+            <!---->
+        </div>
+</div>
+

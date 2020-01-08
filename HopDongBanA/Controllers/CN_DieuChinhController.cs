@@ -291,7 +291,8 @@ namespace HopDongMgr.Controllers
                 s.NgayHetHan
             }).FirstOrDefault() ;
             ViewBag.HopDongDieuChinh =  Newtonsoft.Json.JsonConvert.SerializeObject(HopDongDieuChinh);
-            return View();//o_cN_DieuChinh
+            CN_DieuChinh cN_DieuChinhNull = new CN_DieuChinh();
+            return View(cN_DieuChinhNull);//o_cN_DieuChinh
         }
 
         // POST: CN_DieuChinh/Edit/5

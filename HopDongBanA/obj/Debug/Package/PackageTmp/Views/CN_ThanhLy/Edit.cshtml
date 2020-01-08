@@ -1,0 +1,137 @@
+﻿@model HopDongMgr.Models.CN_ThanhLy
+
+@{
+    ViewBag.Title = "THANH LÝ HỢP ĐỒNG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string sGiatriQT = Model.GiaTriQuyetToan.HasValue == false ? "0" : string.Format("{0:0,0}", Model.GiaTriQuyetToan.Value);
+    string sGiatriTL = Model.GiaTriThanhLy.HasValue == false ? "0" : string.Format("{0:0,0}", Model.GiaTriThanhLy.Value);
+}
+<div>
+    @Html.Raw(TempData["err"])
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.IDTL)
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.IDHD, "IDHD", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Số hợp đồng</label>
+            <div class="col-md-4">
+                @Html.DropDownList("IDHD", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.IDHD, "", new { @class = "text-danger" })
+            </div>
+            @*@Html.LabelFor(model => model.NgayThanhLy, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        </div>
+        <div class="form-group row">
+
+            <label class="control-label col-md-2">Ngày tổng nghiệm thu</label>
+            <div class="col-md-4">
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    @Html.TextBoxFor(model => model.NgayTongNghiemThu, "{0:dd/MM/yyyy}", new { @class = "form-control pull-right cDataPicker setDate", @placeholder = "DD/MM/YYYYY" })
+                    @Html.ValidationMessageFor(model => model.NgayTongNghiemThu, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-9" id="errNgayKiemSoat"></div>
+            </div>
+
+            <label class="control-label col-md-2">Giá trị quyết toán</label>
+            <div class="col-md-4">
+                <input class="form-control CheckNumber Number-Get-GTQT" value="@sGiatriQT" />
+                @Html.EditorFor(model => model.GiaTriQuyetToan, new { htmlAttributes = new { @class = "form-control Number-Set-GTQT", @type = "Hidden" } })
+                @Html.ValidationMessageFor(model => model.GiaTriQuyetToan, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Ngày thanh lý</label>
+            <div class="col-md-4">
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    @Html.TextBoxFor(model => model.NgayThanhLy, "{0:dd/MM/yyyy}", new { @class = "form-control pull-right cDataPicker setDate", @placeholder = "DD/MM/YYYYY" })
+                    @Html.ValidationMessageFor(model => model.NgayThanhLy, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-9" id="errNgayKiemSoat"></div>
+            </div>
+            <label class="control-label col-md-2">Giá trị thanh lý</label>
+            <div class="col-md-4">
+                <input class="form-control CheckNumber Number-Get-GTTL" value="@sGiatriTL" />
+                @Html.EditorFor(model => model.GiaTriThanhLy, new { htmlAttributes = new { @class = "form-control Number-Set-GTTL", @type = "Hidden" } })
+                @Html.ValidationMessageFor(model => model.GiaTriThanhLy, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Trạng thái hoàn thành</label>
+            <div class="col-md-4">
+                <div class="checkbox">
+                    @{
+                        bool IsHoanThanh = Model.IsHoanThanh.GetValueOrDefault(false);
+                    }
+                    @Html.CheckBoxFor(Model => IsHoanThanh, new Dictionary<string, object>() { { "checked", "true" }, { "data-off-color", "danger" }, { "class", "cbootstrapSwitch" } })
+                    @Html.ValidationMessageFor(model => model.IsHoanThanh, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-md-2 col-md-10">
+                <input type = "submit" value="Lưu" class="btn btn-primary" />
+                @*<input type="button" value="Lưu" class="btn btn-primary" id="btnThemThanhLy" />*@
+                <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index", "CN_ThanhLy")'" />
+            </div>
+        </div>
+    </div>
+
+    @section scripts
+    {
+        <script>
+            $(document).ready(function () {
+                $(".Number-Get-GTQT").focusout(function () {
+                    var val = $(this).val().replace(/,/g,"");
+                    $(".Number-Set-GTQT").val(val);
+                });
+                $(".Number-Get-GTTL").focusout(function () {
+                    var val = $(this).val().replace(/,/g, "");
+                    $(".Number-Set-GTTL").val(val);
+                });
+            });
+
+            $('#btnXoaTL').click(function () {
+                var idSelected = $("#IDTL").attr("id");
+                if (idSelected != undefined) {
+                    Loading();
+                    $.ajax({
+                        method: 'POST',
+                        url: '@Url.Action("Delete", "CN_ThanhLy")',
+                        data: { id: idSelected },
+                        success: function (data) {
+                            LoadingHide();
+
+                            $.notify({
+                                // options
+                                message: 'Xóa thành công'
+                            }, {
+                                // settings
+                                type: 'info'
+                            });
+                        },
+                        error: function (data) {
+                            $.notify({
+                                // options
+                                message: 'Có lỗi xảy ra.'
+                            }, {
+                                // settings
+                                type: 'Danger'
+                            });
+                        }
+
+                    })
+                }
+                
+            });
+        </script>
+    }
+}

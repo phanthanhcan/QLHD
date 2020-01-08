@@ -1,0 +1,237 @@
+﻿@using HopDongMgr.Models;
+@model HopDongMgr.Models.CN_HopDong
+
+@{
+    ViewBag.Title = "THÊM MỚI HỢP ĐỒNG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string dNgaycapNhat = (Model == null)? DateTime.Now.ToString("dd/MM/yyyy"): Model.NgayKy.Value.ToString("dd/MM/yyyy");
+    string dNgayHetHan = (Model == null) ? DateTime.Now.ToString("dd/MM/yyyy") : Model.NgayHetHan.Value.ToString("dd/MM/yyyy");
+    string NamGiaoA =  DateTime.Now.Year.ToString();
+    bool IsHoanThanh = false;
+}
+<div>
+    @Html.Raw(TempData["err"])
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.IDLoai, "IDLoai", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Loại hợp đồng <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                @Html.DropDownList("IDLoai", null, htmlAttributes: new { @class = "selectpicker form-control ", @data_live_search = "true" })
+
+                @Html.ValidationMessageFor(model => model.IDLoai, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.SoHopDong, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Số hợp đồng <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.SoHopDong, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SoHopDong, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Ngày ký <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    @Html.TextBoxFor(model => model.NgayKy, "{0:dd/MM/yyyy}", new { @class = "form-control pull-right cDataPicker setDate", @placeholder = "DD/MM/YYYYY" })
+                    @Html.ValidationMessageFor(model => model.NgayKy, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-9" id="errNgayKiemSoat"></div>
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.NoiDung, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Nội dung HĐ</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.NoiDung, new { @class = "form-control", @rows = "5" })
+                @Html.ValidationMessageFor(model => model.NoiDung, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+       @* @Html.HiddenFor(model => model.IDCT)*@ 
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.MaCT, "MaCT", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Công trình <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                @*@Html.DropDownList("MaCT", null, htmlAttributes: new { @class = "form-control" })*@
+                @Html.DropDownList("IDCT", null, htmlAttributes: new { @class = "form-control selectpicker", @data_live_search = "true", @title = "Chọn công trình..." }) 
+                @*@Html.ValidationMessageFor(model => model.MaCT, "", new { @class = "text-danger" })*@
+            </div>
+            @*@Html.LabelFor(model => model.IDDV, "IDDV", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Đơn vị thực hiện</label>
+            <div class="col-md-4">
+                @Html.DropDownList("IDDV", null, htmlAttributes: new { @class = "form-control selectpicker", @data_live_search = "true"})
+                @Html.ValidationMessageFor(model => model.IDDV, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.IDHT, "IDHT", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Hình thức hợp dồng <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                @Html.DropDownList("IDHT", null, htmlAttributes: new { @class = "form-control selectpicker", @data_live_search = "true" })
+
+                @Html.ValidationMessageFor(model => model.IDHT, "", new { @class = "text-danger" })
+            </div>
+
+            @*@Html.LabelFor(model => model.NamGiaoA, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Năm giao A <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.NamGiaoA, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NamGiaoA, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-2">Giá trị gói thầu <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.GiaTriGoiThau, new { htmlAttributes = new { @class = "form-control CheckNumber", @type = "Text" } })
+                @Html.ValidationMessageFor(model => model.GiaTriGoiThau, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Giá trị hợp đồng <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.GiaTriHopDong, new { htmlAttributes = new { @class = "form-control CheckNumber", @type = "Text" } })
+                @Html.ValidationMessageFor(model => model.GiaTriHopDong, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-2">Số ngày thực hiện <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.SoNgayThucHien, new { htmlAttributes = new { @class = "form-control CheckNumber", @Type = "Text" } })
+                @Html.ValidationMessageFor(model => model.SoNgayThucHien, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Số ngày thi công <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.SoNgayThiCong, new { htmlAttributes = new { @class = "form-control CheckNumber", @Type = "Text" } })
+                @Html.ValidationMessageFor(model => model.SoNgayThiCong, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Ngày hết hạn <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    @Html.TextBoxFor(model => model.NgayHetHan, new { @class = "form-control pull-right cDataPicker setDate", @placeholder = "DD/MM/YYYYY" })
+                    @Html.ValidationMessageFor(model => model.NgayHetHan, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-9" id="errNgayKiemSoat"></div>
+            </div>
+        </div>
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.NguoiTao, "NguoiTao", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Người tạo</label>
+            <div class="col-md-4">
+                @Html.DropDownList("NguoiTao", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.NguoiTao, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2" style="display:none">Ngày cập nhật</label>
+            <div class="col-md-4" style="display:none">
+                @Html.EditorFor(model => model.NgayCapNhat, new { htmlAttributes = new { @class = "form-control setDate", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.NgayCapNhat, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display:none">
+            @*@Html.LabelFor(model => model.XuLyViPham, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Xử lý vi phạm</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.XuLyViPham, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.XuLyViPham, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display:none">
+            @*@Html.LabelFor(model => model.GiaTriPhat, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Giá trị phạt</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.GiaTriPhat, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.GiaTriPhat, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display:none">
+            @*@Html.LabelFor(model => model.XuLyTranhChap, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Xử lý tranh chấp</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.XuLyTranhChap, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.XuLyTranhChap, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display:none">
+            @*@Html.LabelFor(model => model.NgayTao, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Ngày tạo</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NgayTao, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NgayTao, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display:none">
+            @*@Html.LabelFor(model => model.NguoiCapNhat, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Người cập nhật</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NguoiCapNhat, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NguoiCapNhat, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" id="submit" value="Lưu" class="btn btn-primary" />
+                <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
+            </div>
+        </div>
+
+    </div>
+
+    @section scripts
+    {
+    <script>
+        $(document).ready(function () {
+
+            $('.selectpicker').selectpicker();
+            $("#NgayKy").change(function () {
+                var val = $("#SoNgayThucHien").val().replace(/,/g, "");
+                var NgayHetHan = $("#NgayKy").datepicker("getDate");
+
+                NgayHetHan.setDate(NgayHetHan.getDate() + Number(val));
+                $("#NgayHetHan").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker("setDate", $.datepicker.formatDate('dd/mm/yy', NgayHetHan).toString());
+                console.log(val + "" + $("#NgayHetHan").datepicker().val())
+            });;
+            $("#SoNgayThucHien").change(function () {
+                var val = $(this).val().replace(/,/g, "");
+                var NgayHetHan = $("#NgayKy").datepicker("getDate");
+
+                NgayHetHan.setDate(NgayHetHan.getDate() + Number(val));
+                $("#NgayHetHan").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker("setDate", $.datepicker.formatDate('dd/mm/yy', NgayHetHan).toString());
+                console.log(val + "" + $("#NgayHetHan").datepicker().val())
+            });
+            // gia tri mac dinh
+            $("#NgayHetHan").val("@dNgayHetHan");
+            $("#NgayKy").val("@dNgaycapNhat");
+            $("#NamGiaoA").val("@NamGiaoA");
+
+            //$('#liDMCT').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+            //    // alert(e.target.value);
+            //    $('#IDCT').val(e.target.value);
+
+            //});
+        });
+    </script>
+    }
+}

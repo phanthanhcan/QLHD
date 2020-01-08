@@ -5,6 +5,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using HopDongMgr.Class.Common;
+using HopDongMgr.DungChung;
 using System.Web.Mvc;
 using HopDongMgr.Models;
 using X.PagedList;
@@ -16,6 +18,7 @@ namespace HopDongMgr.Controllers
         private HopDongMgrEntities db = new HopDongMgrEntities();
         #region GetList
         // GET: HT_LichSuHoatDong
+        [CustomAuthorization]
         public ActionResult Index(int? page = 1)
         {
             int pageIndex = (page < 1 ? 1 : page.Value);

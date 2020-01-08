@@ -1,0 +1,48 @@
+﻿@model IEnumerable<HopDongMgr.Models.DM_DONVI>
+
+@{
+    ViewBag.Title = "DANH SÁCH ĐƠN VỊ";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa đơn vị này không?";
+}
+
+<div class="box-header">
+    <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+    <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
+    <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
+</div>
+<table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+    <thead>
+        <tr role="row">
+            <th>Mã đơn vị</th>
+            <th>Tên đơn vị</th>
+            <th>Đại diện</th>
+            <th>Điện thoại</th>
+            <th>Đơn vị cấp trên</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr role="row" id="@item.MA_DVIQLY">
+                <td class="sorting_1">
+                    @Html.DisplayFor(modelItem => item.MA_DVIQLY)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TEN_DVIQLY)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DAI_DIEN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DIEN_THOAI)
+                </td>
+                <td>
+                    @if (item.DM_DONVI2 != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.DM_DONVI2.TEN_DVIQLY)
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

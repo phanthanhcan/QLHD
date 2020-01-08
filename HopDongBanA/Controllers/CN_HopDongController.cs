@@ -405,18 +405,32 @@ namespace HopDongMgr.Controllers
                 if (cN_HopDong.NgayHetHan < cN_HopDong.NgayKy) ModelState.AddModelError("NgayHetHan", "Ngày hết hạn HĐ phải lớn hơn ngày ký HĐ");
                 DateTime cNgayHetHan = cN_HopDong.NgayKy.Value;
                 if (cN_HopDong.NgayHetHan < cNgayHetHan.AddDays(cN_HopDong.SoNgayThucHien.GetValueOrDefault(0))) ModelState.AddModelError("NgayHetHan", "Ngày hết hạn HĐ phải lớn hơn ngày ký HĐ + Số ngày thực hiện");
-
                 if (ModelState.IsValid)
                 {
+                    ModelState.Clear();
                     List<SelectListItem> list = _common.getThongTinBang();
                     cN_HopDong.NguoiCapNhat = list.Where(o => o.Value == "NguoiTao").SingleOrDefault().Text;
                     cN_HopDong.NgayCapNhat = DateTime.Parse(list.Where(o => o.Value == "NgayTao").SingleOrDefault().Text);
+                    CN_HopDong cN_HopDongUpdate = new CN_HopDong();
+                    cN_HopDongUpdate = db.CN_HopDong.Find(cN_HopDong.IDHD);
+                    
+                    //var cN_HopDongUpdate = db.CN_HopDong.Find(cN_HopDong.IDHD);
 
-                    var cN_HopDongUpdate = db.CN_HopDong.Find(cN_HopDong.IDHD);
                     TryUpdateModel(cN_HopDongUpdate, new string[] {
                         "IDLoai","SoHopDong","NgayKy","NoiDung","IDCT", "IDDV", "IDHT", "NamGiaoA", "GiaTriHopDong", "GiaTriGoiThau",
                         "SoNgayThiCong", "SoNgayThucHien", "NgayHetHan", "NguoiCapNhat", "NgayCapNhat"
                     });
+                    if (ModelState.IsValid == false) {
+                        string Errors = "";
+                        foreach ( ModelState item in ModelState.Values)
+                        {
+                            if (item.Errors.Count > 0)
+                            {
+                                Errors += $"tring error: {item.Errors[0].ErrorMessage} AttemptedValue: {item.Value.AttemptedValue} <br>";
+                            }
+                        }
+                        throw new Exception(Errors);
+                    }
                     db.SaveChanges();
                     TempData["err"] = "<div class='alert alert-success' role='alert'><span class='glyphicon glyphicon-exclamation - sign' aria-hidden='true'></span><span class='sr - only'></span> Cập nhật thành công</div> ";
                     // luu lich su
@@ -473,6 +487,7 @@ namespace HopDongMgr.Controllers
         {
             try
             {
+
                 ModelState.Clear();
                 if (cN_HopDong.GiaTriPhat.GetValueOrDefault(0) < 1000) ModelState.AddModelError("GiaTriPhat", "Số tiền phải lớn hơn 1,000VND");
                 if (string.IsNullOrWhiteSpace(cN_HopDong.XuLyTranhChap)) ModelState.AddModelError("GiaTriPhat", "Nhập nội dung xử lý tranh chấp");

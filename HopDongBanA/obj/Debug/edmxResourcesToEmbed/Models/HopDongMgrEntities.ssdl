@@ -230,7 +230,7 @@
       <PropertyRef Name="IDLichSuHoatDong" />
     </Key>
     <Property Name="IDLichSuHoatDong" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ChucNang" Type="varchar" MaxLength="50" />
+    <Property Name="ChucNang" Type="nvarchar" MaxLength="50" />
     <Property Name="LoaiHoatDong" Type="nvarchar" MaxLength="50" />
     <Property Name="NgayThucHien" Type="datetime" />
     <Property Name="NguoiThucHien" Type="nvarchar" MaxLength="50" />

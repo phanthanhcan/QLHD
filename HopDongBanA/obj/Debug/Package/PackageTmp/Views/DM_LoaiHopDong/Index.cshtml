@@ -1,0 +1,51 @@
+﻿@model IEnumerable<HopDongMgr.Models.DM_LoaiHopDong>
+
+@{
+    ViewBag.Title = "DANH SÁCH LOẠI HỢP ĐỒNG";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa loại hợp đồng này không?";
+}
+<div class="container px-0">
+    <div class="row no-gutters">
+        <div class="box-header col">
+            <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+            <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
+            <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
+        </div>
+    </div>
+    @using (Ajax.BeginForm(
+            "SeachIndex",
+            //"Controler",
+            ajaxOptions: new AjaxOptions
+            {
+                HttpMethod = "GET",
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "DataUpdate"
+            }))
+    {
+        <div class="row no-gutters">
+            <div class="col-md-3 offset-md-9">
+                <input class="form-control" type="text" name="Seach" id="Seach" placeholder="Tìm kiếm: Mã loại, tên loại" />
+            </div>
+            <input id="submit" type="submit" hidden />
+        </div>
+    }
+    <div id="DataUpdate" class=" container px-0 pt-1 form-horizontal">
+        @Html.Partial("_IndexPartial")
+    </div>
+</div>
+@section scripts {
+    <script>
+
+        $(document).ready(function () {
+            $('#Seach').keydown(function (event) {
+                //alert(event.keyCode );
+                if (event.keyCode == 27) {
+                    $('#Seach').val("");
+                    $('#submit').submit();
+                    return true;
+                }
+            })
+        });
+    </script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}

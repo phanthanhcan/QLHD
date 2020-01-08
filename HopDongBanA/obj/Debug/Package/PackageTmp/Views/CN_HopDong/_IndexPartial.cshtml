@@ -1,0 +1,120 @@
+﻿@model CN_HopDong
+<div class="table-responsive">
+    <table id="ListItem" class="table table-striped" style="width:100%">
+        <thead>
+            <tr role="row">
+                <th nowrap>@Html.LabelFor(Model => Model.DM_LoaiHopDong.TenLoai)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.SoHopDong)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.SoNgayThucHien)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.SoNgayThiCong)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.NgayHetHan)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.DM_CongTrinh.TenCT)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.NgayKy)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.GiaTriHopDong)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.NamGiaoA)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.DM_DonViThucHien.TenDV)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.GiaTriGoiThau)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.DM_HinhThucHopDong.TenHinhThuc)</th>
+                @*<th nowrap>@Html.LabelFor(Model => Model.NoiDung)</th>*@
+                <th nowrap>@Html.LabelFor(Model => Model.HT_NguoiDung.HoTen)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.NgayCapNhat)</th>
+                <th nowrap>@Html.LabelFor(Model => Model.NgayHetHanThucTe)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CN_HopDong item in ViewBag.OnePageOfData)
+            {
+                <tr role="row" id="@item.IDHD" nowrap>
+                    <td>
+                        @Html.DisplayFor(Model => item.DM_LoaiHopDong.TenLoai)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => item.SoHopDong)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(Model => item.SoNgayThucHien)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(Model => item.SoNgayThiCong)
+                    </td>
+
+                    <td class="text-right">
+                        @Html.DisplayFor(Model => item.NgayHetHan)
+                    </td>
+
+                    <td title="@item.DM_CongTrinh.MaCT">
+                        @Html.DisplayFor(Model => item.DM_CongTrinh.TenCT)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.NgayKy)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(Model => item.GiaTriHopDong)
+                    </td>
+
+                    <td class="text-right">
+                        @Html.DisplayFor(Model => item.NamGiaoA)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => item.DM_DonViThucHien.TenDV)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => item.GiaTriGoiThau)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => item.DM_HinhThucHopDong.TenHinhThuc)
+                    </td>
+                    @*<td>
+                        @Html.TextAreaFor(model => item.NoiDung, new { rows = "3", cols = "110" })
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(Model => item.HT_NguoiDung.HoTen)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => item.NgayCapNhat)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => item.NgayHetHanThucTe)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="row container">
+    @if (ViewBag.OnePageOfData != null)
+    {
+        string str = $"Trang {ViewBag.OnePageOfData.PageNumber} trên tổng số {ViewBag.OnePageOfData.PageCount} trang, {ViewBag.OnePageOfData.TotalItemCount} dòng";
+        <div>@str</div>
+    }
+</div>
+<div>
+    @{
+        var SoHopDong = TempData["SoHopDong"];
+        var TenCT = TempData["TenCT"];
+        var NamGiaoA = TempData["NamGiaoA"];
+        var IsHoanThanh = TempData["IsHoanThanh"];
+        @Html.PagedListPager(
+                                list: (IPagedList)ViewBag.OnePageOfData
+                                //, generatePageUrl: Page => Url.Action("SeachIndex", new { Page = Page, Seach = Seach })
+                                , generatePageUrl: Page => Url.Action("Index", new { Page = Page, SoHopDong = SoHopDong, TenCT = TenCT, NamGiaoA = NamGiaoA, IsHoanThanh = IsHoanThanh })
+                                , options: PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing
+                                    (
+                                        options: new PagedListRenderOptions
+                                        {
+                                            ContainerDivClasses = new string[] { "col", "dataTables_paginate ", "paging_simple_numbers" },
+                                            UlElementClasses = new string[] { "pagination", "justify-content-end" },
+                                            LiElementClasses = new string[] { "page-item" },
+                                            PageClasses = new string[] { "page-link" },
+                                        }
+                                        , ajaxOptions: new AjaxOptions
+                                        {
+                                            UpdateTargetId = "DataUpdate",
+                                            InsertionMode = InsertionMode.Replace,
+                                            HttpMethod = "GET"
+                                        }
+                                    )
+                            )
+
+    }
+</div>

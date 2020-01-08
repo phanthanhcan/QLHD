@@ -1,0 +1,175 @@
+﻿@model HopDongMgr.Models.CN_DieuChinh
+@using HopDongMgr.DungChung;
+
+@{
+    ViewBag.Title = "THÊM MỚI ĐIỀU CHỈNH HỢP ĐỒNG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    SelectList NgayKyHD = (SelectList)ViewBag.NgayKyHD;
+    List<HopDongDC> HD = (List<HopDongDC>)ViewBag.DSHD;
+    Array HD1 = (Array)ViewBag.HD;
+}
+
+
+<div>
+    @Html.Raw(TempData["err"])
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.IDHD, "IDHD", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2"> Số hợp đồng</label>
+            <div class="col-md-4">
+                @*@using (Ajax.BeginForm(
+                            actionName: "LayHDDieuChinh",
+                            controllerName: "CN_DieuChinh",
+                            htmlAttributes: new { @id = "laythongtin" },
+                            routeValues: null,
+                            ajaxOptions: new AjaxOptions
+                            {
+                                HttpMethod = "Get",
+                                OnSuccess = "OnSuccess",
+                                OnFailure = "OnFailure",
+                                InsertionMode = InsertionMode.Replace
+
+                }
+                    ))
+                {
+                    <div>
+                        @Html.DropDownList("IDHD", null, htmlAttributes: new { @class = "form-control col-md-5 selectpicker", @data_live_search = "true", @onchange = "dsubmit()" })
+                        <input id="LayHDDieuChinh" type="submit" value="sumit">
+                    </div>
+                }*@
+                @Html.DropDownList("IDHD", null, htmlAttributes: new { @class = "selectpicker form-control ", @data_live_search = "true" })
+                @Html.ValidationMessageFor(model => model.IDHD, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Ngày điều chỉnh <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    @Html.TextBoxFor(model => model.NgayDieuChinh, "{0:dd/MM/yyyy}", new { @class = "form-control pull-right cDataPicker", @placeholder = "DD/MM/YYYYY" })
+                    @Html.ValidationMessageFor(model => model.NgayDieuChinh, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.GiaTriSauDieuChinh, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2 small">Số ngày gia hạn tiến độ <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.SoNgayGiaHanTienDo, new { htmlAttributes = new { @class = "form-control CheckNumber", @type = "Text" } })
+                @Html.ValidationMessageFor(model => model.SoNgayGiaHanTienDo, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Ngày hết hạn <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    @Html.TextBoxFor(model => model.NgayHetHanDC, "{0:dd/MM/yyyy}", new { @class = "form-control pull-right cDataPicker setDate", @placeholder = "DD/MM/YYYYY" })
+                    @Html.ValidationMessageFor(model => model.NgayHetHanDC, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-9" id="errNgayKiemSoat"></div>
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Giá trị điều chỉnh <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.GiaTriDieuChinh, new { htmlAttributes = new { @class = "form-control CheckNumber" } })
+                @Html.ValidationMessageFor(model => model.GiaTriDieuChinh, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Loại điều chỉnh</label>
+            <div class="col-md-4">
+                @Html.DropDownList("IDLoaiDieuChinh", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDLoaiDieuChinh, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Chênh lệch</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.ChenhLech, new { htmlAttributes = new { @class = "form-control CheckNumber" } })
+                @Html.ValidationMessageFor(model => model.ChenhLech, "", new { @class = "text-danger" })
+            </div>
+            <label class="control-label col-md-2">Giá trị trước điều chỉnh</label>
+            <div class="col-md-4">
+                <input class="form-control CheckNumber" id="GTTDC" type="text" />
+            </div>
+        </div>
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.NoiDung, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Lý do điều chỉnh</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.LyDoDieuChinh, new { @class = "form-control", @rows = "3" })
+                @Html.ValidationMessageFor(model => model.LyDoDieuChinh, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+                <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
+            </div>
+        </div>
+    </div>
+}
+@section scripts
+{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.selectpicker').selectpicker();
+            var HDDieuChinh;
+
+            $("#SoNgayGiaHanTienDo").change(function () {
+
+                    var val = $(this).val().replace(/,/g, "");
+                    var NgayHetHan = new Date(HDDieuChinh.NgayHetHan);
+                    console.log(NgayHetHan);
+                    NgayHetHan.setDate(NgayHetHan.getDate() + Number(val));
+                    $("#NgayHetHanDC").datepicker("setDate", NgayHetHan);
+
+            });
+            $("#GiaTriDieuChinh").change(function () {
+
+                var GiatriDieuChinh = $(this).val().replace(/,/g, "");
+                var GiatriTruocDieuChinh = $("#GTTDC").val().replace(/,/g, "");
+                $("#ChenhLech").val(GiatriDieuChinh - GiatriTruocDieuChinh)
+            });
+            $("#IDHD").change(function () {
+                console.log($(this).val());
+                if ($("#NgayDieuChinh").val() == undefined);
+                {
+                    $("#NgayDieuChinh").datepicker("setDate", new Date());
+                }
+                var IDHD = $(this).val();
+                $.ajax({
+                    method: 'POST',
+                    url: '@Url.Action("LayHDDieuChinh", "CN_DieuChinh")',
+                    data: { IDHD: IDHD  },
+                    success: function (data) {
+                        HDDieuChinh = JSON.parse(data);
+                        console.log(HDDieuChinh);
+                        if (!isNaN(HDDieuChinh.GiaTriThucTe) && HDDieuChinh.GiaTriThucTe > 0) {
+                            $("#GTTDC").val(HDDieuChinh.GiaTriThucTe)
+                        }
+                        else { $("#GTTDC").val(HDDieuChinh.GiaTriHopDong); }
+                        
+                        $("#GiaTriDieuChinh").val(0);
+                        $("#SoNgayGiaHanTienDo").val(0);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    },
+                });
+            });
+
+        });
+
+    </script>
+}
+

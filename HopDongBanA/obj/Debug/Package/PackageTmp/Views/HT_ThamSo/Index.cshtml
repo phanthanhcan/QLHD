@@ -1,0 +1,33 @@
+﻿@model IEnumerable<HopDongMgr.Models.HT_ThamSo>
+
+@{
+    ViewBag.Title = "DANH SÁCH THAM SỐ";
+    ViewBag.ThongBaoXoa = "Bạn có chắc chắn muốn xóa tham số này không?";
+}
+
+<div class="box-header">
+    <input type="button" value="Thêm mới" class="btn btn-info" onclick="location.href='@Url.Action("Create")'" />
+    <input type="button" value="Cập nhật" class="btn btn-warning" id="btnCapNhat" />
+    <input type="button" value="Xóa" class="btn btn-danger" id="btnXoa" data-toggle="modal" data-target="#modal-danger" />
+</div>
+<table id="example" class="display nowrap dataTable dtr-inline" cellspacing="0" role="grid" aria-describedby="example_info" style="width: 100%;">
+    <thead>
+        <tr role="row">
+            <th>Tên tham số</th>
+            <th>Giá trị</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr role="row" id="@item.ID">
+                <td class="sorting_1">
+                    @Html.DisplayFor(modelItem => item.Ten)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GiaTri)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,71 @@
+﻿@model HopDongMgr.Models.CN_HopDong
+
+@{
+    ViewBag.Title = "CẬP NHẬT THÔNG TIN TRANH CHẤP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string sGTP = Model.GiaTriPhat.HasValue == false ? "0" : string.Format("{0:0,0}", Model.GiaTriPhat.Value);
+
+}
+<div>
+    @Html.Raw(TempData["err"])
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.IDHD)
+
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.SoHopDong, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Số hợp đồng</label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.SoHopDong, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.SoHopDong, "", new { @class = "text-danger" })
+            </div>
+            @*@Html.LabelFor(model => model.SoHopDong, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Giá trị phạt <span style="color:red">(*)</span></label>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.GiaTriPhat, new { htmlAttributes = new { @class = "form-control CheckNumber"} })
+                @Html.ValidationMessageFor(model => model.GiaTriPhat, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.NoiDung, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Xử lý vi phạm</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.XuLyViPham, new { @class = "form-control", rows = "3" })
+                @Html.ValidationMessageFor(model => model.XuLyViPham, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            @*@Html.LabelFor(model => model.NoiDung, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Xử lý tranh chấp</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.XuLyTranhChap, new { @class = "form-control", rows = "3" })
+                @Html.ValidationMessageFor(model => model.XuLyTranhChap, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+                <input type="button" value="Quay lại" class="btn btn-default" onclick="location.href='@Url.Action("Index")'" />
+            </div>
+        </div>
+    </div>
+
+    @section scripts
+    {
+        <script>
+            $(document).ready(function () {
+                $(".Number-Get-GTP").focusout(function () {
+                    var val = $(this).val().replace(/,/g,"");
+                    $(".Number-Set-GTP").val(val);
+                });
+            });
+        </script>
+    }
+}
